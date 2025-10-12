@@ -1,0 +1,287 @@
+/* src/style.css */
+
+:root {
+    --primary-color: #3B82F6;
+    --background-color: #F9FAFB;
+    --surface-color: #FFFFFF;
+    --text-color: #374151;
+    --text-muted: #6B7280;
+    --border-color: #E5E7EB;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 20px;
+    margin: auto;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+h1 {
+    text-align: center;
+    color: #1F2937;
+    font-weight: 700;
+    font-size: 2.25em;
+    letter-spacing: -0.02em;
+}
+h2 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-top: 40px;
+    font-weight: 700;
+}
+.controls-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 10px;
+    padding: 20px;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+label {
+    font-weight: bold;
+    font-size: 1em;
+    color: #374151;
+}
+.view-toggle label[for] {
+    font-weight: normal;
+    cursor: pointer;
+    color: #6B7280;
+}
+select, input[type="number"], input[type="text"] {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    background-color: #fff;
+    color: var(--text-color);
+    font-size: 0.9em;
+    width: 55px;
+}
+select, input[type="text"] { width: auto; }
+#driveTimeButton {
+    padding: 8px 12px;
+    cursor: pointer;
+    background-color:#28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+}
+#driveTimeButton:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+#calculator-result {
+    text-align: center;
+    margin-bottom: 25px;
+    margin-top: 20px;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: var(--green-dark);
+}
+.table-container {
+    overflow-x: auto;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    animation: fadeIn 0.4s ease-in-out;
+}
+th, td {
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 6px 2px;
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--text-color);
+    vertical-align: middle;
+}
+th {
+    background-color: var(--primary-color);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    font-weight: 500;
+}
+td:first-child, th:first-child {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    background-color: var(--surface-color);
+    z-index: 1;
+    padding: 8px 10px;
+    font-size: 0.9em;
+    white-space: normal;
+    min-width: 140px;
+    border-right: 1px solid var(--border-color);
+}
+tbody tr:hover > td {
+    background-color: #F3F4F6;
+}
+.alley-name a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.1em;
+}
+.alley-name a:hover {
+    text-decoration: underline;
+}
+.alley-info {
+    font-size: 0.85em;
+    font-weight: normal;
+    color: var(--text-muted);
+    line-height: 1.3;
+}
+.price-cell {
+    min-height: 50px;
+    position: relative;
+}
+.hour-price { font-weight: 700; font-size: 1em; }
+.game-price { font-size: 0.9em; opacity: 0.7; }
+.closed-cell {
+    background-color: #F9FAFB !important;
+    color: #9CA3AF;
+    font-style: italic;
+}
+.half-hour-note {
+    font-size: 0.8em;
+    font-style: italic;
+    color: #6B7280;
+    display: block;
+    margin-top: 2px;
+}
+#specials-container {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#specials-container h2 { margin-top: 0; padding-bottom: 10px; }
+#specials-container ul {
+    list-style-type: '🎳';
+    padding-left: 25px;
+    margin: 0;
+}
+#specials-container li {
+    padding-left: 10px;
+    margin-bottom: 8px;
+}
+.special-icon {
+    position: absolute;
+    cursor: pointer;
+    font-size: 1.1em;
+    top: 4px;
+    right: 4px;
+}
+.special-icon .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 10;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: normal;
+}
+.special-icon:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Deal indicator tooltips (‼️, 🚫, ⭐) positioned like 💲 tooltip */
+.deal-indicator {
+    position: absolute;
+    cursor: pointer;
+    font-size: 1.1em;
+    top: 4px;
+    left: 4px;
+}
+.deal-indicator .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 9999;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: normal;
+}
+.deal-indicator:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Gentle pulse for best/worst of week */
+@keyframes pulse-week {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.10); }
+    100% { transform: scale(1); }
+}
+
+/* Very subtle pulse for best of day */
+@keyframes pulse-day {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Apply animations */
+.deal-indicator.week { animation: pulse-week 2s infinite ease-in-out; }
+.deal-indicator.day  { animation: pulse-day 2s infinite ease-in-out; }
+
+/* === Passed Time Blocks === */
+.past-time-cell {
+    /* Use a light gray background to signal "past" */
+    background-color: #E0E0E0 !important; 
+    
+    /* Ensure text has full opacity and is slightly muted */
+    opacity: 1 !important; 
+    color: #616161; 
+    cursor: default; 
+}
+
+/* Ensure the prices inside a passed cell are readable */
+.past-time-cell .hour-price, 
+.past-time-cell .game-price {
+    font-weight: 500;
+    color: #616161; 
+    opacity: 1; 
+}
