@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team JaM Bowling Options</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎳</text></svg>">
+<style>
+    :root {
+        --primary-color: #3B82F6;
+        --background-color: #F9FAFB;
+        --surface-color: #FFFFFF;
+        --text-color: #374151;
+        --text-muted: #6B7280;
+        --border-color: #E5E7EB;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        padding: 20px;
+        margin: auto;
+        background-color: var(--background-color);
+        color: var(--text-color);
+    }
+    h1 {
+        text-align: center;
+        color: #1F2937;
+        font-weight: 700;
+        font-size: 2.25em;
+        letter-spacing: -0.02em;
+    }
+    h2 {
+        text-align: center;
+        color: var(--primary-color);
+        margin-top: 40px;
+        font-weight: 700;
+    }
+    .controls-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 10px;
+        padding: 20px;
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .control-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    label {
+        font-weight: bold;
+        font-size: 1em;
+        color: #374151;
+    }
+    .view-toggle label[for] {
+        font-weight: normal;
+        cursor: pointer;
+        color: #6B7280;
+    }
+    select, input[type="number"], input[type="text"] {
+        padding: 6px 10px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        background-color: #fff;
+        color: var(--text-color);
+        font-size: 0.9em;
+        width: 55px;
+    }
+    select, input[type="text"] { width: auto; }
+    #driveTimeButton {
+        padding: 8px 12px;
+        cursor: pointer;
+        background-color:#28a745;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+    #driveTimeButton:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+    }
+    #calculator-result {
+        text-align: center;
+        margin-bottom: 25px;
+        margin-top: 20px;
+        font-size: 1.2em;
+        font-weight: 500;
+        color: var(--green-dark);
+    }
+    .table-container {
+        overflow-x: auto;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        animation: fadeIn 0.4s ease-in-out;
+    }
+    th, td {
+        border: none;
+        border-bottom: 1px solid var(--border-color);
+        padding: 6px 2px;
+        text-align: center;
+        font-size: 0.8em;
+        color: var(--text-color);
+        vertical-align: middle;
+    }
+    th {
+        background-color: var(--primary-color);
+        color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        font-weight: 500;
+    }
+    td:first-child, th:first-child {
+        text-align: left;
+        position: sticky;
+        left: 0;
+        background-color: var(--surface-color);
+        z-index: 1;
+        padding: 8px 10px;
+        font-size: 0.9em;
+        white-space: normal;
+        min-width: 140px;
+        border-right: 1px solid var(--border-color);
+    }
+    tbody tr:hover > td {
+        background-color: #F3F4F6;
+    }
+    .alley-name a {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1em;
+    }
+    .alley-name a:hover {
+        text-decoration: underline;
+    }
+    .alley-info {
+        font-size: 0.85em;
+        font-weight: normal;
+        color: var(--text-muted);
+        line-height: 1.3;
+    }
+    .price-cell {
+        min-height: 50px;
+        position: relative;
+    }
+    .hour-price { font-weight: 700; font-size: 1em; }
+    .game-price { font-size: 0.9em; opacity: 0.7; }
+    .closed-cell {
+        background-color: #F9FAFB !important;
+        color: #9CA3AF;
+        font-style: italic;
+    }
+    .half-hour-note {
+        font-size: 0.8em;
+        font-style: italic;
+        color: #6B7280;
+        display: block;
+        margin-top: 2px;
+    }
+    #specials-container {
+        margin-top: 40px;
+        padding: 20px;
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #specials-container h2 { margin-top: 0; padding-bottom: 10px; }
+    #specials-container ul {
+        list-style-type: '🎳';
+        padding-left: 25px;
+        margin: 0;
+    }
+    #specials-container li {
+        padding-left: 10px;
+        margin-bottom: 8px;
+    }
+    .special-icon {
+        position: absolute;
+        cursor: pointer;
+        font-size: 1.1em;
+        top: 4px;
+        right: 4px;
+    }
+    .special-icon .tooltip-text {
+        visibility: hidden;
+        width: 200px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 10;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        white-space: normal;
+    }
+    .special-icon:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    /* Deal indicator tooltips (‼️, 🚫, ⭐) positioned like 💲 tooltip */
+    .deal-indicator {
+        position: absolute;
+        cursor: pointer;
+        font-size: 1.1em;
+        top: 4px;
+        left: 4px;
+    }
+    .deal-indicator .tooltip-text {
+        visibility: hidden;
+        width: 200px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 9999;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        white-space: normal;
+    }
+    .deal-indicator:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    /* Gentle pulse for best/worst of week */
+    @keyframes pulse-week {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.10); }
+        100% { transform: scale(1); }
+    }
+
+    /* Very subtle pulse for best of day */
+    @keyframes pulse-day {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    /* Apply animations */
+    .deal-indicator.week { animation: pulse-week 2s infinite ease-in-out; }
+    .deal-indicator.day  { animation: pulse-day 2s infinite ease-in-out; }
+
+</style>
+
+</head>
+<body>
+
+    <h1>🎳 Team JaM Bowling Options</h1>
+
+    <div class="controls-container">
+    <div class="control-group">
+        <label for="day">Day:</label>
+        <select id="day" onchange="generateFullDayTable()">
+            <option value="Sun">Sunday</option>
+            <option value="Mon">Monday</option>
+            <option value="Tue">Tuesday</option>
+            <option value="Wed">Wednesday</option>
+            <option value="Thu">Thursday</option>
+            <option value="Fri">Friday</option>
+            <option value="Sat">Saturday</option>
+        </select>
+    </div>
+    <div class="control-group">
+        <label for="timeFilter">Time:</label>
+        <select id="timeFilter" onchange="generateFullDayTable()"></select>
+    </div>
+    <div class="control-group">
+        <label for="numPlayers">Players:</label>
+        <input type="number" id="numPlayers" value="2" min="1" onchange="generateFullDayTable()">
+        <label for="numGames">Games:</label>
+        <input type="number" id="numGames" value="4" min="1" onchange="generateFullDayTable()">
+        <div class="control-group view-toggle">
+            <label>Pace:</label>
+            <input type="radio" id="paceNormal" name="paceOfPlay" value="normal" checked onchange="generateFullDayTable()">
+            <label for="paceNormal">Normal (10 min/game)</label>
+            <input type="radio" id="paceLeisurely" name="paceOfPlay" value="leisurely" onchange="generateFullDayTable()">
+            <label for="paceLeisurely">Leisurely (15 min/game)</label>
+        </div>
+    </div>
+    <div class="control-group view-toggle">
+        <label>Heatmap:</label>
+        <input type="radio" id="viewHour" name="heatmapView" value="hour" checked onchange="generateFullDayTable()">
+        <label for="viewHour">By Hour</label>
+        <input type="radio" id="viewGame" name="heatmapView" value="game" onchange="generateFullDayTable()">
+        <label for="viewGame">By Game</label>
+    </div>
+     <div class="control-group">
+        <label for="startAddress">Address:</label>
+        <input type="text" id="startAddress" value="3155 S Moody Ave, Portland OR 97239">
+        <button id="driveTimeButton" onclick="getDriveTimes()">Get Drive Times</button>
+    </div>
+</div>
+    
+    <div id="calculator-result"></div>
+
+    <div id="results" class="table-container"></div>
+    <div id="specials-container"></div>
+
+    <script>
+        // --- DATA SECTION ---
+        
+        const hoursOfOperation = {
+            "Tigard Bowl":       { address: "11660 SW Pacific Hwy, Tigard, OR 97223", Sun: {o:9,c:24}, Mon: {o:9,c:24}, Tue: {o:9,c:24}, Wed: {o:9,c:24}, Thu: {o:9,c:24}, Fri: {o:9,c:25}, Sat: {o:9,c:25} },
+            "Kingpins Beaverton": { address: "2725 SW Cedar Hills Blvd, Beaverton, OR 97005", Sun: {o:10,c:23,m:30}, Mon: {o:11,c:23,m:30}, Tue: {o:10,c:23,m:30}, Wed: {o:11,c:23,m:30}, Thu: {o:10,c:24}, Fri: {o:11,c:25}, Sat: {o:9,c:25} },
+            "Kingpins Portland":  { address: "3550 SE 92nd Ave, Portland, OR 97266", Sun: {o:9,c:23,m:30}, Mon: {o:11,c:24}, Tue: {o:11,c:23,m:30}, Wed: {o:11,c:23,m:30}, Thu: {o:12,c:23,m:30}, Fri: {o:10,c:24}, Sat: {o:9,c:24} },
+            "Milwaukie Bowl":     { address: "3056 SE Harrison St, Milwaukie, OR 97222", Sun: {o:9,c:22}, Mon: {o:9,c:23}, Tue: {o:9,c:23}, Wed: {o:9,c:23}, Thu: {o:9,c:23}, Fri: {o:9,c:24}, Sat: {o:9,c:24} },
+            "Big Al's Vancouver": { address: "16615 SE 18th St, Vancouver, WA 98683", Sun: {o:9,m:30,c:22}, Mon: {o:15,c:22}, Tue: {o:15,c:22}, Wed: {o:15,c:22}, Thu: {o:15,c:22}, Fri: {o:15,c:24}, Sat: {o:12,c:24} },
+            "Hazel Dell Lanes":   { address: "6300 NE Hwy 99, Vancouver, WA 98665", Sun: {o:9,c:22}, Mon: {o:11,m:30,c:23}, Tue: {o:10,m:30,c:23}, Wed: {o:9,c:23}, Thu: {o:9,m:30,c:23}, Fri: {o:9,m:30,c:24}, Sat: {o:9,c:24} },
+            "SuperPlay":          { address: "9300 SW Beaverton Hillsdale Hwy, Beaverton, OR 97005", Sun: {o:12,c:22}, Mon: {o:15,c:23}, Tue: {o:15,c:23}, Wed: {o:15,c:23}, Thu: {o:12,c:24}, Fri: {o:12,c:24}, Sat: {o:12,c:24} }
+        };
+        
+        const links = {
+            "Tigard Bowl": "https://www.tigardbowl.com/open-bowl",
+            "Milwaukie Bowl": "https://www.milwaukiebowl.com/copy-of-legacy",
+            "Kingpins Beaverton": "https://mykingpins.com/beaverton-bowling/#bowling-pricing",
+            "Kingpins Portland": "https://mykingpins.com/portland-bowling/#bowling-pricing",
+            "Big Al's Vancouver": "https://www.ilovebigals.com/vancouver/lanes/",
+            "Hazel Dell Lanes": "https://www.hazeldelllanes.com/hours--rates.html",
+            "SuperPlay": "https://www.superplayor.com/Play/Bowling"
+        };
+
+        let contactInfo = {};
+
+        const specials = {
+            Sun: ["<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games/shoes)."],
+            Mon: ["<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).", "<b>Hazel Dell Lanes:</b> All-you-can-bowl for $12 from 9 PM - Midnight."],
+            Tue: ["<b>Big Al's Vancouver:</b> Two Buck Tuesdays ($2 games, shoes, sodas, beers & snacks).", "<b>SuperPlay:</b> $25 per hour, all day."],
+            Wed: ["<b>SuperPlay:</b> $2 Wednesdays ($2 games, $2 shoes & drink specials).", "<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes)."],
+            Thu: ["<b>SuperPlay:</b> $15 per hour, all Day.", "<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes)."],
+            Fri: ["<b>Kingpins Portland:</b> Cosmic All You Can Bowl from 10 PM - Midnight for $15 (shoes included).", "<b>Kingpins Beaverton:</b> Cosmic All You Can Bowl from 11 PM - 1 AM for $15 (shoes included).", "<b>SuperPlay:</b> Cosmic Bowling after 9 PM."],
+            Sat: ["<b>Kingpins Portland:</b> Cosmic All You Can Bowl from 10 PM - Midnight for $15 (shoes included).", "<b>Kingpins Beaverton:</b> Cosmic All You Can Bowl from 11 PM - 1 AM for $15 (shoes included).", "<b>SuperPlay:</b> Cosmic Bowling after 9 PM."],
+        };
+        
+        const structuredSpecials = {
+            "Big Al's Vancouver": { Tue: { allDay: "$2 games, shoes, drinks & snacks!" } },
+            "SuperPlay": { Thu: { allDay: "$15/hr per lane special." }, Tue: { allDay: "$25/hr per lane special." }, Wed: { allDay: "$2/game & $2/shoes special." } },
+            "Hazel Dell Lanes": { Mon: { from: 21, text: "All-You-Can-Bowl for $12." } },
+            "Kingpins Beaverton": { Sun: { from: 20, text: "Quarter Mania! $11 cover + $0.25 games/shoes." }, Mon: { from: 21, text: "Quarter Mania! $11 cover + $0.25 games/shoes." }, Tue: { from: 21, text: "Quarter Mania! $11 cover + $0.25 games/shoes." }, Wed: { from: 21, text: "Quarter Mania! $11 cover + $0.25 games/shoes." }, Thu: { from: 21, text: "Quarter Mania! $11 cover + $0.25 games/shoes." }, Fri: { from: 23, text: "All You Can Bowl for $15." }, Sat: { from: 23, text: "All You Can Bowl for $15." } },
+            "Kingpins Portland": { Sun: { from: 20, text: "Quarter Mania! $11 cover + $0.25 games/shoes." }, Mon: { from: 21, text: "Quarter Mania! $11 cover + $0.25 games/shoes." }, Tue: { from: 21, text: "Quarter Mania! $11 cover + $0.25 games/shoes." }, Wed: { from: 21, text: "Quarter Mania! $11 cover + $0.25 games/shoes." }, Thu: { from: 21, text: "Quarter Mania! $11 cover + $0.25 games/shoes." }, Fri: { from: 22, text: "All You Can Bowl for $15." }, Sat: { from: 22, text: "All You Can Bowl for $15." } }
+        };
+
+        // --- HELPER FUNCTIONS ---
+        async function getDriveTimes() {
+            const button = document.getElementById('driveTimeButton');
+            const origin = document.getElementById('startAddress').value;
+            if (!origin) {
+                alert("Please enter a starting address.");
+                return;
+            }
+
+            button.disabled = true;
+            button.textContent = "Calculating...";
+
+            const destinations = Object.values(hoursOfOperation).map(v => v.address);
+
+            const functionUrl = '/.netlify/functions/getDriveTimes';
+
+            try {
+                const response = await fetch(functionUrl, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        origin: origin,
+                        destinations: destinations.join('|')
+                    })
+                });
+                const data = await response.json();
+
+                if (data.status !== 'OK') {
+                    throw new Error(`Google Maps API Error: ${data.error_message || data.status}`);
+                }
+
+                const alleyNames = Object.keys(hoursOfOperation);
+                data.rows[0].elements.forEach((element, index) => {
+                    const alleyName = alleyNames[index];
+                    if (element.status === "OK") {
+                        contactInfo[alleyName] = {
+                            ...contactInfo[alleyName],
+                            drive: element.duration.text
+                        };
+                    } else {
+                        contactInfo[alleyName] = { ...contactInfo[alleyName], drive: "Not found" };
+                    }
+                });
+                generateFullDayTable();
+
+            } catch (error) {
+                console.error("Error fetching drive times:", error);
+                alert("Could not fetch drive times. Please try again later.");
+            } finally {
+                button.disabled = false;
+                button.textContent = "Get Drive Times";
+            }
+        }
+        
+        function initializeContactInfo() {
+            contactInfo = {
+                "Tigard Bowl":       { phone: "(503) 639-2001", drive: "- mins" },
+                "Kingpins Beaverton": { phone: "(503) 646-1116", drive: "- mins" },
+                "Kingpins Portland":  { phone: "(503) 788-7889", drive: "- mins" },
+                "Milwaukie Bowl":     { phone: "(503) 654-7719", drive: "- mins" },
+                "Big Al's Vancouver": { phone: "(360) 944-6118", drive: "- mins" },
+                "Hazel Dell Lanes":   { phone: "(360) 694-8364", drive: "- mins" },
+                "SuperPlay":          { phone: "(503) 292-3523", drive: "- mins" }
+            };
+        }
+
+        function getRatesForAlley(alleyName, day, hour) {
+            let gamePrice = null, hourPrice = null;
+            const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+            switch (alleyName) {
+                case "Tigard Bowl":
+                    if (weekDays.includes(day) && day !== 'Fri') { gamePrice = (hour < 17) ? 6.00 : 6.50; }
+                    else if (day === 'Fri') { gamePrice = (hour < 17) ? 6.00 : 7.00; }
+                    else if (day === 'Sat') { gamePrice = (hour < 18) ? 6.50 : 7.00; }
+                    else { gamePrice = 6.50; }
+                    break;
+                case "Kingpins Beaverton": case "Kingpins Portland":
+                    hourPrice = (weekDays.includes(day) && hour < 17) ? 30.00 : 45.00;
+                    break;
+                case "Milwaukie Bowl":
+                    if (day === 'Sat') { hourPrice = (hour < 16) ? 35.00 : 40.00; } 
+                    else if (day === 'Sun') { hourPrice = 35.00; } 
+                    else if (['Mon', 'Tue', 'Wed', 'Thu'].includes(day)) { hourPrice = 25.00; } 
+                    else if (day === 'Fri') { hourPrice = (hour < 22) ? 25.00 : 40.00; }
+                    break;
+                case "Big Al's Vancouver":
+                    if (day === 'Tue') { gamePrice = 2.00; }
+                    else if (['Sat', 'Sun'].includes(day) || (day === 'Fri' && hour >= 17)) { gamePrice = 8.00; }
+                    else if (weekDays.includes(day)) { gamePrice = (hour < 17) ? 5.00 : 6.00; }
+                    break;
+                case "Hazel Dell Lanes":
+                    if ((day === 'Fri' && hour >= 17) || (day === 'Sat' && hour >= 12) || (day === 'Sun' && hour >= 12)) { hourPrice = 35.00; }
+                    else { gamePrice = (hour < 17) ? 4.50 : 5.50; hourPrice = 35.00; }
+                    break;
+                case "SuperPlay":
+                    if (day === 'Thu') { hourPrice = 15.00; }
+                    else if (day === 'Tue') { hourPrice = 25.00; }
+                    else if (day === 'Wed') { gamePrice = 2.00; }
+                    else if ((day === 'Fri' && hour >= 17) || ['Sat', 'Sun'].includes(day)) { hourPrice = 43.00; }
+                    else { hourPrice = 32.00; }
+                    break;
+            }
+            return { game: gamePrice, hour: hourPrice };
+        }
+
+        function calculateTotalCost(rates, players, games, minutesPerGame) {
+            if (!rates.game && !rates.hour) return { cost: Infinity };
+            const timeInMinutes = players * games * minutesPerGame;
+            const timeInHours = Math.ceil(timeInMinutes / 30) * 0.5;
+            const lanesNeeded = Math.ceil(players / 6);
+            const hourlyCost = rates.hour ? timeInHours * rates.hour * lanesNeeded : Infinity;
+            const gameCost = rates.game ? players * games * rates.game : Infinity;
+
+            if (hourlyCost < gameCost) {
+                const hourString = timeInHours === 1 ? 'hour' : 'hours';
+                return { cost: hourlyCost, details: `(${timeInHours} ${hourString} @ $${rates.hour.toFixed(2)}/hr)` };
+            } else {
+                const totalGames = players * games;
+                const gameString = totalGames === 1 ? 'game' : 'games';
+                return { cost: gameCost, details: `(${totalGames} ${gameString} @ $${rates.game.toFixed(2)}/game)` };
+            }
+        }
+
+        function formatHour(hour) {
+            if (hour === 12) return '12 PM';
+            if (hour > 12) return (hour - 12) + ' PM';
+            return hour + ' AM';
+        }
+
+        function getColorForPrice(price, min, max) {
+            if (min === max || price === null) return '';
+            const percentage = (price - min) / (max - min);
+            const hue = 120 - (percentage * 120);
+            return `hsl(${hue}, 70%, 85%)`;
+        }
+
+        function populateTimeFilter() {
+            const timeFilter = document.getElementById('timeFilter');
+            timeFilter.innerHTML = '<option value="any">Any Time</option>';
+            const hours = Array.from({length: 15}, (_, i) => i + 9);
+            hours.forEach(hour => {
+                const option = document.createElement('option');
+                option.value = hour;
+                option.textContent = formatHour(hour);
+                timeFilter.appendChild(option);
+            });
+        }
+
+        // --- MAIN FUNCTION ---
+        function generateFullDayTable() {
+            const day = document.getElementById('day').value;
+            const heatmapView = document.querySelector('input[name="heatmapView"]:checked').value;
+            const numPlayers = parseInt(document.getElementById('numPlayers').value) || 1;
+            const numGames = parseInt(document.getElementById('numGames').value) || 1;
+            const pace = document.querySelector('input[name="paceOfPlay"]:checked').value;
+            const minutesPerGame = (pace === 'normal') ? 10 : 15;
+            const selectedTime = document.getElementById('timeFilter').value;
+
+            const resultsDiv = document.getElementById('results');
+            const specialsDiv = document.getElementById('specials-container');
+            const calculatorResultDiv = document.getElementById('calculator-result');
+            const hours = Array.from({length: 15}, (_, i) => i + 9);
+
+            let dayBestRate = { price: Infinity, alley: null, hour: null };
+            let dayMaxRate = -Infinity;
+            let dayBestTotalDeal = { cost: Infinity, alley: null, hour: null, details: '' };
+            let dealFound = false;
+            
+            let weekBestTotalDeal = { cost: Infinity, alley: null, hour: null, day: null };
+            let weekWorstTotalDeal = { cost: -Infinity, alley: null, hour: null, day: null };
+            const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+            for (const dayOfWeek of daysOfWeek) {
+                 for (const alleyName in hoursOfOperation) {
+                     for (const hour of hours) {
+                         const hoursInfo = hoursOfOperation[alleyName][dayOfWeek];
+                         const isLeagueTime = (
+                             alleyName === 'Hazel Dell Lanes' &&
+                             ((dayOfWeek === 'Sun' && hour >= 9 && hour < 12) || (['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].includes(dayOfWeek) && hour >= 17 && hour < 22))
+                         );
+                         if (hour >= hoursInfo.o && hour < hoursInfo.c && !isLeagueTime) {
+                             const rates = getRatesForAlley(alleyName, dayOfWeek, hour);
+                             const costResult = calculateTotalCost(rates, numPlayers, numGames, minutesPerGame);
+                             if(costResult.cost !== Infinity) {
+                                 if (costResult.cost < weekBestTotalDeal.cost) {
+                                     weekBestTotalDeal = { cost: costResult.cost, alley: alleyName, hour: hour, day: dayOfWeek };
+                                 }
+                                 if (costResult.cost > weekWorstTotalDeal.cost) {
+                                     weekWorstTotalDeal = { cost: costResult.cost, alley: alleyName, hour: hour, day: dayOfWeek };
+                                 }
+                             }
+                         }
+                     }
+                 }
+            }
+
+            for (const alleyName in hoursOfOperation) {
+                for (const hour of hours) {
+                    if (selectedTime !== 'any' && hour != selectedTime) continue;
+                    const hoursInfo = hoursOfOperation[alleyName][day];
+                    const isLeagueTime = (
+                        alleyName === 'Hazel Dell Lanes' &&
+                        ((day === 'Sun' && hour >= 9 && hour < 12) || (['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].includes(day) && hour >= 17 && hour < 22))
+                    );
+
+                    if (hour >= hoursInfo.o && hour < hoursInfo.c && !isLeagueTime) {
+                        const rates = getRatesForAlley(alleyName, day, hour);
+                        const currentRate = rates[heatmapView];
+                        if (currentRate !== null) {
+                            if (currentRate < dayBestRate.price) dayBestRate = { price: currentRate, alley: alleyName, hour: hour };
+                            if (currentRate > dayMaxRate) dayMaxRate = currentRate;
+                        }
+
+                        const costResult = calculateTotalCost(rates, numPlayers, numGames, minutesPerGame);
+                        if (costResult.cost < dayBestTotalDeal.cost) {
+                            dayBestTotalDeal = { cost: costResult.cost, alley: alleyName, hour: hour, details: costResult.details };
+                            dealFound = true;
+                        }
+                    }
+                }
+            }
+            
+            if (dealFound) {
+                 const timeString = selectedTime === 'any' ? `is <b>${dayBestTotalDeal.alley}</b> at <b>${formatHour(dayBestTotalDeal.hour)}</b>,` : `at <b>${formatHour(parseInt(selectedTime))}</b> is <b>${dayBestTotalDeal.alley}</b>,`;
+                 calculatorResultDiv.innerHTML = `Best deal for ${numPlayers} players, ${numGames} games each ${timeString} costing <b>$${dayBestTotalDeal.cost.toFixed(0)}</b> ${dayBestTotalDeal.details}`;
+            } else {
+                 calculatorResultDiv.innerHTML = `No available deals found for the selected time.`;
+            }
+
+            let tableHTML = `<table><thead><tr><th></th>`;
+            hours.forEach(hour => tableHTML += `<th>${formatHour(hour)}</th>`);
+            tableHTML += `</tr></thead><tbody>`;
+
+            for (const alleyName in hoursOfOperation) {
+                const link = links[alleyName];
+                const info = contactInfo[alleyName];
+                const linkTag = link ? `<a href="${link}" target="_blank" rel="noopener noreferrer">${alleyName}</a>` : alleyName;
+                
+                let alleyCellContent = `<div class="alley-name">${linkTag}</div>`;
+                if (info) {
+                    alleyCellContent += `<div class="alley-info">${info.phone}</div>`;
+                    alleyCellContent += `<div class="alley-info">${info.drive}</div>`;
+                }
+                tableHTML += `<tr><td>${alleyCellContent}</td>`;
+                
+                const hoursInfo = hoursOfOperation[alleyName][day];
+                for (const hour of hours) {
+                    const isLeagueTime = (
+                        alleyName === 'Hazel Dell Lanes' &&
+                        ((day === 'Sun' && hour >= 9 && hour < 12) || (['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].includes(day) && hour >= 17 && hour < 22))
+                    );
+
+                    if (isLeagueTime) {
+                        tableHTML += `<td class="closed-cell">Unavailable<br>(League Play)</td>`;
+                    } else if (hour >= hoursInfo.o && hour < hoursInfo.c) {
+                        const currentRates = getRatesForAlley(alleyName, day, hour);
+                        const priceForColoring = currentRates[heatmapView];
+                        const backgroundColor = getColorForPrice(priceForColoring, dayBestRate.price, dayMaxRate);
+                        
+                        let halfHourNote = '';
+                        if (hoursInfo.m && hour === hoursInfo.o) {
+                            halfHourNote = `<span class="half-hour-note">Opens at ${hoursInfo.o > 12 ? hoursInfo.o-12 : hoursInfo.o}:${hoursInfo.m}</span>`;
+                        }
+                        
+                        let priceContent = '';
+                        if (currentRates.hour) { priceContent += `<div class="hour-price">$${currentRates.hour.toFixed(2)} /hr</div>`; }
+                        if (currentRates.game) { priceContent += `<div class="game-price">$${currentRates.game.toFixed(2)} /gm</div>`; }
+
+                        let specialContent = '';
+                        const specialInfo = structuredSpecials[alleyName]?.[day];
+                        if (specialInfo) {
+                            if (specialInfo.allDay || (specialInfo.from && hour >= specialInfo.from)) {
+                                specialContent = `<div class="special-icon">💲<span class="tooltip-text">${specialInfo.allDay || specialInfo.text}</span></div>`;
+                            }
+                        }
+                        
+let dealIndicatorContent = '';
+if (alleyName === weekBestTotalDeal.alley && hour === weekBestTotalDeal.hour && day === weekBestTotalDeal.day) {
+    dealIndicatorContent = `<div class="deal-indicator week">‼️<span class="tooltip-text">Best deal of the week!</span></div>`;
+} else if (alleyName === weekWorstTotalDeal.alley && hour === weekWorstTotalDeal.hour && day === weekWorstTotalDeal.day) {
+    dealIndicatorContent = `<div class="deal-indicator week">🚫<span class="tooltip-text">Worst deal of the week</span></div>`;
+} else if (alleyName === dayBestRate.alley && hour === dayBestRate.hour) {
+    dealIndicatorContent = `<div class="deal-indicator day">⭐<span class="tooltip-text">Best deal of the day</span></div>`;
+}
+
+
+
+                        tableHTML += `<td class="price-cell" style="background-color: ${backgroundColor};">
+                                          ${dealIndicatorContent}
+                                          ${specialContent}
+                                          ${priceContent || '&nbsp;'}
+                                          ${halfHourNote}
+                                      </td>`;
+                    } else {
+                        tableHTML += `<td class="closed-cell">Closed</td>`;
+                    }
+                }
+                tableHTML += `</tr>`;
+            }
+            tableHTML += `</tbody></table>`;
+            resultsDiv.innerHTML = tableHTML;
+
+            const daySpecials = specials[day];
+            let specialsHTML = `<h2>Specials for Today</h2>`;
+            if (daySpecials && daySpecials.length > 0) {
+                specialsHTML += `<ul>`;
+                daySpecials.forEach(special => specialsHTML += `<li>${special}</li>`);
+                specialsHTML += `</ul>`;
+            } else {
+                specialsHTML += `<p>No specific specials are listed for this day.</p>`;
+            }
+            specialsDiv.innerHTML = specialsHTML;
+        }
+        
+        // --- INITIALIZATION ---
+        initializeContactInfo();
+        populateTimeFilter();
+
+// Set the day select to the current Pacific Time weekday
+(function setPacificDayAndLoad() {
+  // Get Pacific time (America/Los_Angeles)
+  const pacificNow = new Date(
+    new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })
+  );
+
+  // Map numeric day (0–6) to your select’s short day values
+  const weekdayShortMap = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  const daySelect = document.getElementById('day');
+  if (daySelect) {
+    daySelect.value = weekdayShortMap[pacificNow.getDay()];
+  }
+
+  // Generate the table once the window is ready
+  window.onload = generateFullDayTable;
+})();
+
+    </script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+

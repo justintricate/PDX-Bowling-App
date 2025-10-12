@@ -1,0 +1,16 @@
+{
+  "name": "bowling-app",
+  "version": "1.0.0",
+  "description": "Team JaM Bowling Options Web App",
+  "main": "index.js",
+  "scripts": {
+  "start": "netlify dev -c vite",
+  "build": "vite build"
+},
+  "keywords": ["vite", "netlify", "serverless", "bowling"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^7.1.9"
+  }
+}

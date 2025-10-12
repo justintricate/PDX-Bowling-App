@@ -1,0 +1,10 @@
+# ----------------------------------------------------
+# 1. CRITICAL SECRETS (Do not commit to Git)
+# ----------------------------------------------------
+.env
+.netlify/
+/node_modules
+/dist
+.vscode/
+Thumbs.db
+.DS_Store
