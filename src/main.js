@@ -500,12 +500,30 @@ function generateFullDayTable() {
             hour >= 17 &&
             hour < 22));
       let effectiveHour = currentHour;
+      let driveTimeMins = 0; // Initialize drive time
       const driveInfo = state.contactInfo[alleyName]?.drive;
-      if (isToday && driveInfo?.includes('mins')) {
-        effectiveHour = new Date(
-          now.getTime() + (parseInt(driveInfo) || 0) * 60000
-        ).getHours();
-      }
+
+      if (driveInfo?.includes('mins')) {
+        driveTimeMins = parseInt(driveInfo) || 0;
+      } // ⭐️ FIX: Only apply the drive time if the selected day is TODAY. // And most importantly, check if the day rolled over after adding drive time.
+
+      if (isToday) {
+        const futureTime = now.getTime() + driveTimeMins * 60000;
+        const futureDate = new Date(futureTime);
+        const futureDay = AppConfig.DAYS_OF_WEEK[futureDate.getDay()];
+        if (futureDay === currentDay) {
+          // The drive time did not push us into the next calendar day
+          effectiveHour = futureDate.getHours();
+        } else {
+          // Drive time pushed us into the next calendar day (e.g., 11:50 PM + 10 mins = 12:00 AM Mon)
+          // Since the selected day is still 'Sun', all remaining hours should be marked as past.
+          // However, setting effectiveHour to 24 (or a high number) will mark everything as past.
+          // A simpler solution is to just skip the isPast check for rollover hours,
+          // but since we want to disable everything, effectiveHour should be very high.
+          // Let's simplify: if the day rolled over, every hour in the current day must be past.
+          effectiveHour = 24;
+        }
+      } // The isPast logic is now simpler and handles day rollover correctly:
       const isPast = isToday && hour < effectiveHour;
       const isOpen = hour >= hoursInfo.o && hour < hoursInfo.c && !isLeagueTime;
       let isFiltered = false;
@@ -599,12 +617,15 @@ function generateFullDayTable() {
           if (!cell.isOpen) return `<td class="closed-cell">Closed</td>`;
           const cellClass = cell.isPast
             ? 'price-cell past-time-cell'
-            : 'price-cell';
-          const backgroundColor = getColorForPrice(
-            cell.cost,
-            dayMinTotalCost,
-            dayMaxTotalCost
-          );
+            : 'price-cell'; // ⭐️ REVISED FIX: Only calculate heatmap color for non-past, non-filtered cells.
+          let backgroundColor = '';
+          if (!cell.isPast && !cell.isFiltered && cell.cost !== Infinity) {
+            backgroundColor = getColorForPrice(
+              cell.cost,
+              dayMinTotalCost,
+              dayMaxTotalCost
+            );
+          }
           const priceHTML =
             (cell.rates?.hour
               ? `<div class="hour-price">$${cell.rates.hour.toFixed(
