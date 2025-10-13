@@ -2,7 +2,6 @@ import './style.css';
 
 // =================================================================================
 // DATA & CONFIGURATION
-// All static data for the application.
 // =================================================================================
 
 const AppConfig = {
@@ -165,6 +164,7 @@ const dom = {
   themeToggle: document.getElementById('theme-toggle-checkbox'),
   drivePrompt: document.getElementById('drive-time-prompt'),
   closePromptBtn: document.getElementById('close-prompt-btn'),
+  shareButton: document.getElementById('share-button'),
 };
 
 // =================================================================================
@@ -201,6 +201,27 @@ function hideDriveTimePrompt() {
   dom.drivePrompt.classList.remove('show');
 }
 
+function shareSettings() {
+  const params = new URLSearchParams({
+    day: dom.daySelect.value,
+    players: dom.numPlayers.value,
+    games: dom.numGames.value,
+    pace: dom.paceNormal.checked ? 'normal' : 'leisurely',
+  });
+
+  const shareUrl = `${window.location.origin}${
+    window.location.pathname
+  }?${params.toString()}`;
+
+  navigator.clipboard.writeText(shareUrl).then(() => {
+    const originalContent = dom.shareButton.innerHTML;
+    dom.shareButton.innerHTML = '<span>Copied!</span>';
+    setTimeout(() => {
+      dom.shareButton.innerHTML = originalContent;
+    }, 2000);
+  });
+}
+
 function populateTimeFilter() {
   dom.timeFilter.innerHTML = '<option value="any">Any Time</option>';
   AppConfig.HOURS.forEach((hour) => {
@@ -218,13 +239,11 @@ function setupTooltipEvents() {
   tooltipAnchors.forEach((anchor) => {
     const tooltipText = anchor.querySelector('.tooltip-text');
     if (!tooltipText) return;
-
     const showTooltip = () => {
       tooltipText.classList.add('show-tooltip');
       const tooltipRect = tooltipText.getBoundingClientRect();
       const viewportEdgeSafety = 15;
       let finalMarginLeft = -100;
-
       if (tooltipRect.right > window.innerWidth - viewportEdgeSafety) {
         const overflow =
           tooltipRect.right - (window.innerWidth - viewportEdgeSafety);
@@ -235,12 +254,10 @@ function setupTooltipEvents() {
       }
       tooltipText.style.marginLeft = `${finalMarginLeft}px`;
     };
-
     const hideTooltip = () => {
       tooltipText.classList.remove('show-tooltip');
       tooltipText.style.marginLeft = '-100px';
     };
-
     anchor.addEventListener('mouseenter', showTooltip);
     anchor.addEventListener('mouseleave', hideTooltip);
   });
@@ -256,10 +273,8 @@ async function getDriveTimes() {
     alert('Please enter a starting address.');
     return;
   }
-
   dom.driveTimeButton.disabled = true;
   dom.driveTimeButton.textContent = 'Calculating...';
-
   try {
     const destinations = Object.values(hoursOfOperation).map((v) => v.address);
     const response = await fetch(AppConfig.NETLIFY_FUNCTION_URL, {
@@ -267,13 +282,11 @@ async function getDriveTimes() {
       body: JSON.stringify({ origin, destinations: destinations.join('|') }),
     });
     const data = await response.json();
-
     if (data.status !== 'OK') {
       throw new Error(
         `Google Maps API Error: ${data.error_message || data.status}`
       );
     }
-
     const alleyNames = Object.keys(hoursOfOperation);
     data.rows[0].elements.forEach((element, i) => {
       const alleyName = alleyNames[i];
@@ -283,7 +296,6 @@ async function getDriveTimes() {
         state.contactInfo[alleyName].drive = 'Not found';
       }
     });
-
     generateFullDayTable();
     hideDriveTimePrompt();
   } catch (error) {
@@ -311,10 +323,6 @@ function initializeContactInfo() {
 // CALCULATION & FORMATTING
 // =================================================================================
 
-/**
- * Gets the current time object for the Pacific Time Zone.
- * @returns {{day: string, hour: number, date: Date}}
- */
 function getCurrentPacificTime() {
   const now = new Date(
     new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })
@@ -326,16 +334,13 @@ function getCurrentPacificTime() {
 
 function calculateTotalCost(rates, players, games, minutesPerGame) {
   if (!rates.game && !rates.hour) return { cost: Infinity };
-
   const timeInMinutes = players * games * minutesPerGame;
   const timeInHours = Math.ceil(timeInMinutes / 30) * 0.5;
   const lanesNeeded = Math.ceil(players / 6);
-
   const hourlyCost = rates.hour
     ? timeInHours * rates.hour * lanesNeeded
     : Infinity;
   const gameCost = rates.game ? players * games * rates.game : Infinity;
-
   if (hourlyCost < gameCost) {
     const hourString = timeInHours === 1 ? 'hour' : 'hours';
     return {
@@ -356,7 +361,6 @@ function getRatesForAlley(alleyName, day, hour) {
   let gamePrice = null,
     hourPrice = null;
   const isWeekday = ['Mon', 'Tue', 'Wed', 'Thu'].includes(day);
-
   switch (alleyName) {
     case 'Tigard Bowl':
       if (day === 'Sat') gamePrice = hour < 18 ? 6.5 : 7.0;
@@ -424,34 +428,24 @@ function getColorForPrice(price, min, max) {
 // MAIN APPLICATION LOGIC
 // =================================================================================
 
-/**
- * The main function to generate and render the bowling options table.
- */
 function generateFullDayTable() {
-  // 1. Get user inputs from the DOM
   const day = dom.daySelect.value;
   const numPlayers = parseInt(dom.numPlayers.value) || 1;
   const numGames = parseInt(dom.numGames.value) || 1;
   const pace = dom.paceNormal.checked ? 'normal' : 'leisurely';
   const minutesPerGame = pace === 'normal' ? 10 : 15;
   const selectedTime = dom.timeFilter.value;
-
-  // 2. Get current time for "past" calculations
   const {
     date: now,
     day: currentDay,
     hour: currentHour,
   } = getCurrentPacificTime();
   const isToday = day === currentDay;
-
-  // 3. Process all data for the day
-  let dayMinTotalCost = Infinity;
-  let dayMaxTotalCost = -Infinity;
+  let dayMinTotalCost = Infinity,
+    dayMaxTotalCost = -Infinity;
   let dayBestTotalDeal = { cost: Infinity };
   let weekBestTotalDeals = [],
     weekWorstTotalDeals = [];
-
-  // This loop calculates the best/worst deals for the entire week
   AppConfig.DAYS_OF_WEEK.forEach((dayOfWeek) => {
     Object.keys(hoursOfOperation).forEach((alleyName) => {
       AppConfig.HOURS.forEach((hour) => {
@@ -477,8 +471,6 @@ function generateFullDayTable() {
       });
     });
   });
-
-  // This loop processes data for the selected day for rendering
   const dayData = Object.keys(hoursOfOperation).map((alleyName) => {
     const hours = AppConfig.HOURS.map((hour) => {
       const hoursInfo = hoursOfOperation[alleyName][day];
@@ -488,7 +480,6 @@ function generateFullDayTable() {
           (['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].includes(day) &&
             hour >= 17 &&
             hour < 22));
-
       let effectiveHour = currentHour;
       const driveInfo = state.contactInfo[alleyName]?.drive;
       if (isToday && driveInfo?.includes('mins')) {
@@ -496,11 +487,9 @@ function generateFullDayTable() {
           now.getTime() + (parseInt(driveInfo) || 0) * 60000
         ).getHours();
       }
-
       const isPast = isToday && hour < effectiveHour;
       const isOpen = hour >= hoursInfo.o && hour < hoursInfo.c && !isLeagueTime;
       const cellData = { hour, isOpen, isPast, isLeagueTime };
-
       if (isOpen) {
         cellData.rates = getRatesForAlley(alleyName, day, hour);
         const costResult = calculateTotalCost(
@@ -510,8 +499,6 @@ function generateFullDayTable() {
           minutesPerGame
         );
         cellData.cost = costResult.cost;
-
-        // But only consider FUTURE cells for best deals and heatmap range
         if (!isPast && (selectedTime === 'any' || hour == selectedTime)) {
           if (cellData.cost < dayMinTotalCost) dayMinTotalCost = cellData.cost;
           if (cellData.cost > dayMaxTotalCost) dayMaxTotalCost = cellData.cost;
@@ -524,11 +511,8 @@ function generateFullDayTable() {
     });
     return { alleyName, hours };
   });
-
   const bestWeeklyCost = weekBestTotalDeals[0]?.cost ?? Infinity;
   const worstWeeklyCost = weekWorstTotalDeals[0]?.cost ?? -Infinity;
-
-  // 4. Render all UI components
   if (dayBestTotalDeal.cost !== Infinity) {
     const timeString =
       selectedTime === 'any'
@@ -545,7 +529,6 @@ function generateFullDayTable() {
     dom.calculatorResult.innerHTML =
       'No available deals found for the selected time.';
   }
-
   const tableHeaderHTML = `<th></th>${AppConfig.HOURS.map(
     (hour) => `<th>${formatHour(hour)}</th>`
   ).join('')}`;
@@ -556,13 +539,11 @@ function generateFullDayTable() {
         ? `<a href="${links[alleyName]}" target="_blank" rel="noopener noreferrer">${alleyName}</a>`
         : alleyName;
       const alleyInfoHTML = `<div class="alley-name">${linkTag}</div><div class="alley-info">${info.phone}</div><div class="alley-info">${info.drive}</div>`;
-
       const hourCellsHTML = hours
         .map((cell) => {
           if (cell.isLeagueTime)
             return `<td class="closed-cell">Unavailable<br>(League Play)</td>`;
           if (!cell.isOpen) return `<td class="closed-cell">Closed</td>`;
-
           const cellClass = cell.isPast
             ? 'price-cell past-time-cell'
             : 'price-cell';
@@ -589,7 +570,6 @@ function generateFullDayTable() {
                   hoursInfo.o > 12 ? hoursInfo.o - 12 : hoursInfo.o
                 }:${hoursInfo.m}</span>`
               : '';
-
           let dealIndicatorHTML = '';
           if (cell.cost < Infinity) {
             if (cell.cost === bestWeeklyCost)
@@ -599,7 +579,6 @@ function generateFullDayTable() {
             else if (cell.cost === dayBestTotalDeal.cost)
               dealIndicatorHTML = `<div class="deal-indicator day">⭐<span class="tooltip-text">Best rate of today!</span></div>`;
           }
-
           const specialInfo = structuredSpecials[alleyName]?.[day];
           const specialHTML =
             specialInfo &&
@@ -609,26 +588,21 @@ function generateFullDayTable() {
                   specialInfo.allDay || specialInfo.text
                 }</span></div>`
               : '';
-
           return `<td class="${cellClass}" style="background-color: ${backgroundColor};">${dealIndicatorHTML}${specialHTML}${
             priceHTML || '&nbsp;'
           }${halfHourNote}</td>`;
         })
         .join('');
-
       return `<tr><td>${alleyInfoHTML}</td>${hourCellsHTML}</tr>`;
     })
     .join('');
-
   dom.results.innerHTML = `<table><thead><tr>${tableHeaderHTML}</tr></thead><tbody>${tableBodyHTML}</tbody></table>`;
-
   const daySpecials = specials[day];
   dom.specialsContainer.innerHTML =
     `<h2>Specials for Today</h2>` +
     (daySpecials?.length > 0
       ? `<ul>${daySpecials.map((s) => `<li>${s}</li>`).join('')}</ul>`
       : `<p>No specific specials are listed for this day.</p>`);
-
   setupTooltipEvents();
 }
 
@@ -640,8 +614,22 @@ function init() {
   initializeContactInfo();
   populateTimeFilter();
 
-  const { day } = getCurrentPacificTime();
-  dom.daySelect.value = day;
+  // Load settings from URL or set default day
+  const urlParams = new URLSearchParams(window.location.search);
+  const dayFromUrl = urlParams.get('day');
+  if (dayFromUrl) {
+    dom.daySelect.value = dayFromUrl;
+  } else {
+    const { day } = getCurrentPacificTime();
+    dom.daySelect.value = day;
+  }
+  const playersFromUrl = urlParams.get('players');
+  const gamesFromUrl = urlParams.get('games');
+  const paceFromUrl = urlParams.get('pace');
+  if (playersFromUrl) dom.numPlayers.value = playersFromUrl;
+  if (gamesFromUrl) dom.numGames.value = gamesFromUrl;
+  if (paceFromUrl === 'leisurely')
+    document.getElementById('paceLeisurely').checked = true;
 
   // Add all event listeners programmatically
   dom.daySelect.addEventListener('change', generateFullDayTable);
@@ -652,6 +640,7 @@ function init() {
     radio.addEventListener('change', generateFullDayTable);
   });
   dom.driveTimeButton.addEventListener('click', getDriveTimes);
+  dom.shareButton.addEventListener('click', shareSettings);
   dom.themeToggle.addEventListener('change', () =>
     applyTheme(dom.themeToggle.checked ? 'dark' : 'light')
   );

@@ -12,22 +12,20 @@
 }
 
 html {
-  /* Resets browser defaults to ensure no initial overflow */
   margin: 0;
   padding: 0;
 }
 
 #app-wrapper {
   width: 100%;
-  position: relative; /* Establishes a new containing block */
-  overflow-x: clip; /* Aggressively clips any horizontal overflow */
+  position: relative;
+  overflow-x: clip;
 }
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
     Helvetica, Arial, sans-serif;
   padding: 20px;
-  /* DO NOT set overflow-x here */
   margin: 0;
   background-color: var(--background-color);
   color: var(--text-color);
@@ -52,12 +50,9 @@ h2 {
    2. LAYOUT & COMPONENTS
    ========================================================================== */
 
-/**
- * Main Controls Container
- */
 .controls-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
@@ -69,6 +64,15 @@ h2 {
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
     0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+.main-controls-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  flex-grow: 1;
 }
 
 .control-group {
@@ -84,9 +88,6 @@ h2 {
   font-weight: 500;
 }
 
-/**
- * Form Elements
- */
 label {
   font-weight: bold;
   font-size: 1em;
@@ -116,14 +117,25 @@ input[type='text'] {
   width: auto;
 }
 
-#driveTimeButton {
-  padding: 8px 12px;
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 500;
+  border: 1px solid transparent;
+  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+#driveTimeButton {
   background-color: #28a745;
   color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
 }
 
 #driveTimeButton:disabled {
@@ -131,24 +143,37 @@ input[type='text'] {
   cursor: not-allowed;
 }
 
-/**
- * Main Table
- */
+#share-button {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+#driveTimeButton:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+#share-button:hover {
+  background-color: #2563eb;
+}
+
+[data-theme='dark'] #share-button:hover {
+  background-color: #60a5fa;
+}
+
 .table-container {
   overflow-x: auto;
   position: relative;
-  padding: 0 1px; /* Buffer to prevent unnecessary scrollbar */
+  padding: 0 1px;
 }
 
 table {
-  width: calc(100% - 2px); /* Fill container minus buffer */
+  width: calc(100% - 2px);
   border-collapse: collapse;
   margin-top: 20px;
   animation: fadeIn 0.4s ease-in-out;
-  table-layout: fixed; /* CRITICAL: Enforces uniform column widths */
+  table-layout: fixed;
 }
 
-/* Base styles for ALL cells */
 th,
 td {
   border-bottom: 1px solid var(--border-color);
@@ -157,10 +182,9 @@ td {
   font-size: 0.8em;
   color: var(--text-color);
   vertical-align: middle;
-  word-wrap: break-word; /* Prevent long text from breaking layout */
+  word-wrap: break-word;
 }
 
-/* Specific styles for HEADER cells (th) */
 th {
   background-color: var(--primary-color);
   color: #fff;
@@ -168,15 +192,13 @@ th {
   top: 0;
   z-index: 2;
   font-weight: 500;
-  height: 25px; /* Compact header height */
+  height: 25px;
 }
 
-/* Specific styles for DATA cells (td) */
 td {
-  height: 75px; /* UNIFORM height for all data rows */
+  height: 75px;
 }
 
-/* Styles for the FIRST column (Alley Names) */
 td:first-child,
 th:first-child {
   text-align: left;
@@ -186,31 +208,27 @@ th:first-child {
   z-index: 10;
   padding: 8px 10px;
   font-size: 0.9em;
-  width: 150px; /* Comfortable width for alley names */
+  width: 150px;
   border-right: 1px solid var(--border-color);
   box-sizing: border-box;
   overflow: visible;
 }
 
-/* Style for the top-left empty corner */
 thead th:first-child {
   background-color: var(--background-color);
   border: none;
-  z-index: 11; /* Above other sticky elements */
+  z-index: 11;
 }
 
-/* Add vertical borders to all columns except the last one */
 th:not(:last-child),
 td:not(:last-child) {
   border-right: 1px solid var(--border-color);
 }
 
-/* Hover effect */
 tbody tr:hover > td {
   background-color: #f3f4f6;
 }
 
-/* Alley info text styling */
 .alley-name a {
   color: var(--primary-color);
   text-decoration: none;
@@ -229,9 +247,6 @@ tbody tr:hover > td {
   line-height: 1.3;
 }
 
-/**
- * Table Cell Variants
- */
 .price-cell {
   position: relative;
   overflow: visible !important;
@@ -272,9 +287,6 @@ tbody tr:hover > td {
   color: #616161;
 }
 
-/**
- * Specials & Legend
- */
 .specials-key-wrapper {
   display: flex;
   justify-content: center;
@@ -435,7 +447,7 @@ tbody tr:hover > td {
 
 [data-theme='dark'] h2,
 [data-theme='dark'] .alley-name a {
-  color: #93c5fd; /* Softer blue for contrast */
+  color: #93c5fd;
 }
 
 [data-theme='dark'] select,
@@ -473,16 +485,13 @@ tbody tr:hover > td {
 [data-theme='dark'] .past-time-cell {
   background-color: #1f2937 !important;
   color: var(--text-muted);
-  opacity: 0.9; /* Adds a subtle fade */
+  opacity: 0.9;
 }
 
 /* ==========================================================================
    5. UTILITY COMPONENTS (PROMPT & THEME SWITCH)
    ========================================================================== */
 
-/**
- * Drive Time Prompt Notification
- */
 .drive-prompt {
   position: fixed;
   top: 20px;
@@ -529,9 +538,6 @@ tbody tr:hover > td {
   color: var(--text-color);
 }
 
-/**
- * Theme Toggle Switch
- */
 .theme-switch-wrapper {
   display: flex;
   align-items: center;
