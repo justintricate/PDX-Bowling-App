@@ -137,29 +137,30 @@ input[type='text'] {
 .table-container {
   overflow-x: auto;
   position: relative;
-  /* Adds a 1px buffer on the left and right, creating the necessary space */
-  padding: 0 1px;
+  padding: 0 1px; /* Buffer to prevent unnecessary scrollbar */
 }
 
 table {
-  /* Take up 100% of the container's width, minus a 2px buffer */
-  width: calc(100% - 2px);
+  width: calc(100% - 2px); /* Fill container minus buffer */
   border-collapse: collapse;
   margin-top: 20px;
   animation: fadeIn 0.4s ease-in-out;
+  table-layout: fixed; /* CRITICAL: Enforces uniform column widths */
 }
 
+/* Base styles for ALL cells */
 th,
 td {
-  border: none;
   border-bottom: 1px solid var(--border-color);
   padding: 6px 2px;
   text-align: center;
   font-size: 0.8em;
   color: var(--text-color);
   vertical-align: middle;
+  word-wrap: break-word; /* Prevent long text from breaking layout */
 }
 
+/* Specific styles for HEADER cells (th) */
 th {
   background-color: var(--primary-color);
   color: #fff;
@@ -167,9 +168,15 @@ th {
   top: 0;
   z-index: 2;
   font-weight: 500;
+  height: 25px; /* Compact header height */
 }
 
-/* Sticky first column for alley names */
+/* Specific styles for DATA cells (td) */
+td {
+  height: 75px; /* UNIFORM height for all data rows */
+}
+
+/* Styles for the FIRST column (Alley Names) */
 td:first-child,
 th:first-child {
   text-align: left;
@@ -179,23 +186,31 @@ th:first-child {
   z-index: 10;
   padding: 8px 10px;
   font-size: 0.9em;
-  white-space: normal;
-  min-width: 140px;
+  width: 150px; /* Comfortable width for alley names */
   border-right: 1px solid var(--border-color);
-  overflow: visible;
   box-sizing: border-box;
+  overflow: visible;
 }
 
+/* Style for the top-left empty corner */
 thead th:first-child {
   background-color: var(--background-color);
   border: none;
-  z-index: 3; /* Above other headers */
+  z-index: 11; /* Above other sticky elements */
 }
 
+/* Add vertical borders to all columns except the last one */
+th:not(:last-child),
+td:not(:last-child) {
+  border-right: 1px solid var(--border-color);
+}
+
+/* Hover effect */
 tbody tr:hover > td {
   background-color: #f3f4f6;
 }
 
+/* Alley info text styling */
 .alley-name a {
   color: var(--primary-color);
   text-decoration: none;
@@ -218,7 +233,6 @@ tbody tr:hover > td {
  * Table Cell Variants
  */
 .price-cell {
-  min-height: 50px;
   position: relative;
   overflow: visible !important;
   z-index: 20;
