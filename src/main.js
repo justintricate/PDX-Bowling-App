@@ -434,28 +434,35 @@ function getColorForPrice(price, min, max) {
 // MAIN APPLICATION LOGIC
 // =================================================================================
 
+/**
+ * The main function to generate and render the bowling options table.
+ */
 function generateFullDayTable() {
+  // 1. Get user inputs from the DOM
   const day = dom.daySelect.value;
   const numPlayers = parseInt(dom.numPlayers.value) || 1;
   const numGames = parseInt(dom.numGames.value) || 1;
   const pace = dom.paceSelect.value;
   const minutesPerGame = pace === 'normal' ? 10 : 15;
   const selectedTime = dom.timeFilter.value;
-  // NEW: Read from the checkbox
   const timeFilterType = dom.timeFilterExact.checked ? 'exact' : 'after';
 
-  // ... the rest of the function remains the same ...
+  // 2. Get current time for "past" calculations
   const {
     date: now,
     day: currentDay,
     hour: currentHour,
   } = getCurrentPacificTime();
   const isToday = day === currentDay;
+
+  // 3. Process all data for the day
   let dayMinTotalCost = Infinity,
-    dayMaxTotalCost = -Infinity,
-    dayBestTotalDeal = { cost: Infinity };
+    dayMaxTotalCost = -Infinity;
+  let dayBestTotalDeal = { cost: Infinity };
   let weekBestTotalDeals = [],
     weekWorstTotalDeals = [];
+
+  // This loop calculates the best/worst deals for the entire week
   AppConfig.DAYS_OF_WEEK.forEach((dayOfWeek) => {
     Object.keys(hoursOfOperation).forEach((alleyName) => {
       AppConfig.HOURS.forEach((hour) => {
@@ -481,6 +488,8 @@ function generateFullDayTable() {
       });
     });
   });
+
+  // This loop processes data for the selected day for rendering
   const dayData = Object.keys(hoursOfOperation).map((alleyName) => {
     const hours = AppConfig.HOURS.map((hour) => {
       const hoursInfo = hoursOfOperation[alleyName][day];
@@ -529,8 +538,11 @@ function generateFullDayTable() {
     });
     return { alleyName, hours };
   });
+
   const bestWeeklyCost = weekBestTotalDeals[0]?.cost ?? Infinity;
   const worstWeeklyCost = weekWorstTotalDeals[0]?.cost ?? -Infinity;
+
+  // 4. Render all UI components
   if (dayBestTotalDeal.cost !== Infinity) {
     const timeStringPrefix =
       timeFilterType === 'after'
@@ -544,13 +556,31 @@ function generateFullDayTable() {
         : `${timeStringPrefix} is <b>${
             dayBestTotalDeal.alley
           }</b> at <b>${formatHour(dayBestTotalDeal.hour)}</b>,`;
+
+    // NEW: Calculate the per-person cost
+    const perPersonCost = (dayBestTotalDeal.cost / numPlayers).toFixed(2);
+
+    // ⭐️ FIX: Determine the precise rate type based on the content of dayBestTotalDeal.details
+    let rateType = 'unknown';
+    if (dayBestTotalDeal.details.includes('/game')) {
+      rateType = 'per-game';
+    } else if (dayBestTotalDeal.details.includes('/hour')) {
+      rateType = 'hourly';
+    }
+
+    // ⭐️ NEW: Construct the new, specific rate sentence
+    const rateTypeSentence = `at the <b>${rateType}</b> rate.`;
+
+    // UPDATED: Use the new rateTypeSentence
+    // We exclude the old, messy 'dayBestTotalDeal.details' to keep the result clean.
     dom.calculatorResult.innerHTML = `Best deal for ${numPlayers} players, ${numGames} games each ${timeString} costing <b>$${dayBestTotalDeal.cost.toFixed(
       0
-    )}</b> ${dayBestTotalDeal.details}`;
+    )}</b> total. ($${perPersonCost}/person ${rateTypeSentence})`;
   } else {
     dom.calculatorResult.innerHTML =
       'No available deals found for the selected time.';
   }
+
   const tableHeaderHTML = `<th></th>${AppConfig.HOURS.map(
     (hour) => `<th>${formatHour(hour)}</th>`
   ).join('')}`;
