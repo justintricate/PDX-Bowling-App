@@ -153,6 +153,7 @@ const dom = {
   html: document.documentElement,
   daySelect: document.getElementById('day'),
   timeFilter: document.getElementById('timeFilter'),
+  timeFilterExact: document.getElementById('timeFilterExact'),
   numPlayers: document.getElementById('numPlayers'),
   numGames: document.getElementById('numGames'),
   paceSelect: document.getElementById('paceSelect'),
@@ -206,12 +207,18 @@ function shareSettings() {
     day: dom.daySelect.value,
     players: dom.numPlayers.value,
     games: dom.numGames.value,
-    pace: dom.paceSelect.value, // <-- UPDATED
+    pace: dom.paceSelect.value,
   });
-  // ... rest of the function is the same
+
+  // NEW: Add 'exact' param only if the box is checked
+  if (dom.timeFilterExact.checked) {
+    params.set('exact', 'true');
+  }
+
   const shareUrl = `${window.location.origin}${
     window.location.pathname
   }?${params.toString()}`;
+
   navigator.clipboard.writeText(shareUrl).then(() => {
     const originalContent = dom.shareButton.innerHTML;
     dom.shareButton.innerHTML = '<span>Copied!</span>';
@@ -434,6 +441,10 @@ function generateFullDayTable() {
   const pace = dom.paceSelect.value;
   const minutesPerGame = pace === 'normal' ? 10 : 15;
   const selectedTime = dom.timeFilter.value;
+  // NEW: Read from the checkbox
+  const timeFilterType = dom.timeFilterExact.checked ? 'exact' : 'after';
+
+  // ... the rest of the function remains the same ...
   const {
     date: now,
     day: currentDay,
@@ -441,8 +452,8 @@ function generateFullDayTable() {
   } = getCurrentPacificTime();
   const isToday = day === currentDay;
   let dayMinTotalCost = Infinity,
-    dayMaxTotalCost = -Infinity;
-  let dayBestTotalDeal = { cost: Infinity };
+    dayMaxTotalCost = -Infinity,
+    dayBestTotalDeal = { cost: Infinity };
   let weekBestTotalDeals = [],
     weekWorstTotalDeals = [];
   AppConfig.DAYS_OF_WEEK.forEach((dayOfWeek) => {
@@ -488,7 +499,15 @@ function generateFullDayTable() {
       }
       const isPast = isToday && hour < effectiveHour;
       const isOpen = hour >= hoursInfo.o && hour < hoursInfo.c && !isLeagueTime;
-      const cellData = { hour, isOpen, isPast, isLeagueTime };
+      let isFiltered = false;
+      if (selectedTime !== 'any') {
+        if (timeFilterType === 'after') {
+          isFiltered = hour < parseInt(selectedTime);
+        } else {
+          isFiltered = hour != parseInt(selectedTime);
+        }
+      }
+      const cellData = { hour, isOpen, isPast, isLeagueTime, isFiltered };
       if (isOpen) {
         cellData.rates = getRatesForAlley(alleyName, day, hour);
         const costResult = calculateTotalCost(
@@ -498,7 +517,7 @@ function generateFullDayTable() {
           minutesPerGame
         );
         cellData.cost = costResult.cost;
-        if (!isPast && (selectedTime === 'any' || hour == selectedTime)) {
+        if (!isPast && !isFiltered) {
           if (cellData.cost < dayMinTotalCost) dayMinTotalCost = cellData.cost;
           if (cellData.cost > dayMaxTotalCost) dayMaxTotalCost = cellData.cost;
           if (cellData.cost < dayBestTotalDeal.cost) {
@@ -513,14 +532,18 @@ function generateFullDayTable() {
   const bestWeeklyCost = weekBestTotalDeals[0]?.cost ?? Infinity;
   const worstWeeklyCost = weekWorstTotalDeals[0]?.cost ?? -Infinity;
   if (dayBestTotalDeal.cost !== Infinity) {
+    const timeStringPrefix =
+      timeFilterType === 'after'
+        ? `from <b>${formatHour(parseInt(selectedTime))}</b> onwards`
+        : `at <b>${formatHour(parseInt(selectedTime))}</b>`;
     const timeString =
       selectedTime === 'any'
         ? `is <b>${dayBestTotalDeal.alley}</b> at <b>${formatHour(
             dayBestTotalDeal.hour
           )}</b>,`
-        : `at <b>${formatHour(parseInt(selectedTime))}</b> is <b>${
+        : `${timeStringPrefix} is <b>${
             dayBestTotalDeal.alley
-          }</b>,`;
+          }</b> at <b>${formatHour(dayBestTotalDeal.hour)}</b>,`;
     dom.calculatorResult.innerHTML = `Best deal for ${numPlayers} players, ${numGames} games each ${timeString} costing <b>$${dayBestTotalDeal.cost.toFixed(
       0
     )}</b> ${dayBestTotalDeal.details}`;
@@ -540,6 +563,7 @@ function generateFullDayTable() {
       const alleyInfoHTML = `<div class="alley-name">${linkTag}</div><div class="alley-info">${info.phone}</div><div class="alley-info">${info.drive}</div>`;
       const hourCellsHTML = hours
         .map((cell) => {
+          if (cell.isFiltered) return `<td class="filtered-cell"></td>`;
           if (cell.isLeagueTime)
             return `<td class="closed-cell">Unavailable<br>(League Play)</td>`;
           if (!cell.isOpen) return `<td class="closed-cell">Closed</td>`;
@@ -608,13 +632,13 @@ function generateFullDayTable() {
 // =================================================================================
 // INITIALIZATION
 // =================================================================================
-
 function init() {
   initializeContactInfo();
   populateTimeFilter();
 
   const urlParams = new URLSearchParams(window.location.search);
   const dayFromUrl = urlParams.get('day');
+
   if (dayFromUrl) {
     dom.daySelect.value = dayFromUrl;
   } else {
@@ -622,20 +646,23 @@ function init() {
     dom.daySelect.value = day;
   }
 
-  // Updated logic to read from URL
   const playersFromUrl = urlParams.get('players');
-  const gamesFromUrl = urlParams.get('games');
+  const gamesFromUrl = urlParams.get('games'); // This line was incorrect before
   const paceFromUrl = urlParams.get('pace');
+  const exactFromUrl = urlParams.get('exact');
+
   if (playersFromUrl) dom.numPlayers.value = playersFromUrl;
   if (gamesFromUrl) dom.numGames.value = gamesFromUrl;
-  if (paceFromUrl) dom.paceSelect.value = paceFromUrl; // <-- UPDATED
+  if (paceFromUrl) dom.paceSelect.value = paceFromUrl;
+  if (exactFromUrl === 'true') dom.timeFilterExact.checked = true;
 
   // Add all event listeners programmatically
   dom.daySelect.addEventListener('change', generateFullDayTable);
   dom.timeFilter.addEventListener('change', generateFullDayTable);
+  dom.timeFilterExact.addEventListener('change', generateFullDayTable);
   dom.numPlayers.addEventListener('change', generateFullDayTable);
   dom.numGames.addEventListener('change', generateFullDayTable);
-  dom.paceSelect.addEventListener('change', generateFullDayTable); // <-- ADD THIS
+  dom.paceSelect.addEventListener('change', generateFullDayTable);
   dom.driveTimeButton.addEventListener('click', getDriveTimes);
   dom.shareButton.addEventListener('click', shareSettings);
   dom.themeToggle.addEventListener('change', () =>
