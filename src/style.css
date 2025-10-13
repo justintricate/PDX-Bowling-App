@@ -51,19 +51,28 @@ h2 {
    ========================================================================== */
 
 .controls-container {
+  position: relative; /* Create a positioning context for the toggle */
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
   max-width: 1200px;
   margin: 0 auto 10px auto;
   padding: 20px;
+  /* Add padding on the right to make space for the toggle */
+  padding-right: 90px;
   background-color: var(--surface-color);
   border: 1px solid var(--border-color);
   border-radius: 16px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
     0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+.theme-switch-wrapper {
+  position: absolute;
+  top: 20px; /* Align to the top padding of the container */
+  right: 20px; /* Position on the far right */
 }
 
 .main-controls-wrapper {
@@ -539,8 +548,10 @@ tbody tr:hover > td {
 }
 
 .theme-switch-wrapper {
-  display: flex;
-  align-items: center;
+  position: absolute; /* Take the toggle out of the normal flow */
+  top: 85%;
+  right: 10px; /* Position it on the right */
+  transform: translateY(-50%); /* Fine-tune the vertical centering */
 }
 
 .theme-switch {
