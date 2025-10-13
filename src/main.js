@@ -155,7 +155,7 @@ const dom = {
   timeFilter: document.getElementById('timeFilter'),
   numPlayers: document.getElementById('numPlayers'),
   numGames: document.getElementById('numGames'),
-  paceNormal: document.getElementById('paceNormal'),
+  paceSelect: document.getElementById('paceSelect'),
   startAddress: document.getElementById('startAddress'),
   driveTimeButton: document.getElementById('driveTimeButton'),
   calculatorResult: document.getElementById('calculator-result'),
@@ -206,13 +206,12 @@ function shareSettings() {
     day: dom.daySelect.value,
     players: dom.numPlayers.value,
     games: dom.numGames.value,
-    pace: dom.paceNormal.checked ? 'normal' : 'leisurely',
+    pace: dom.paceSelect.value, // <-- UPDATED
   });
-
+  // ... rest of the function is the same
   const shareUrl = `${window.location.origin}${
     window.location.pathname
   }?${params.toString()}`;
-
   navigator.clipboard.writeText(shareUrl).then(() => {
     const originalContent = dom.shareButton.innerHTML;
     dom.shareButton.innerHTML = '<span>Copied!</span>';
@@ -432,7 +431,7 @@ function generateFullDayTable() {
   const day = dom.daySelect.value;
   const numPlayers = parseInt(dom.numPlayers.value) || 1;
   const numGames = parseInt(dom.numGames.value) || 1;
-  const pace = dom.paceNormal.checked ? 'normal' : 'leisurely';
+  const pace = dom.paceSelect.value;
   const minutesPerGame = pace === 'normal' ? 10 : 15;
   const selectedTime = dom.timeFilter.value;
   const {
@@ -614,7 +613,6 @@ function init() {
   initializeContactInfo();
   populateTimeFilter();
 
-  // Load settings from URL or set default day
   const urlParams = new URLSearchParams(window.location.search);
   const dayFromUrl = urlParams.get('day');
   if (dayFromUrl) {
@@ -623,22 +621,21 @@ function init() {
     const { day } = getCurrentPacificTime();
     dom.daySelect.value = day;
   }
+
+  // Updated logic to read from URL
   const playersFromUrl = urlParams.get('players');
   const gamesFromUrl = urlParams.get('games');
   const paceFromUrl = urlParams.get('pace');
   if (playersFromUrl) dom.numPlayers.value = playersFromUrl;
   if (gamesFromUrl) dom.numGames.value = gamesFromUrl;
-  if (paceFromUrl === 'leisurely')
-    document.getElementById('paceLeisurely').checked = true;
+  if (paceFromUrl) dom.paceSelect.value = paceFromUrl; // <-- UPDATED
 
   // Add all event listeners programmatically
   dom.daySelect.addEventListener('change', generateFullDayTable);
   dom.timeFilter.addEventListener('change', generateFullDayTable);
   dom.numPlayers.addEventListener('change', generateFullDayTable);
   dom.numGames.addEventListener('change', generateFullDayTable);
-  document.querySelectorAll('input[name="paceOfPlay"]').forEach((radio) => {
-    radio.addEventListener('change', generateFullDayTable);
-  });
+  dom.paceSelect.addEventListener('change', generateFullDayTable); // <-- ADD THIS
   dom.driveTimeButton.addEventListener('click', getDriveTimes);
   dom.shareButton.addEventListener('click', shareSettings);
   dom.themeToggle.addEventListener('change', () =>

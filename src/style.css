@@ -259,7 +259,6 @@ tbody tr:hover > td {
 .price-cell {
   position: relative;
   overflow: visible !important;
-  z-index: 20;
 }
 
 .hour-price,
@@ -629,4 +628,150 @@ input:checked + .slider .moon-icon {
 
 [data-theme='dark'] .slider {
   background-color: #4b5563;
+}
+
+/* ==========================================================================
+   6. MOBILE RESPONSIVE STYLES
+   ========================================================================== */
+
+/* ==========================================================================
+   6. MOBILE RESPONSIVE STYLES
+   ========================================================================== */
+
+/* Targets small screens like the iPhone SE */
+/* ==========================================================================
+   6. RESPONSIVE STYLES (TABLET & MOBILE)
+   ========================================================================== */
+
+/* === Tablet & General Mobile Styles (screens <= 768px) === */
+@media (max-width: 768px) {
+  body {
+    padding: 15px; /* Reduce page padding */
+  }
+
+  h1 {
+    font-size: 1.75em;
+  }
+
+  /* --- CONTROLS --- */
+  .controls-container {
+    padding: 15px;
+    /* Remove the padding that made space for the absolute-positioned toggle */
+    padding-right: 15px;
+  }
+
+  .theme-switch-wrapper {
+    /* Let the toggle flow with other elements instead of being fixed on the right */
+    position: static;
+    transform: none;
+  }
+
+  /* --- TABLE --- */
+  table {
+    /* The calc() buffer is not needed when the table scrolls */
+    width: 100%;
+  }
+
+  td:first-child,
+  th:first-child {
+    width: 120px; /* Make the first column narrower */
+  }
+
+  /* --- SPECIALS & KEY --- */
+  .specials-key-wrapper {
+    flex-direction: column; /* Stack vertically */
+    align-items: center;
+  }
+
+  #legend-container {
+    width: 100%;
+    max-width: 450px; /* Give it a max-width so it doesn't look huge on tablets */
+  }
+}
+
+/* === Small Phone Optimizations (screens <= 480px, e.g., iPhone SE) === */
+/* ==========================================================================
+   6. RESPONSIVE STYLES (MOBILE & TABLET)
+   ========================================================================== */
+
+/* ==========================================================================
+   6. RESPONSIVE STYLES (MOBILE & TABLET)
+   ========================================================================== */
+
+/* === General Mobile & Tablet Styles (screens <= 768px) === */
+@media (max-width: 768px) {
+  body {
+    padding: 10px 5px;
+  }
+
+  h1 {
+    font-size: 1.5em;
+  }
+
+  /* --- 1. Restructure Controls for Vertical Stacking --- */
+  .controls-container {
+    flex-direction: column; /* Stack all control groups vertically */
+    align-items: stretch; /* Make groups take up full width */
+    padding: 15px;
+  }
+
+  .theme-switch-wrapper {
+    position: static; /* Let the toggle flow with other elements */
+    transform: none;
+    align-self: center; /* Center the toggle within the column */
+    margin-top: 10px;
+  }
+
+  /* Make specific control groups stack their own content */
+  .control-group.view-toggle,
+  .control-group:has(#driveTimeButton) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .control-group input[type='text'] {
+    width: 100%; /* Make address input full-width on mobile */
+  }
+
+  .action-button {
+    width: 100%; /* Make action buttons full-width for easy tapping */
+  }
+
+  /* --- 2. Make the Table Readable & Horizontally Scrollable --- */
+  table {
+    table-layout: auto; /* Let columns size to content */
+    width: auto; /* Allow table to be wider than the screen */
+  }
+
+  .hour-price,
+  .game-price {
+    white-space: nowrap; /* CRITICAL: Prevents prices like "$6.50 /gm" from wrapping */
+  }
+
+  /* Give time columns a minimum width to look consistent */
+  th:not(:first-child),
+  td:not(:first-child) {
+    min-width: 70px;
+  }
+
+  td:first-child,
+  th:first-child {
+    width: 100px;
+  }
+
+  td {
+    height: 65px;
+  }
+
+  /* --- 3. Stack Specials & Key --- */
+  .specials-key-wrapper {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #legend-container {
+    width: 100%;
+    max-width: 450px;
+  }
 }

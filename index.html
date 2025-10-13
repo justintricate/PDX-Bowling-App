@@ -45,23 +45,12 @@
             <input type="number" id="numGames" value="4" min="1" />
           </div>
 
-          <div class="control-group view-toggle">
-            <label>Pace:</label>
-            <input
-              type="radio"
-              id="paceNormal"
-              name="paceOfPlay"
-              value="normal"
-              checked
-            />
-            <label for="paceNormal">Normal (10 min/game)</label>
-            <input
-              type="radio"
-              id="paceLeisurely"
-              name="paceOfPlay"
-              value="leisurely"
-            />
-            <label for="paceLeisurely">Leisurely (15 min/game)</label>
+          <div class="control-group">
+            <label for="paceSelect">Pace:</label>
+            <select id="paceSelect">
+              <option value="normal">Normal (10 min/game)</option>
+              <option value="leisurely">Leisurely (15 min/game)</option>
+            </select>
           </div>
 
           <div class="control-group">
