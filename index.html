@@ -18,168 +18,156 @@
     />
   </head>
   <body>
-    <h1>🎳 Team JaM Bowling Options</h1>
+    <div id="app-wrapper">
+      <h1>🎳 Team JaM Bowling Options</h1>
 
-    <div class="controls-container">
-      <div class="control-group">
-        <label for="day">Day:</label>
-        <select id="day" onchange="generateFullDayTable()">
-          <option value="Sun">Sunday</option>
-          <option value="Mon">Monday</option>
-          <option value="Tue">Tuesday</option>
-          <option value="Wed">Wednesday</option>
-          <option value="Thu">Thursday</option>
-          <option value="Fri">Friday</option>
-          <option value="Sat">Saturday</option>
-        </select>
-      </div>
-      <div class="control-group">
-        <label for="timeFilter">Time:</label>
-        <select id="timeFilter" onchange="generateFullDayTable()"></select>
-      </div>
-
-      <div class="control-group">
-        <label for="numPlayers">Players:</label>
-        <input
-          type="number"
-          id="numPlayers"
-          value="2"
-          min="1"
-          onchange="generateFullDayTable()"
-        />
-        <label for="numGames">Games:</label>
-        <input
-          type="number"
-          id="numGames"
-          value="4"
-          min="1"
-          onchange="generateFullDayTable()"
-        />
-
-        <div class="control-group view-toggle">
-          <label>Pace:</label>
-          <input
-            type="radio"
-            id="paceNormal"
-            name="paceOfPlay"
-            value="normal"
-            checked
-            onchange="generateFullDayTable()"
-          />
-          <label for="paceNormal">Normal (10 min/game)</label>
-          <input
-            type="radio"
-            id="paceLeisurely"
-            name="paceOfPlay"
-            value="leisurely"
-            onchange="generateFullDayTable()"
-          />
-          <label for="paceLeisurely">Leisurely (15 min/game)</label>
+      <div class="controls-container">
+        <div class="control-group">
+          <label for="day">Day:</label>
+          <select id="day">
+            <option value="Sun">Sunday</option>
+            <option value="Mon">Monday</option>
+            <option value="Tue">Tuesday</option>
+            <option value="Wed">Wednesday</option>
+            <option value="Thu">Thursday</option>
+            <option value="Fri">Friday</option>
+            <option value="Sat">Saturday</option>
+          </select>
         </div>
-      </div>
+        <div class="control-group">
+          <label for="timeFilter">Time:</label>
+          <select id="timeFilter"></select>
+        </div>
 
-      <div class="control-group">
-        <label for="startAddress">Address:</label>
-        <input
-          type="text"
-          id="startAddress"
-          value="3155 S Moody Ave, Portland OR 97239"
-        />
-        <button id="driveTimeButton" onclick="getDriveTimes()">
-          Get Drive Times
-        </button>
-      </div>
+        <div class="control-group">
+          <label for="numPlayers">Players:</label>
+          <input type="number" id="numPlayers" value="2" min="1" />
+          <label for="numGames">Games:</label>
+          <input type="number" id="numGames" value="4" min="1" />
 
-      <div class="theme-switch-wrapper">
-        <label
-          class="theme-switch"
-          for="theme-toggle-checkbox"
-          aria-label="Toggle Theme"
-        >
-          <input type="checkbox" id="theme-toggle-checkbox" />
-          <div class="slider">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="sun-icon"
-            >
-              <circle cx="12" cy="12" r="5"></circle>
-              <line x1="12" y1="1" x2="12" y2="3"></line>
-              <line x1="12" y1="21" x2="12" y2="23"></line>
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-              <line x1="1" y1="12" x2="3" y2="12"></line>
-              <line x1="21" y1="12" x2="23" y2="12"></line>
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-            </svg>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="moon-icon"
-            >
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-            </svg>
+          <div class="control-group view-toggle">
+            <label>Pace:</label>
+            <input
+              type="radio"
+              id="paceNormal"
+              name="paceOfPlay"
+              value="normal"
+              checked
+            />
+            <label for="paceNormal">Normal (10 min/game)</label>
+            <input
+              type="radio"
+              id="paceLeisurely"
+              name="paceOfPlay"
+              value="leisurely"
+            />
+            <label for="paceLeisurely">Leisurely (15 min/game)</label>
           </div>
-        </label>
-      </div>
-    </div>
-
-    <div id="calculator-result"></div>
-
-    <div id="results" class="table-container"></div>
-
-    <div class="specials-key-wrapper">
-      <div id="specials-container">
-        <h2>Specials for Today</h2>
-      </div>
-
-      <div id="legend-container">
-        <h3>Deal Indicator Key</h3>
-
-        <div class="legend-item">
-          <span class="legend-emoji">‼️</span>
-          <span class="legend-text">Best Cost of the Week</span>
         </div>
 
-        <div class="legend-item">
-          <span class="legend-emoji">🚫</span>
-          <span class="legend-text">Worst Cost of the Week</span>
+        <div class="control-group">
+          <label for="startAddress">Address:</label>
+          <input
+            type="text"
+            id="startAddress"
+            value="3155 S Moody Ave, Portland OR 97239"
+          />
+          <button id="driveTimeButton">Get Drive Times</button>
         </div>
 
-        <div class="legend-item">
-          <span class="legend-emoji">⭐</span>
-          <span class="legend-text">Best Cost of the Day</span>
-        </div>
-
-        <div class="legend-item">
-          <span class="legend-emoji">💲</span>
-          <span class="legend-text"
-            >Alley has a Timed Special (check tooltip)</span
+        <div class="theme-switch-wrapper">
+          <label
+            class="theme-switch"
+            for="theme-toggle-checkbox"
+            aria-label="Toggle Theme"
           >
+            <input type="checkbox" id="theme-toggle-checkbox" />
+            <div class="slider">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="sun-icon"
+              >
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+              </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="moon-icon"
+              >
+                <path
+                  d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
+                ></path>
+              </svg>
+            </div>
+          </label>
         </div>
       </div>
-    </div>
-    <div id="drive-time-prompt" class="drive-prompt">
-      <p>
-        <strong>Want smarter results?</strong> Calculate drive times to
-        automatically hide slots you can't make in time.
-      </p>
-      <button id="close-prompt-btn" aria-label="Dismiss">&times;</button>
+
+      <div id="calculator-result"></div>
+
+      <div id="results" class="table-container"></div>
+
+      <div class="specials-key-wrapper">
+        <div id="specials-container">
+          <h2>Specials for Today</h2>
+        </div>
+
+        <div id="legend-container">
+          <h3>Deal Indicator Key</h3>
+
+          <div class="legend-item">
+            <span class="legend-emoji">‼️</span>
+            <span class="legend-text">Best Cost of the Week</span>
+          </div>
+
+          <div class="legend-item">
+            <span class="legend-emoji">🚫</span>
+            <span class="legend-text">Worst Cost of the Week</span>
+          </div>
+
+          <div class="legend-item">
+            <span class="legend-emoji">⭐</span>
+            <span class="legend-text">Best Cost of the Day</span>
+          </div>
+
+          <div class="legend-item">
+            <span class="legend-emoji">💲</span>
+            <span class="legend-text"
+              >Alley has a Timed Special (check tooltip)</span
+            >
+          </div>
+        </div>
+      </div>
+      <div id="drive-time-prompt" class="drive-prompt">
+        <p>
+          <strong>Want smarter results?</strong> Calculate drive times to
+          automatically hide slots you can't make in time.
+        </p>
+        <button id="close-prompt-btn" aria-label="Dismiss">&times;</button>
+      </div>
     </div>
     <script type="module" src="/src/main.js"></script>
   </body>
