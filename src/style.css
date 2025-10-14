@@ -151,7 +151,7 @@ input[type='text'] {
 .table-container {
   overflow-x: auto;
   position: relative;
-  padding: 0 1px;
+  padding: 0px;
 }
 
 table {
@@ -578,8 +578,6 @@ input:checked + .slider .moon-icon {
 /* ==========================================================================
    MOBILE & TABLET RESPONSIVE STYLES
    ========================================================================== */
-
-/* Tablet and wider mobile */
 @media (max-width: 1024px) {
   .controls-container {
     flex-direction: column;
@@ -599,9 +597,40 @@ input:checked + .slider .moon-icon {
     width: 100%;
     max-width: 450px;
   }
+
+  /* --- Make the Scrolling Table Readable --- */
+  table {
+    table-layout: auto; /* Let columns resize based on content */
+    width: auto; /* Allow table to be wider than the screen */
+  }
+
+  /* Give price columns a minimum width to prevent squishing */
+  th:not(:first-child),
+  td:not(:first-child) {
+    min-width: 75px;
+  }
+
+  /* Stack the price and unit vertically inside the cell */
+  .hour-price,
+  .game-price {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.1;
+  }
+
+  .price-value {
+    font-size: 1.2em; /* Make the number bigger */
+    font-weight: 700;
+  }
+
+  .price-unit {
+    font-size: 0.8em; /* Make the unit smaller */
+    opacity: 0.7;
+  }
 }
 
-/* Narrow mobile */
 @media (max-width: 640px) {
   body {
     padding: 10px;
@@ -638,63 +667,8 @@ input:checked + .slider .moon-icon {
     margin-top: 5px;
   }
 
-  /* Transform table to card view on mobile */
-  .table-container {
-    overflow-x: hidden;
-  }
-  table,
-  thead,
-  tbody,
-  th,
-  td,
-  tr {
-    display: block;
-  }
-  thead {
-    display: none;
-  }
-  tr {
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    margin-bottom: 20px;
-    background-color: var(--surface-color);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
-      0 2px 4px -2px rgba(0, 0, 0, 0.05);
-  }
-  td {
-    border-bottom: 1px solid var(--border-color);
-    padding-left: 50%;
-    position: relative;
-    height: auto;
-    text-align: right;
-  }
-  td:last-child {
-    border-bottom: none;
-  }
-  td:first-child {
-    position: static;
-    width: auto;
-    border-right: none;
-    text-align: center;
-    padding: 15px;
-    border-bottom: 2px solid var(--border-color);
-  }
-  td:not(:first-child)::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 15px;
-    width: calc(50% - 20px);
-    text-align: left;
-    font-weight: bold;
-    color: var(--text-muted);
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  .price-cell,
-  .closed-cell {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 12px 15px;
+  td:first-child,
+  th:first-child {
+    width: 100px; /* Make first column a bit narrower on phones */
   }
 }
