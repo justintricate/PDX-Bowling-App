@@ -611,13 +611,14 @@ function generateFullDayTable() {
       const alleyInfoHTML = `<div class="alley-name">${linkTag}</div><div class="alley-info">${info.phone}</div><div class="alley-info">${info.drive}</div>`;
       const hourCellsHTML = hours
         .map((cell) => {
-          if (cell.isFiltered) return `<td class="filtered-cell"></td>`;
+          let cellClass = 'price-cell';
+          if (cell.isFiltered) cellClass += ' filtered-cell';
+          if (cell.isPast) cellClass += ' past-time-cell';
+
           if (cell.isLeagueTime)
             return `<td class="closed-cell">Unavailable<br>(League Play)</td>`;
           if (!cell.isOpen) return `<td class="closed-cell">Closed</td>`;
-          const cellClass = cell.isPast
-            ? 'price-cell past-time-cell'
-            : 'price-cell'; // ⭐️ REVISED FIX: Only calculate heatmap color for non-past, non-filtered cells.
+
           let backgroundColor = '';
           if (!cell.isPast && !cell.isFiltered && cell.cost !== Infinity) {
             backgroundColor = getColorForPrice(
@@ -626,6 +627,7 @@ function generateFullDayTable() {
               dayMaxTotalCost
             );
           }
+
           const priceHTML =
             (cell.rates?.hour
               ? `<div class="hour-price">$${cell.rates.hour.toFixed(
@@ -637,6 +639,7 @@ function generateFullDayTable() {
                   2
                 )} /gm</div>`
               : '');
+
           const hoursInfo = hoursOfOperation[alleyName][day];
           const halfHourNote =
             hoursInfo.m && cell.hour === hoursInfo.o
@@ -644,15 +647,33 @@ function generateFullDayTable() {
                   hoursInfo.o > 12 ? hoursInfo.o - 12 : hoursInfo.o
                 }:${hoursInfo.m}</span>`
               : '';
+
           let dealIndicatorHTML = '';
-          if (cell.cost < Infinity) {
-            if (cell.cost === bestWeeklyCost)
-              dealIndicatorHTML = `<div class="deal-indicator week">‼️<span class="tooltip-text">Best deal of the week!!</span></div>`;
-            else if (cell.cost === worstWeeklyCost)
-              dealIndicatorHTML = `<div class="deal-indicator week">🚫<span class="tooltip-text">Worst deal of the week.</span></div>`;
-            else if (cell.cost === dayBestTotalDeal.cost)
-              dealIndicatorHTML = `<div class="deal-indicator day">⭐<span class="tooltip-text">Best rate of today!</span></div>`;
+          const isWeekBest = weekBestTotalDeals.some(
+            (deal) =>
+              deal.alley === alleyName &&
+              deal.hour === cell.hour &&
+              deal.day === day
+          );
+          const isWeekWorst = weekWorstTotalDeals.some(
+            (deal) =>
+              deal.alley === alleyName &&
+              deal.hour === cell.hour &&
+              deal.day === day
+          );
+          const isDayBest =
+            !cell.isFiltered &&
+            !cell.isPast &&
+            cell.cost === dayBestTotalDeal.cost;
+
+          if (isWeekBest) {
+            dealIndicatorHTML = `<div class="deal-indicator week">‼️<span class="tooltip-text">Best deal of the week!</span></div>`;
+          } else if (isWeekWorst) {
+            dealIndicatorHTML = `<div class="deal-indicator week">🚫<span class="tooltip-text">Worst deal of the week.</span></div>`;
+          } else if (isDayBest) {
+            dealIndicatorHTML = `<div class="deal-indicator day">⭐<span class="tooltip-text">Best deal for this day!</span></div>`;
           }
+
           const specialInfo = structuredSpecials[alleyName]?.[day];
           const specialHTML =
             specialInfo &&
@@ -662,6 +683,7 @@ function generateFullDayTable() {
                   specialInfo.allDay || specialInfo.text
                 }</span></div>`
               : '';
+
           return `<td class="${cellClass}" style="background-color: ${backgroundColor};">${dealIndicatorHTML}${specialHTML}${
             priceHTML || '&nbsp;'
           }${halfHourNote}</td>`;

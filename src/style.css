@@ -777,3 +777,7 @@ input:checked + .slider .moon-icon {
     max-width: 450px;
   }
 }
+
+.filtered-cell {
+  opacity: 0.35; /* Dims the content of non-selected times */
+}
