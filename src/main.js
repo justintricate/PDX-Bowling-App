@@ -582,7 +582,7 @@ function generateFullDayTable() {
     let rateType = 'unknown';
     if (dayBestTotalDeal.details.includes('/game')) {
       rateType = 'per-game';
-    } else if (dayBestTotalDeal.details.includes('/hour')) {
+    } else if (dayBestTotalDeal.details.includes('/hr')) {
       rateType = 'hourly';
     }
 
