@@ -4,13 +4,21 @@
   "description": "Team JaM Bowling Options Web App",
   "main": "index.js",
   "scripts": {
-  "start": "netlify dev -c vite",
-  "build": "vite build"
-},
-  "keywords": ["vite", "netlify", "serverless", "bowling"],
+    "start": "netlify dev -c vite",
+    "build": "vite build"
+  },
+  "keywords": [
+    "vite",
+    "netlify",
+    "serverless",
+    "bowling"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "vite": "^7.1.9"
+  },
+  "dependencies": {
+    "node-fetch": "^2.7.0"
   }
 }
