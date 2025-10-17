@@ -71,6 +71,7 @@ h2 {
   display: flex;
   align-items: center;
   gap: 10px;
+  position: relative;
 }
 
 #calculator-result {
@@ -196,9 +197,9 @@ th:first-child {
   z-index: 10;
   padding: 8px 10px;
   font-size: 0.9em;
-  width: 150px;
   border-right: 1px solid var(--border-color);
   box-sizing: border-box;
+  width: 140px;
 }
 
 thead th:first-child {
@@ -671,4 +672,91 @@ input:checked + .slider .moon-icon {
   th:first-child {
     width: 100px; /* Make first column a bit narrower on phones */
   }
+}
+
+.tax-note {
+  text-align: center;
+  font-size: 0.8em;
+  color: var(--text-muted);
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color);
+}
+
+.tax-asterisk {
+  white-space: nowrap; /* Ensures the asterisk stays with the word before it */
+}
+
+.alley-info a {
+  color: inherit; /* Makes the link the same color as the other info text */
+  text-decoration: none; /* Removes the underline */
+}
+
+.alley-info a:hover {
+  text-decoration: underline; /* Adds an underline on hover for feedback */
+  color: var(--primary-color);
+}
+
+/* Add this new block to the end of style.css */
+
+/* Google Maps Autocomplete Dropdown Styles */
+/* Replace your existing .pac-container rule with this one */
+.pac-container {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  z-index: 1050;
+  font-family: 'Inter', sans-serif;
+  display: none;
+  position: absolute;
+  top: 100%; /* Position it directly below the control group */
+  left: 0; /* Align to the left of the group */
+  right: 0; /* Stretch to the right of the group */
+  margin-top: 4px; /* Add a small gap */
+}
+.pac-item {
+  padding: 10px;
+  font-size: 0.9em;
+  cursor: pointer;
+  color: var(--text-color);
+  border: none;
+  border-top: 1px solid var(--border-color);
+}
+.pac-item:first-child {
+  border-top: none;
+}
+.pac-item:hover {
+  background-color: var(--background-color);
+}
+.pac-item-query {
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+/* Dark Mode Styles for Autocomplete */
+[data-theme='dark'] .pac-item:hover {
+  background-color: #4b5563;
+}
+
+.row-hover > td,
+.column-hover {
+  filter: brightness(95%);
+  transition: filter 0.15s ease-in-out;
+}
+
+/* This adds the stronger, more emphasized hover for the specific cell */
+.cell-hover {
+  filter: brightness(85%);
+}
+
+/* Dark mode overrides for the new hover effects */
+[data-theme='dark'] .row-hover > td,
+[data-theme='dark'] .column-hover {
+  background-color: #4b5563 !important;
+}
+
+[data-theme='dark'] .cell-hover {
+  background-color: #5a6778 !important;
 }

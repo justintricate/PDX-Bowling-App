@@ -8,151 +8,331 @@ const AppConfig = {
   DAYS_OF_WEEK: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
   HOURS: Array.from({ length: 15 }, (_, i) => i + 9), // 9 AM to 11 PM
   NETLIFY_FUNCTION_URL: '/.netlify/functions/getDriveTimes',
+  AUTOCOMPLETE_FUNCTION_URL: '/.netlify/functions/getAutocomplete',
 };
 
-const hoursOfOperation = {
+const bowlingAlleys = {
+  'Milwaukie Bowl': {
+    address: '3056 SE Harrison St, Milwaukie, OR 97222',
+    url: 'https://www.milwaukiebowl.com/copy-of-legacy',
+    phone: '(503) 654-7719',
+    taxRate: 0,
+    hours: {
+      Sun: { o: 9, c: 22 },
+      Mon: { o: 9, c: 23 },
+      Tue: { o: 9, c: 23 },
+      Wed: { o: 9, c: 23 },
+      Thu: { o: 9, c: 23 },
+      Fri: { o: 9, c: 24 },
+      Sat: { o: 9, c: 24 },
+    },
+    specials: {},
+  },
   'Tigard Bowl': {
     address: '11660 SW Pacific Hwy, Tigard, OR 97223',
-    Sun: { o: 9, c: 24 },
-    Mon: { o: 9, c: 24 },
-    Tue: { o: 9, c: 24 },
-    Wed: { o: 9, c: 24 },
-    Thu: { o: 9, c: 24 },
-    Fri: { o: 9, c: 25 },
-    Sat: { o: 9, c: 25 },
-  },
-  'Kingpins Beaverton': {
-    address: '2725 SW Cedar Hills Blvd, Beaverton, OR 97005',
-    Sun: { o: 10, c: 23, m: 30 },
-    Mon: { o: 11, c: 23, m: 30 },
-    Tue: { o: 10, c: 23, m: 30 },
-    Wed: { o: 11, c: 23, m: 30 },
-    Thu: { o: 10, c: 24 },
-    Fri: { o: 11, c: 25 },
-    Sat: { o: 9, c: 25 },
+    url: 'https://www.tigardbowl.com/open-bowl',
+    phone: '(503) 639-2001',
+    taxRate: 0,
+    hours: {
+      Sun: { o: 9, c: 24 },
+      Mon: { o: 9, c: 24 },
+      Tue: { o: 9, c: 24 },
+      Wed: { o: 9, c: 24 },
+      Thu: { o: 9, c: 24 },
+      Fri: { o: 9, c: 25 },
+      Sat: { o: 9, c: 25 },
+    },
+    specials: {},
   },
   'Kingpins Portland': {
     address: '3550 SE 92nd Ave, Portland, OR 97266',
-    Sun: { o: 9, c: 23, m: 30 },
-    Mon: { o: 11, c: 24 },
-    Tue: { o: 11, c: 23, m: 30 },
-    Wed: { o: 11, c: 23, m: 30 },
-    Thu: { o: 12, c: 23, m: 30 },
-    Fri: { o: 10, c: 24 },
-    Sat: { o: 9, c: 24 },
-  },
-  'Milwaukie Bowl': {
-    address: '3056 SE Harrison St, Milwaukie, OR 97222',
-    Sun: { o: 9, c: 22 },
-    Mon: { o: 9, c: 23 },
-    Tue: { o: 9, c: 23 },
-    Wed: { o: 9, c: 23 },
-    Thu: { o: 9, c: 23 },
-    Fri: { o: 9, c: 24 },
-    Sat: { o: 9, c: 24 },
-  },
-  "Big Al's Vancouver": {
-    address: '16615 SE 18th St, Vancouver, WA 98683',
-    Sun: { o: 9, m: 30, c: 22 },
-    Mon: { o: 15, c: 22 },
-    Tue: { o: 15, c: 22 },
-    Wed: { o: 15, c: 22 },
-    Thu: { o: 15, c: 22 },
-    Fri: { o: 15, c: 24 },
-    Sat: { o: 12, c: 24 },
-  },
-  'Hazel Dell Lanes': {
-    address: '6300 NE Hwy 99, Vancouver, WA 98665',
-    Sun: { o: 9, c: 22 },
-    Mon: { o: 11, m: 30, c: 23 },
-    Tue: { o: 10, m: 30, c: 23 },
-    Wed: { o: 9, c: 23 },
-    Thu: { o: 9, m: 30, c: 23 },
-    Fri: { o: 9, m: 30, c: 24 },
-    Sat: { o: 9, c: 24 },
+    url: 'https://mykingpins.com/portland-bowling/#bowling-pricing',
+    phone: '(503) 788-7889',
+    taxRate: 0,
+    hours: {
+      Sun: { o: 9, c: 23, m: 30 },
+      Mon: { o: 11, c: 24 },
+      Tue: { o: 11, c: 23, m: 30 },
+      Wed: { o: 11, c: 23, m: 30 },
+      Thu: { o: 12, c: 23, m: 30 },
+      Fri: { o: 10, c: 24 },
+      Sat: { o: 9, c: 24 },
+    },
+    specials: {
+      Sun: {
+        from: 20,
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        description:
+          '<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games/shoes).',
+      },
+      Mon: {
+        from: 21,
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        description:
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+      },
+      Tue: {
+        from: 21,
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        description:
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+      },
+      Wed: {
+        from: 21,
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        description:
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+      },
+      Thu: {
+        from: 21,
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        description:
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+      },
+      Fri: {
+        from: 22,
+        text: 'All You Can Bowl for $15.',
+        description:
+          '<b>Kingpins Portland:</b> Cosmic All You Can Bowl from 10 PM - Midnight for $15 (shoes included).',
+      },
+      Sat: {
+        from: 22,
+        text: 'All You Can Bowl for $15.',
+        description:
+          '<b>Kingpins Portland:</b> Cosmic All You Can Bowl from 10 PM - Midnight for $15 (shoes included).',
+      },
+    },
   },
   SuperPlay: {
     address: '9300 SW Beaverton Hillsdale Hwy, Beaverton, OR 97005',
-    Sun: { o: 12, c: 22 },
-    Mon: { o: 15, c: 23 },
-    Tue: { o: 15, c: 23 },
-    Wed: { o: 15, c: 23 },
-    Thu: { o: 12, c: 24 },
-    Fri: { o: 12, c: 24 },
-    Sat: { o: 12, c: 24 },
+    url: 'https://www.superplayor.com/Play/Bowling',
+    phone: '(503) 292-3523',
+    taxRate: 0,
+    hours: {
+      Sun: { o: 12, c: 22 },
+      Mon: { o: 15, c: 23 },
+      Tue: { o: 15, c: 23 },
+      Wed: { o: 15, c: 23 },
+      Thu: { o: 12, c: 24 },
+      Fri: { o: 12, c: 24 },
+      Sat: { o: 12, c: 24 },
+    },
+    specials: {
+      Tue: {
+        allDay: true,
+        text: '$25/hr per lane special.',
+        description: '<b>SuperPlay:</b> $25 per hour, all day.',
+      },
+      Wed: {
+        allDay: true,
+        text: '$2/game & $2/shoes special.',
+        description:
+          '<b>SuperPlay:</b> $2 Wednesdays ($2 games, $2 shoes & drink specials).',
+      },
+      Thu: {
+        allDay: true,
+        text: '$15/hr per lane special.',
+        description: '<b>SuperPlay:</b> $15 per hour, all Day.',
+      },
+      Fri: {
+        from: 21,
+        text: 'Cosmic Bowling is on!',
+        description: '<b>SuperPlay:</b> Cosmic Bowling after 9 PM.',
+      },
+      Sat: {
+        from: 21,
+        text: 'Cosmic Bowling is on!',
+        description: '<b>SuperPlay:</b> Cosmic Bowling after 9 PM.',
+      },
+    },
   },
-};
-const links = {
-  'Tigard Bowl': 'https://www.tigardbowl.com/open-bowl',
-  'Milwaukie Bowl': 'https://www.milwaukiebowl.com/copy-of-legacy',
-  'Kingpins Beaverton':
-    'https://mykingpins.com/beaverton-bowling/#bowling-pricing',
-  'Kingpins Portland':
-    'https://mykingpins.com/portland-bowling/#bowling-pricing',
-  "Big Al's Vancouver": 'https://www.ilovebigals.com/vancouver/lanes/',
-  'Hazel Dell Lanes': 'https://www.hazeldelllanes.com/hours--rates.html',
-  SuperPlay: 'https://www.superplayor.com/Play/Bowling',
-};
-const specials = {
-  Sun: [
-    '<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games/shoes).',
-  ],
-  Mon: [
-    '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
-    '<b>Hazel Dell Lanes:</b> All-you-can-bowl for $12 from 9 PM - Midnight.',
-  ],
-  Tue: [
-    "<b>Big Al's Vancouver:</b> Two Buck Tuesdays ($2 games, shoes, sodas, beers & snacks).",
-    '<b>SuperPlay:</b> $25 per hour, all day.',
-  ],
-  Wed: [
-    '<b>SuperPlay:</b> $2 Wednesdays ($2 games, $2 shoes & drink specials).',
-    '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
-  ],
-  Thu: [
-    '<b>SuperPlay:</b> $15 per hour, all Day.',
-    '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
-  ],
-  Fri: [
-    '<b>Kingpins Portland:</b> Cosmic All You Can Bowl from 10 PM - Midnight for $15 (shoes included).',
-    '<b>Kingpins Beaverton:</b> Cosmic All You Can Bowl from 11 PM - 1 AM for $15 (shoes included).',
-    '<b>SuperPlay:</b> Cosmic Bowling after 9 PM.',
-  ],
-  Sat: [
-    '<b>Kingpins Portland:</b> Cosmic All You Can Bowl from 10 PM - Midnight for $15 (shoes included).',
-    '<b>Kingpins Beaverton:</b> Cosmic All You Can Bowl from 11 PM - 1 AM for $15 (shoes included).',
-    '<b>SuperPlay:</b> Cosmic Bowling after 9 PM.',
-  ],
-};
-const structuredSpecials = {
-  "Big Al's Vancouver": {
-    Tue: { allDay: '$2 games, shoes, drinks & snacks!' },
+  'Hazel Dell Lanes': {
+    address: '6300 NE Hwy 99, Vancouver, WA 98665',
+    url: 'https://www.hazeldelllanes.com/hours--rates.html',
+    phone: '(360) 694-8364',
+    taxRate: 0.088,
+    hours: {
+      Sun: { o: 9, c: 22 },
+      Mon: { o: 11, m: 30, c: 23 },
+      Tue: { o: 10, m: 30, c: 23 },
+      Wed: { o: 9, c: 23 },
+      Thu: { o: 9, m: 30, c: 23 },
+      Fri: { o: 9, m: 30, c: 24 },
+      Sat: { o: 9, c: 24 },
+    },
+    specials: {
+      Mon: {
+        from: 21,
+        text: 'All-You-Can-Bowl for $12.',
+        description:
+          '<b>Hazel Dell Lanes:</b> All-you-can-bowl for $12 from 9 PM - Midnight.',
+      },
+    },
   },
-  SuperPlay: {
-    Thu: { allDay: '$15/hr per lane special.' },
-    Tue: { allDay: '$25/hr per lane special.' },
-    Wed: { allDay: '$2/game & $2/shoes special.' },
-  },
-  'Hazel Dell Lanes': { Mon: { from: 21, text: 'All-You-Can-Bowl for $12.' } },
   'Kingpins Beaverton': {
-    Sun: { from: 20, text: 'Quarter Mania! $11 cover + $0.25 games/shoes.' },
-    Mon: { from: 21, text: 'Quarter Mania! $11 cover + $0.25 games/shoes.' },
-    Tue: { from: 21, text: 'Quarter Mania! $11 cover + $0.25 games/shoes.' },
-    Wed: { from: 21, text: 'Quarter Mania! $11 cover + $0.25 games/shoes.' },
-    Thu: { from: 21, text: 'Quarter Mania! $11 cover + $0.25 games/shoes.' },
-    Fri: { from: 23, text: 'All You Can Bowl for $15.' },
-    Sat: { from: 23, text: 'All You Can Bowl for $15.' },
+    address: '2725 SW Cedar Hills Blvd, Beaverton, OR 97005',
+    url: 'https://mykingpins.com/beaverton-bowling/#bowling-pricing',
+    phone: '(503) 646-1116',
+    taxRate: 0,
+    hours: {
+      Sun: { o: 10, c: 23, m: 30 },
+      Mon: { o: 11, c: 23, m: 30 },
+      Tue: { o: 10, c: 23, m: 30 },
+      Wed: { o: 11, c: 23, m: 30 },
+      Thu: { o: 10, c: 24 },
+      Fri: { o: 11, c: 25 },
+      Sat: { o: 9, c: 25 },
+    },
+    specials: {
+      Sun: {
+        from: 20,
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        description:
+          '<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games/shoes).',
+      },
+      Mon: {
+        from: 21,
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        description:
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+      },
+      Tue: {
+        from: 21,
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        description:
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+      },
+      Wed: {
+        from: 21,
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        description:
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+      },
+      Thu: {
+        from: 21,
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        description:
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+      },
+      Fri: {
+        from: 23,
+        text: 'All You Can Bowl for $15.',
+        description:
+          '<b>Kingpins Beaverton:</b> Cosmic All You Can Bowl from 11 PM - 1 AM for $15 (shoes included).',
+      },
+      Sat: {
+        from: 23,
+        text: 'All You Can Bowl for $15.',
+        description:
+          '<b>Kingpins Beaverton:</b> Cosmic All You Can Bowl from 11 PM - 1 AM for $15 (shoes included).',
+      },
+    },
   },
-  'Kingpins Portland': {
-    Sun: { from: 20, text: 'Quarter Mania! $11 cover + $0.25 games/shoes.' },
-    Mon: { from: 21, text: 'Quarter Mania! $11 cover + $0.25 games/shoes.' },
-    Tue: { from: 21, text: 'Quarter Mania! $11 cover + $0.25 games/shoes.' },
-    Wed: { from: 21, text: 'Quarter Mania! $11 cover + $0.25 games/shoes.' },
-    Thu: { from: 21, text: 'Quarter Mania! $11 cover + $0.25 games/shoes.' },
-    Fri: { from: 22, text: 'All You Can Bowl for $15.' },
-    Sat: { from: 22, text: 'All You Can Bowl for $15.' },
+  "Big Al's Beaverton": {
+    address: '14950 SW Barrows Rd, Beaverton, OR 97007',
+    url: 'https://www.ilovebigals.com/beaverton/lanes/',
+    phone: '(503) 748-6118',
+    taxRate: 0,
+    hours: {
+      Sun: { o: 11, c: 22 },
+      Mon: { o: 15, c: 22 },
+      Tue: { o: 15, c: 22 },
+      Wed: { o: 15, c: 22 },
+      Thu: { o: 15, c: 22 },
+      Fri: { o: 15, c: 24 },
+      Sat: { o: 11, c: 24 },
+    },
+    specials: {
+      Tue: {
+        allDay: true,
+        text: '$2 games all day!',
+        description:
+          "<b>Big Al's Beaverton:</b> Two Buck Tuesdays ($2 games, shoes, sodas, beers & snacks).",
+      },
+    },
+  },
+  "Langer's Entertainment": {
+    address: '21650 SW Langer Farms Pkwy, Sherwood, OR 97140',
+    url: 'https://langersfun.com/attractions/bowling/',
+    phone: '(503) 625-1800',
+    taxRate: 0,
+    hours: {
+      Sun: { o: 11, c: 22 },
+      Mon: { o: 11, c: 22 },
+      Tue: { o: 11, c: 22 },
+      Wed: { o: 11, c: 22 },
+      Thu: { o: 11, c: 22 },
+      Fri: { o: 11, c: 23 },
+      Sat: { o: 11, c: 23 },
+    },
+    specials: {
+      Mon: {
+        from: 15,
+        to: 18,
+        text: 'Happy Hour! $15/hr.',
+        description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
+      },
+      Tue: {
+        allDay: true,
+        text: '$2 games all day!',
+        description: "<b>Langer's:</b> Twosday! $2 per person per game.",
+      },
+      Wed: {
+        from: 15,
+        to: 18,
+        text: 'Happy Hour! $15/hr.',
+        description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
+      },
+      Thu: {
+        from: 15,
+        to: 18,
+        text: 'Happy Hour! $15/hr.',
+        description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
+      },
+      Fri: {
+        from: 15,
+        to: 18,
+        text: 'Happy Hour! $15/hr.',
+        description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
+      },
+    },
+  },
+  "Big Al's Vancouver": {
+    address: '16615 SE 18th St, Vancouver, WA 98683',
+    url: 'https://www.ilovebigals.com/vancouver/lanes/',
+    phone: '(360) 944-6118',
+    taxRate: 0.088,
+    hours: {
+      Sun: { o: 9, m: 30, c: 22 },
+      Mon: { o: 15, c: 22 },
+      Tue: { o: 15, c: 22 },
+      Wed: { o: 15, c: 22 },
+      Thu: { o: 15, c: 22 },
+      Fri: { o: 15, c: 24 },
+      Sat: { o: 12, c: 24 },
+    },
+    specials: {
+      Tue: {
+        allDay: true,
+        text: '$2 games, shoes, drinks & snacks!',
+        description:
+          "<b>Big Al's Vancouver:</b> Two Buck Tuesdays ($2 games, shoes, sodas, beers & snacks).",
+      },
+    },
   },
 };
+
+const defaultSortOrder = [
+  'Milwaukie Bowl',
+  'Tigard Bowl',
+  'Kingpins Beaverton',
+  'Kingpins Portland',
+  'SuperPlay',
+  'Hazel Dell Lanes',
+  "Big Al's Beaverton",
+  "Langer's Entertainment",
+  "Big Al's Vancouver",
+];
 
 // =================================================================================
 // DOM ELEMENTS & STATE
@@ -210,6 +390,7 @@ function hideDriveTimePrompt() {
 function shareSettings() {
   const params = new URLSearchParams({
     day: dom.daySelect.value,
+    time: dom.timeFilter.value,
     players: dom.numPlayers.value,
     games: dom.numGames.value,
     pace: dom.paceSelect.value,
@@ -267,7 +448,7 @@ async function getDriveTimes() {
   dom.driveTimeButton.disabled = true;
   dom.driveTimeButton.textContent = 'Calculating...';
   try {
-    const destinations = Object.values(hoursOfOperation).map((v) => v.address);
+    const destinations = Object.values(bowlingAlleys).map((v) => v.address);
     const response = await fetch(AppConfig.NETLIFY_FUNCTION_URL, {
       method: 'POST',
       body: JSON.stringify({ origin, destinations: destinations.join('|') }),
@@ -278,7 +459,7 @@ async function getDriveTimes() {
         `Google Maps API Error: ${data.error_message || data.status}`
       );
     }
-    const alleyNames = Object.keys(hoursOfOperation);
+    const alleyNames = Object.keys(bowlingAlleys);
     data.rows[0].elements.forEach((element, i) => {
       const alleyName = alleyNames[i];
       if (element.status === 'OK') {
@@ -299,20 +480,21 @@ async function getDriveTimes() {
 }
 
 function initializeContactInfo() {
-  state.contactInfo = {
-    'Tigard Bowl': { phone: '(503) 639-2001', drive: '- mins' },
-    'Kingpins Beaverton': { phone: '(503) 646-1116', drive: '- mins' },
-    'Kingpins Portland': { phone: '(503) 788-7889', drive: '- mins' },
-    'Milwaukie Bowl': { phone: '(503) 654-7719', drive: '- mins' },
-    "Big Al's Vancouver": { phone: '(360) 944-6118', drive: '- mins' },
-    'Hazel Dell Lanes': { phone: '(360) 694-8364', drive: '- mins' },
-    SuperPlay: { phone: '(503) 292-3523', drive: '- mins' },
-  };
+  for (const alleyName in bowlingAlleys) {
+    state.contactInfo[alleyName] = {
+      phone: bowlingAlleys[alleyName].phone,
+      drive: '- mins',
+    };
+  }
 }
 
 // =================================================================================
 // CALCULATION & FORMATTING
 // =================================================================================
+
+function formatPhoneNumberForLink(phone) {
+  return phone.replace(/\D/g, ''); // Removes all non-digit characters
+}
 
 function getCurrentPacificTime() {
   const now = new Date(
@@ -376,9 +558,16 @@ function getRatesForAlley(alleyName, day, hour) {
       else if (day === 'Fri') hourPrice = hour < 22 ? 25.0 : 40.0;
       break;
     case "Big Al's Vancouver":
-      if (day === 'Tue') gamePrice = 2.0;
-      else if (isWeekday) gamePrice = hour < 17 ? 5.0 : 6.0;
-      else gamePrice = 8.0;
+    case "Big Al's Beaverton":
+      if (day === 'Tue') {
+        gamePrice = 2.0;
+      } else if (isWeekday) {
+        gamePrice = hour < 17 ? 5.0 : 6.0;
+      } else if (day === 'Fri') {
+        gamePrice = hour < 17 ? 5.0 : 8.0;
+      } else {
+        gamePrice = 8.0;
+      }
       break;
     case 'Hazel Dell Lanes':
       if (
@@ -401,7 +590,29 @@ function getRatesForAlley(alleyName, day, hour) {
         hourPrice = 32.0;
       }
       break;
+    case "Langer's Entertainment":
+      if (day === 'Tue') {
+        gamePrice = 2.0;
+      } else if (
+        ['Mon', 'Wed', 'Thu', 'Fri'].includes(day) &&
+        hour >= 15 &&
+        hour < 18
+      ) {
+        hourPrice = 15.0;
+      } else if (['Mon', 'Wed', 'Thu', 'Fri'].includes(day) && hour < 15) {
+        gamePrice = 5.0;
+      } else if (['Fri', 'Sat', 'Sun'].includes(day)) {
+        hourPrice = 40.0;
+      } else {
+        hourPrice = 30.0;
+      }
+      break;
   }
+
+  const taxRate = bowlingAlleys[alleyName].taxRate || 0;
+  if (gamePrice) gamePrice *= 1 + taxRate;
+  if (hourPrice) hourPrice *= 1 + taxRate;
+
   return { game: gamePrice, hour: hourPrice };
 }
 
@@ -431,6 +642,8 @@ function getColorForPrice(price, min, max) {
 // MAIN APPLICATION LOGIC
 // =================================================================================
 
+// Replace the entire existing generateFullDayTable function in your main.js
+
 function generateFullDayTable() {
   const day = dom.daySelect.value;
   const numPlayers = parseInt(dom.numPlayers.value) || 1;
@@ -447,13 +660,31 @@ function generateFullDayTable() {
   } = getCurrentPacificTime();
   const isToday = day === currentDay;
 
+  const alleyNames = Object.keys(bowlingAlleys);
+  const driveTimesCalculated = Object.values(state.contactInfo).some(
+    (info) => info.drive !== '- mins' && info.drive !== 'N/A'
+  );
+
+  if (driveTimesCalculated) {
+    alleyNames.sort((a, b) => {
+      const parseDriveTime = (driveString) => parseInt(driveString) || Infinity;
+      const driveA = parseDriveTime(state.contactInfo[a].drive);
+      const driveB = parseDriveTime(state.contactInfo[b].drive);
+      return driveA - driveB;
+    });
+  } else {
+    alleyNames.sort(
+      (a, b) => defaultSortOrder.indexOf(a) - defaultSortOrder.indexOf(b)
+    );
+  }
+
   let weekBestTotalDeals = [];
   let weekWorstTotalDeals = [];
 
   AppConfig.DAYS_OF_WEEK.forEach((dayOfWeek) => {
-    Object.keys(hoursOfOperation).forEach((alleyName) => {
+    alleyNames.forEach((alleyName) => {
       AppConfig.HOURS.forEach((hour) => {
-        const hoursInfo = hoursOfOperation[alleyName][dayOfWeek];
+        const hoursInfo = bowlingAlleys[alleyName].hours[dayOfWeek];
         if (hour < hoursInfo.o || hour >= hoursInfo.c) return;
         const isLeagueTime =
           alleyName === 'Hazel Dell Lanes' &&
@@ -497,9 +728,9 @@ function generateFullDayTable() {
   let dayMaxTotalCost = -Infinity;
   let dayBestTotalDeal = { cost: Infinity };
 
-  const dayData = Object.keys(hoursOfOperation).map((alleyName) => {
+  const dayData = alleyNames.map((alleyName) => {
     const hours = AppConfig.HOURS.map((hour) => {
-      const hoursInfo = hoursOfOperation[alleyName][day];
+      const hoursInfo = bowlingAlleys[alleyName].hours[day];
       const isLeagueTime =
         alleyName === 'Hazel Dell Lanes' &&
         ((day === 'Sun' && hour >= 9 && hour < 12) ||
@@ -558,8 +789,7 @@ function generateFullDayTable() {
       0
     )}</b> total. ($${perPersonCost}/person at the <b>${rateType}</b> rate.)`;
   } else {
-    dom.calculatorResult.innerHTML =
-      'No available deals found for the selected time.';
+    dom.calculatorResult.innerHTML = `No available deals found for the selected time.`;
   }
 
   const tableHeaderHTML = `<th></th>${AppConfig.HOURS.map(
@@ -568,10 +798,18 @@ function generateFullDayTable() {
   const tableBodyHTML = dayData
     .map(({ alleyName, hours }) => {
       const info = state.contactInfo[alleyName];
-      const linkTag = links[alleyName]
-        ? `<a href="${links[alleyName]}" target="_blank" rel="noopener noreferrer">${alleyName}</a>`
-        : alleyName;
-      const alleyInfoHTML = `<div class="alley-name">${linkTag}</div><div class="alley-info">${info.phone}</div><div class="alley-info">${info.drive}</div>`;
+      const alleyData = bowlingAlleys[alleyName];
+      let displayName = alleyName;
+      if (alleyData.taxRate > 0) {
+        displayName += ' *';
+      }
+      let linkTag = displayName;
+      if (alleyData.url) {
+        linkTag = `<a href="${alleyData.url}" target="_blank" rel="noopener noreferrer">${displayName}</a>`;
+      }
+      const alleyInfoHTML = `<div class="alley-name">${linkTag}</div><div class="alley-info"><a href="tel:${formatPhoneNumberForLink(
+        info.phone
+      )}">${info.phone}</a></div><div class="alley-info">${info.drive}</div>`;
       const hourCellsHTML = hours
         .map((cell) => {
           let cellClass = 'price-cell';
@@ -603,12 +841,13 @@ function generateFullDayTable() {
             cell.rates?.game,
             'gm'
           )}</div>`;
-          const hoursInfo = hoursOfOperation[alleyName][day];
           const halfHourNote =
-            hoursInfo.m && cell.hour === hoursInfo.o
+            alleyData.hours[day].m && cell.hour === alleyData.hours[day].o
               ? `<span class="half-hour-note">Opens at ${
-                  hoursInfo.o > 12 ? hoursInfo.o - 12 : hoursInfo.o
-                }:${hoursInfo.m}</span>`
+                  alleyData.hours[day].o > 12
+                    ? alleyData.hours[day].o - 12
+                    : alleyData.hours[day].o
+                }:${alleyData.hours[day].m}</span>`
               : '';
 
           let dealIndicatorHTML = '';
@@ -637,14 +876,12 @@ function generateFullDayTable() {
             dealIndicatorHTML = `<div class="deal-indicator day">⭐<span class="tooltip-text">Best deal for this day!</span></div>`;
           }
 
-          const specialInfo = structuredSpecials[alleyName]?.[day];
+          const specialInfo = alleyData.specials?.[day];
           const specialHTML =
             specialInfo &&
             (specialInfo.allDay ||
               (specialInfo.from && cell.hour >= specialInfo.from))
-              ? `<div class="special-icon">💲<span class="tooltip-text">${
-                  specialInfo.allDay || specialInfo.text
-                }</span></div>`
+              ? `<div class="special-icon">💲<span class="tooltip-text">${specialInfo.text}</span></div>`
               : '';
 
           return `<td data-label="${formatHour(
@@ -659,12 +896,62 @@ function generateFullDayTable() {
     .join('');
   dom.results.innerHTML = `<table><thead><tr>${tableHeaderHTML}</tr></thead><tbody>${tableBodyHTML}</tbody></table>`;
 
-  const daySpecials = specials[day];
-  dom.specialsContainer.innerHTML =
-    `<h2>Specials for Today</h2>` +
-    (daySpecials?.length > 0
-      ? `<ul>${daySpecials.map((s) => `<li>${s}</li>`).join('')}</ul>`
-      : `<p>No specific specials are listed for this day.</p>`);
+  const daySpecials = Object.values(bowlingAlleys)
+    .map((alley) => alley.specials?.[day]?.description)
+    .filter(Boolean);
+
+  let specialsHTML = `<h2>Specials for Today</h2>`;
+  if (daySpecials.length > 0) {
+    specialsHTML += `<ul>${daySpecials
+      .map((s) => `<li>${s}</li>`)
+      .join('')}</ul>`;
+  } else {
+    specialsHTML += `<p>No specific specials are listed for this day.</p>`;
+  }
+
+  if (Object.values(bowlingAlleys).some((a) => a.taxRate > 0)) {
+    specialsHTML += `<p class="tax-note">* Prices for WA locations include an estimated 8.8% sales tax.</p>`;
+  }
+
+  dom.specialsContainer.innerHTML = specialsHTML;
+
+  // THIS NEW SECTION ADDS THE HOVER LISTENERS
+  const table = dom.results.querySelector('table');
+  if (!table) return;
+
+  table.querySelectorAll('th, td').forEach((cell) => {
+    cell.addEventListener('mouseenter', () => {
+      // Add row hover class to the parent row
+      if (cell.parentElement.tagName === 'TR') {
+        cell.parentElement.classList.add('row-hover');
+      }
+      // Add strong cell hover to the specific cell
+      cell.classList.add('cell-hover');
+
+      // Get column index and highlight the entire column
+      const colIndex = cell.cellIndex;
+      table.querySelectorAll('tr').forEach((row) => {
+        if (row.cells[colIndex]) {
+          row.cells[colIndex].classList.add('column-hover');
+        }
+      });
+    });
+
+    cell.addEventListener('mouseleave', () => {
+      // Remove all hover classes
+      if (cell.parentElement.tagName === 'TR') {
+        cell.parentElement.classList.remove('row-hover');
+      }
+      cell.classList.remove('cell-hover');
+
+      const colIndex = cell.cellIndex;
+      table.querySelectorAll('tr').forEach((row) => {
+        if (row.cells[colIndex]) {
+          row.cells[colIndex].classList.remove('column-hover');
+        }
+      });
+    });
+  });
 
   setupTooltipEvents();
 }
@@ -672,6 +959,7 @@ function generateFullDayTable() {
 // =================================================================================
 // INITIALIZATION
 // =================================================================================
+
 function init() {
   initializeContactInfo();
   populateTimeFilter();
@@ -685,16 +973,20 @@ function init() {
     dom.daySelect.value = day;
   }
 
+  const timeFromUrl = urlParams.get('time');
+
   const playersFromUrl = urlParams.get('players');
   const gamesFromUrl = urlParams.get('games');
   const paceFromUrl = urlParams.get('pace');
   const exactFromUrl = urlParams.get('exact');
 
   if (playersFromUrl) dom.numPlayers.value = playersFromUrl;
+  if (timeFromUrl) dom.timeFilter.value = timeFromUrl;
   if (gamesFromUrl) dom.numGames.value = gamesFromUrl;
   if (paceFromUrl) dom.paceSelect.value = paceFromUrl;
   if (exactFromUrl === 'true') dom.timeFilterExact.checked = true;
 
+  // Event Listeners
   dom.daySelect.addEventListener('change', generateFullDayTable);
   dom.timeFilter.addEventListener('change', generateFullDayTable);
   dom.timeFilterExact.addEventListener('change', generateFullDayTable);
@@ -709,6 +1001,61 @@ function init() {
   dom.closePromptBtn.addEventListener('click', () => {
     hideDriveTimePrompt();
     sessionStorage.setItem('promptDismissed', 'true');
+  });
+
+  // --- Autocomplete Logic ---
+  const pacContainer = document.createElement('div');
+  pacContainer.className = 'pac-container pac-logo';
+  dom.startAddress.parentNode.appendChild(pacContainer);
+
+  let debounceTimer;
+  dom.startAddress.addEventListener('input', (e) => {
+    clearTimeout(debounceTimer);
+    const input = e.target.value;
+
+    if (input.length < 3) {
+      pacContainer.innerHTML = '';
+      pacContainer.style.display = 'none';
+      return;
+    }
+
+    debounceTimer = setTimeout(async () => {
+      try {
+        const response = await fetch(AppConfig.AUTOCOMPLETE_FUNCTION_URL, {
+          method: 'POST',
+          body: JSON.stringify({ input }),
+        });
+        const data = await response.json();
+        if (data.predictions && data.predictions.length > 0) {
+          pacContainer.innerHTML = data.predictions
+            .map(
+              (p) =>
+                `<div class="pac-item"><span class="pac-item-query">${p.structured_formatting.main_text}</span> <span>${p.structured_formatting.secondary_text}</span></div>`
+            )
+            .join('');
+          pacContainer.style.display = 'block';
+
+          document.querySelectorAll('.pac-item').forEach((item, index) => {
+            item.addEventListener('click', () => {
+              dom.startAddress.value = data.predictions[index].description;
+              pacContainer.innerHTML = '';
+              pacContainer.style.display = 'none';
+            });
+          });
+        } else {
+          pacContainer.innerHTML = '';
+          pacContainer.style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Autocomplete error:', error);
+      }
+    }, 300); // Debounce to avoid sending too many requests
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!dom.startAddress.contains(e.target)) {
+      pacContainer.style.display = 'none';
+    }
   });
 
   initializeTheme();
