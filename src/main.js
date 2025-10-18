@@ -1584,16 +1584,74 @@ function generateFullDayTable() {
 
       let cannotMakeItInTime = false;
       if (state.driveTimesActive && isToday && !isPastTime) {
-        const driveTimeStr = state.contactInfo[alleyName].drive;
-        const driveMinutes = parseInt(driveTimeStr) || 0;
+        const driveTimeStr = state.contactInfo[alleyName].drive; // e.g., "15 mins", "1 hour 5 mins", "1 day 2 hours"
 
-        if (driveMinutes > 0) {
+        // --- Robust parsing of driveTimeStr into minutes ---
+        let driveMinutes = 0;
+        try {
+          const timeParts = driveTimeStr.split(' ');
+          let days = 0,
+            hours = 0,
+            mins = 0;
+
+          const dayIndex = timeParts.findIndex((p) => p.includes('day'));
+          if (dayIndex > 0) {
+            days = parseInt(timeParts[dayIndex - 1]) || 0;
+          }
+
+          const hourIndex = timeParts.findIndex((p) => p.includes('hour'));
+          if (hourIndex > 0) {
+            hours = parseInt(timeParts[hourIndex - 1]) || 0;
+          }
+
+          const minIndex = timeParts.findIndex((p) => p.includes('min'));
+          if (minIndex > 0) {
+            mins = parseInt(timeParts[minIndex - 1]) || 0;
+          }
+          // Handle cases like just "50 mins" where there's no preceding index for days/hours
+          if (
+            days === 0 &&
+            hours === 0 &&
+            mins === 0 &&
+            timeParts.length >= 2 &&
+            timeParts[1].includes('min')
+          ) {
+            mins = parseInt(timeParts[0]) || 0;
+          }
+          if (
+            days === 0 &&
+            hours === 0 &&
+            mins === 0 &&
+            timeParts.length >= 2 &&
+            timeParts[1].includes('hour')
+          ) {
+            hours = parseInt(timeParts[0]) || 0;
+          }
+
+          driveMinutes = days * 24 * 60 + hours * 60 + mins;
+
+          if (isNaN(driveMinutes) || driveMinutes < 0) {
+            throw new Error('Parsed NaN or negative minutes');
+          }
+        } catch (e) {
+          console.error('Error parsing drive time:', driveTimeStr, e);
+          driveMinutes = Infinity; // Treat unparseable times as unreachable
+        }
+        // --- End of parsing ---
+
+        if (driveMinutes > 0 && driveMinutes !== Infinity) {
           const currentMinutes = currentDate.getMinutes();
-          const currentTotalMinutes = currentHour * 60 + currentMinutes;
-          const targetTotalMinutes = hour * 60;
-          const availableMinutes = targetTotalMinutes - currentTotalMinutes;
+          const currentTotalMinutes = currentHour * 60 + currentMinutes; // e.g., 901 at 3:01 PM
 
-          cannotMakeItInTime = driveMinutes > availableMinutes;
+          const arrivalTotalMinutes = currentTotalMinutes + driveMinutes; // Estimated arrival time in minutes past midnight
+
+          const targetHourStartMinutes = hour * 60; // e.g., 900 for 3 PM start
+          const targetHourEndMinutes = targetHourStartMinutes + 60; // e.g., 960 for 3 PM end (exclusive)
+
+          // --- Check if arrival time is AFTER or AT the target hour slot ENDS ---
+          cannotMakeItInTime = arrivalTotalMinutes >= targetHourEndMinutes;
+        } else if (driveMinutes === Infinity || driveMinutes < 0) {
+          cannotMakeItInTime = true; // Mark as unreachable if parsing failed or was negative
         }
       }
 

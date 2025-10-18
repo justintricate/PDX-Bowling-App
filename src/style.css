@@ -648,7 +648,27 @@ tbody tr:hover > td {
 .cannot-make-it-cell {
   background-color: #f9fafb !important;
   color: #9ca3af;
+}
+
+.closed-cell .rate-text,
+.filtered-cell .rate-text,
+.past-time-cell .rate-text,
+.cannot-make-it-cell .rate-text,
+.closed-cell .calculated-cost,
+.filtered-cell .calculated-cost,
+.past-time-cell .calculated-cost,
+.cannot-make-it-cell .calculated-cost,
+.closed-cell .per-person-cost,
+.filtered-cell .per-person-cost,
+.past-time-cell .per-person-cost,
+.cannot-make-it-cell .per-person-cost {
   font-style: italic;
+}
+
+/* Explicitly prevent icons from becoming italic */
+.deal-indicator,
+.special-icon {
+  font-style: normal !important; /* Use !important to override inheritance */
 }
 
 .cannot-make-it-cell {
