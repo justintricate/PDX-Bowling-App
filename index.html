@@ -17,6 +17,14 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <!-- Screen reader only announcements -->
+    <div
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
     <div id="app-wrapper">
       <h1>🎳 Team JaM Bowling Options</h1>
 
@@ -24,7 +32,7 @@
         <div class="controls-row">
           <div class="control-group">
             <label for="day">Day:</label>
-            <select id="day">
+            <select id="day" aria-label="Select day of the week">
               <option value="Sun">Sunday</option>
               <option value="Mon">Monday</option>
               <option value="Tue">Tuesday</option>
@@ -36,7 +44,7 @@
           </div>
           <div class="control-group">
             <label for="timeFilter">Earliest Time:</label>
-            <select id="timeFilter"></select>
+            <select id="timeFilter" aria-label="Select earliest time"></select>
             <div class="control-group view-toggle time-filter-toggle">
               <input type="checkbox" id="timeFilterExact" />
               <label for="timeFilterExact">Exact time only</label>
@@ -44,13 +52,27 @@
           </div>
           <div class="control-group">
             <label for="numPlayers">Players:</label>
-            <input type="number" id="numPlayers" value="2" min="1" />
+            <input
+              type="number"
+              id="numPlayers"
+              value="2"
+              min="1"
+              max="50"
+              aria-label="Number of players"
+            />
             <label for="numGames">Games:</label>
-            <input type="number" id="numGames" value="4" min="1" />
+            <input
+              type="number"
+              id="numGames"
+              value="4"
+              min="1"
+              max="20"
+              aria-label="Number of games per player"
+            />
           </div>
           <div class="control-group">
             <label for="paceSelect">Pace:</label>
-            <select id="paceSelect">
+            <select id="paceSelect" aria-label="Select bowling pace">
               <option value="normal">Normal (10 min/game)</option>
               <option value="leisurely">Leisurely (15 min/game)</option>
             </select>
@@ -63,6 +85,7 @@
               type="text"
               id="startAddress"
               value="3155 S Moody Ave, Portland OR 97239"
+              aria-label="Starting address for drive time calculation"
             />
             <button id="driveTimeButton" class="action-button">
               <svg
@@ -75,6 +98,7 @@
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+                aria-hidden="true"
               >
                 <polygon
                   points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"
@@ -85,10 +109,35 @@
               <span>Get Drive Times</span>
             </button>
           </div>
+          <button
+            id="week-comparison-button"
+            class="action-button"
+            aria-label="Compare best deals across the week"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            <span>Week Comparison</span>
+          </button>
           <div
             id="share-button"
             class="action-button"
             role="button"
+            tabindex="0"
             aria-label="Share current settings"
           >
             <svg
@@ -101,7 +150,7 @@
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
-              class="feather feather-send"
+              aria-hidden="true"
             >
               <line x1="22" y1="2" x2="11" y2="13"></line>
               <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -127,6 +176,7 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   class="sun-icon"
+                  aria-hidden="true"
                 >
                   <circle cx="12" cy="12" r="5"></circle>
                   <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -149,6 +199,7 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   class="moon-icon"
+                  aria-hidden="true"
                 >
                   <path
                     d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"
@@ -160,8 +211,14 @@
         </div>
       </div>
 
-      <div id="calculator-result"></div>
-      <div id="results" class="table-container"></div>
+      <div id="calculator-result" role="status" aria-live="polite"></div>
+      <div
+        id="results"
+        class="table-container"
+        role="region"
+        aria-label="Bowling prices table"
+      ></div>
+
       <div class="specials-key-wrapper">
         <div id="specials-container">
           <h2>Specials for Today</h2>
@@ -169,33 +226,58 @@
         <div id="legend-container">
           <h3>Deal Indicator Key</h3>
           <div class="legend-item">
-            <span class="legend-emoji">‼️</span
-            ><span class="legend-text">Best Cost of the Week</span>
+            <span class="legend-emoji" aria-hidden="true">‼️</span>
+            <span class="legend-text">Best Cost of the Week</span>
           </div>
           <div class="legend-item">
-            <span class="legend-emoji">🚫</span
-            ><span class="legend-text">Worst Cost of the Week</span>
+            <span class="legend-emoji" aria-hidden="true">🚫</span>
+            <span class="legend-text">Worst Cost of the Week</span>
           </div>
           <div class="legend-item">
-            <span class="legend-emoji">⭐</span
-            ><span class="legend-text">Best Cost of the Day</span>
+            <span class="legend-emoji" aria-hidden="true">⭐</span>
+            <span class="legend-text">Best Cost of the Day</span>
           </div>
           <div class="legend-item">
-            <span class="legend-emoji">💲</span
-            ><span class="legend-text"
+            <span class="legend-emoji" aria-hidden="true">💲</span>
+            <span class="legend-text"
               >Alley has a Timed Special (check tooltip)</span
             >
           </div>
         </div>
       </div>
-      <div id="drive-time-prompt" class="drive-prompt">
+
+      <div id="drive-time-prompt" class="drive-prompt" role="alert">
         <p>
           <strong>Want smarter results?</strong> Calculate drive times to
           automatically hide slots you can't make in time.
         </p>
         <button id="close-prompt-btn" aria-label="Dismiss">&times;</button>
       </div>
+
+      <!-- Week Comparison Modal -->
+      <div
+        id="week-comparison-modal"
+        class="modal"
+        aria-hidden="true"
+        role="dialog"
+        aria-labelledby="modal-title"
+      >
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+          <button
+            id="close-modal-btn"
+            class="modal-close"
+            aria-label="Close modal"
+          >
+            &times;
+          </button>
+          <div class="modal-content-inner" id="modal-title">
+            <!-- Content populated by JavaScript -->
+          </div>
+        </div>
+      </div>
     </div>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
