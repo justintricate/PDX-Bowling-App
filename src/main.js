@@ -1662,11 +1662,13 @@ function generateFullDayTable() {
         isLeagueTime,
         isFilteredByTime,
         cannotMakeItInTime,
-        unavailableReason: isLeagueTime
+        unavailableReason: !isOpen // Check if closed FIRST
+          ? 'Closed'
+          : isLeagueTime
           ? 'League Play'
           : cannotMakeItInTime
           ? `Can't arrive in time (${state.contactInfo[alleyName].drive} drive)`
-          : isPastTime
+          : isPastTime // Now only checked if it WAS open but is past
           ? 'Time has passed'
           : null,
       };
