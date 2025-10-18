@@ -79,45 +79,64 @@ const bowlingAlleys = {
     specials: {
       Sun: {
         from: 20,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes', // Period removed
         description:
           '<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games/shoes).',
+        type: 'cover_plus_per_game',
+        coverCharge: 11,
+        gameRate: 0.25,
       },
       Mon: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes', // Period removed
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+        type: 'cover_plus_per_game',
+        coverCharge: 11,
+        gameRate: 0.25,
       },
       Tue: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes', // Period removed
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+        type: 'cover_plus_per_game',
+        coverCharge: 11,
+        gameRate: 0.25,
       },
       Wed: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes', // Period removed
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+        type: 'cover_plus_per_game',
+        coverCharge: 11,
+        gameRate: 0.25,
       },
       Thu: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes', // Period removed
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+        type: 'cover_plus_per_game',
+        coverCharge: 11,
+        gameRate: 0.25,
       },
       Fri: {
         from: 22,
-        text: 'All You Can Bowl for $15.',
+        text: 'All-You-Can-Bowl for $15', // Period removed
         description:
-          '<b>Kingpins Portland:</b> Cosmic All You Can Bowl from 10 PM - Midnight for $15 (shoes included).',
+          '<b>Kingpins Portland:</b> Cosmic All-You-Can-Bowl from 10 PM - Midnight for $15 (shoes included).',
+        type: 'ayce',
+        aycePrice: 15,
       },
       Sat: {
         from: 22,
-        text: 'All You Can Bowl for $15.',
+        text: 'All-You-Can-Bowl for $15', // Period removed
         description:
-          '<b>Kingpins Portland:</b> Cosmic All You Can Bowl from 10 PM - Midnight for $15 (shoes included).',
+          '<b>Kingpins Portland:</b> Cosmic All-You-Can-Bowl from 10 PM - Midnight for $15 (shoes included).',
+        type: 'ayce',
+        aycePrice: 15,
       },
     },
   },
@@ -138,19 +157,25 @@ const bowlingAlleys = {
     specials: {
       Tue: {
         allDay: true,
-        text: '$25/hr per lane special.',
+        text: '$25/hr per lane special', // Period removed
         description: '<b>SuperPlay:</b> $25 per hour, all day.',
+        type: 'flat_rate_hourly',
+        hourlyRate: 25,
       },
       Wed: {
         allDay: true,
-        text: '$2/game & $2/shoes special.',
+        text: '$2/game & $2/shoes special', // Period removed
         description:
           '<b>SuperPlay:</b> $2 Wednesdays ($2 games, $2 shoes & drink specials).',
+        type: 'per_game',
+        gameRate: 2,
       },
       Thu: {
         allDay: true,
-        text: '$15/hr per lane special.',
+        text: '$15/hr per lane special', // Period removed
         description: '<b>SuperPlay:</b> $15 per hour, all Day.',
+        type: 'flat_rate_hourly',
+        hourlyRate: 15,
       },
       Fri: {
         from: 21,
@@ -181,9 +206,11 @@ const bowlingAlleys = {
     specials: {
       Mon: {
         from: 21,
-        text: 'All-You-Can-Bowl for $12.',
+        text: 'All-You-Can-Bowl for $12',
         description:
           '<b>Hazel Dell Lanes:</b> All-you-can-bowl for $12 from 9 PM - Midnight.',
+        type: 'ayce',
+        aycePrice: 12,
       },
     },
   },
@@ -204,45 +231,64 @@ const bowlingAlleys = {
     specials: {
       Sun: {
         from: 20,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes', // Period removed
         description:
           '<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games/shoes).',
+        type: 'cover_plus_per_game',
+        coverCharge: 11,
+        gameRate: 0.25,
       },
       Mon: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes', // Period removed
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+        type: 'cover_plus_per_game',
+        coverCharge: 11,
+        gameRate: 0.25,
       },
       Tue: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes', // Period removed
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+        type: 'cover_plus_per_game',
+        coverCharge: 11,
+        gameRate: 0.25,
       },
       Wed: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes', // Period removed
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+        type: 'cover_plus_per_game',
+        coverCharge: 11,
+        gameRate: 0.25,
       },
       Thu: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes.',
+        text: 'Quarter Mania! $11 cover + $0.25 games/shoes', // Period removed
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+        type: 'cover_plus_per_game',
+        coverCharge: 11,
+        gameRate: 0.25,
       },
       Fri: {
         from: 23,
-        text: 'All You Can Bowl for $15.',
+        text: 'All-You-Can-Bowl for $15', // Period removed
         description:
-          '<b>Kingpins Beaverton:</b> Cosmic All You Can Bowl from 11 PM - 1 AM for $15 (shoes included).',
+          '<b>Kingpins Beaverton:</b> Cosmic All-You-Can-Bowl from 11 PM - 1 AM for $15 (shoes included).',
+        type: 'ayce',
+        aycePrice: 15,
       },
       Sat: {
         from: 23,
-        text: 'All You Can Bowl for $15.',
+        text: 'All-You-Can-Bowl for $15', // Period removed
         description:
-          '<b>Kingpins Beaverton:</b> Cosmic All You Can Bowl from 11 PM - 1 AM for $15 (shoes included).',
+          '<b>Kingpins Beaverton:</b> Cosmic All-You-Can-Bowl from 11 PM - 1 AM for $15 (shoes included).',
+        type: 'ayce',
+        aycePrice: 15,
       },
     },
   },
@@ -263,9 +309,11 @@ const bowlingAlleys = {
     specials: {
       Tue: {
         allDay: true,
-        text: '$2 games all day!',
+        text: '$2 games all day!', // Period removed
         description:
           "<b>Big Al's Beaverton:</b> Two Buck Tuesdays ($2 games, shoes, sodas, beers & snacks).",
+        type: 'per_game',
+        gameRate: 2,
       },
     },
   },
@@ -287,31 +335,41 @@ const bowlingAlleys = {
       Mon: {
         from: 15,
         to: 18,
-        text: 'Happy Hour! $15/hr.',
+        text: 'Happy Hour! $15/hr', // Period removed
         description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
+        type: 'flat_rate_hourly',
+        hourlyRate: 15,
       },
       Tue: {
         allDay: true,
-        text: '$2 games all day!',
+        text: '$2 games all day!', // Period removed
         description: "<b>Langer's:</b> Twosday! $2 per person per game.",
+        type: 'per_game',
+        gameRate: 2,
       },
       Wed: {
         from: 15,
         to: 18,
-        text: 'Happy Hour! $15/hr.',
+        text: 'Happy Hour! $15/hr', // Period removed
         description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
+        type: 'flat_rate_hourly',
+        hourlyRate: 15,
       },
       Thu: {
         from: 15,
         to: 18,
-        text: 'Happy Hour! $15/hr.',
+        text: 'Happy Hour! $15/hr', // Period removed
         description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
+        type: 'flat_rate_hourly',
+        hourlyRate: 15,
       },
       Fri: {
         from: 15,
         to: 18,
-        text: 'Happy Hour! $15/hr.',
+        text: 'Happy Hour! $15/hr', // Period removed
         description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
+        type: 'flat_rate_hourly',
+        hourlyRate: 15,
       },
     },
   },
@@ -332,9 +390,13 @@ const bowlingAlleys = {
     specials: {
       Tue: {
         allDay: true,
-        text: '$2 games, shoes, drinks & snacks!',
+        text: '$2 games, shoes, drinks & snacks!', // Period removed
         description:
           "<b>Big Al's Vancouver:</b> Two Buck Tuesdays ($2 games, shoes, sodas, beers & snacks).",
+        type: 'per_game',
+        // Note: Keep gameRate with tax pre-calculated for display simplicity
+        // The calculation logic uses the taxed value correctly.
+        gameRate: 2.18,
       },
     },
   },
@@ -563,40 +625,114 @@ const AlleyPreferences = {
 // ============================================================================
 
 const PricingModule = {
-  calculateTotalCost(rates, numPlayers, numGames, minutesPerGame) {
-    if (!rates.game && !rates.hour) {
-      return { cost: Infinity };
-    }
-
+  calculateTotalCost(
+    alleyName,
+    day,
+    hour,
+    numPlayers,
+    numGames,
+    minutesPerGame
+  ) {
+    const alley = bowlingAlleys[alleyName];
+    const taxRate = alley.taxRate || 0;
     const totalMinutes = numPlayers * numGames * minutesPerGame;
     const hoursNeeded = Math.ceil(totalMinutes / 30) * 0.5;
     const lanesNeeded = Math.ceil(numPlayers / CONFIG.PLAYERS_PER_LANE);
-
-    const hourlyCost = rates.hour
-      ? hoursNeeded * rates.hour * lanesNeeded
-      : Infinity;
     const totalGames = numPlayers * numGames;
-    const perGameCost = rates.game ? totalGames * rates.game : Infinity;
 
-    if (hourlyCost < perGameCost) {
+    let deals = [];
+
+    // --- 1. Calculate Standard Rates ---
+    const standardRates = this.getRatesForAlley(alleyName, day, hour);
+
+    if (standardRates.hour) {
+      const hourlyCost = standardRates.hour * hoursNeeded * lanesNeeded;
       const hourLabel = hoursNeeded === 1 ? 'hour' : 'hours';
-      return {
+      deals.push({
         cost: hourlyCost,
         details: `(${hoursNeeded} ${hourLabel} @ ${this.formatPrice(
-          rates.hour,
+          standardRates.hour,
           'hr'
         )})`,
-      };
-    } else {
+        rateType: 'hourly',
+      });
+    }
+
+    if (standardRates.game) {
+      const perGameCost = standardRates.game * totalGames;
       const gameLabel = totalGames === 1 ? 'game' : 'games';
-      return {
+      deals.push({
         cost: perGameCost,
         details: `(${totalGames} ${gameLabel} @ ${this.formatPrice(
-          rates.game,
+          standardRates.game,
           'gm'
         )})`,
-      };
+        rateType: 'per-game',
+      });
     }
+
+    // --- 2. Check for Specials ---
+    const special = alley.specials?.[day];
+    let specialCost = Infinity;
+
+    if (
+      special &&
+      special.type &&
+      (special.allDay ||
+        (special.from &&
+          hour >= special.from &&
+          (!special.to || hour < special.to)))
+    ) {
+      switch (special.type) {
+        case 'cover_plus_per_game':
+          specialCost =
+            numPlayers * special.coverCharge + totalGames * special.gameRate;
+          deals.push({
+            cost: specialCost,
+            details: `${special.text}`,
+            rateType: 'special',
+          });
+          break;
+        case 'ayce':
+          specialCost = numPlayers * special.aycePrice;
+          deals.push({
+            cost: specialCost,
+            details: `${special.text}`,
+            rateType: 'special',
+          });
+          break;
+        case 'flat_rate_hourly':
+          specialCost = special.hourlyRate * hoursNeeded * lanesNeeded;
+          deals.push({
+            cost: specialCost,
+            details: `${special.text}`,
+            rateType: 'special',
+          });
+          break;
+        case 'per_game':
+          specialCost = special.gameRate * totalGames;
+          deals.push({
+            cost: specialCost,
+            details: `${special.text}`,
+            rateType: 'special',
+          });
+          break;
+      }
+    }
+
+    // --- 3. Find the Best Deal ---
+    if (deals.length === 0) {
+      return { cost: Infinity };
+    }
+
+    const bestDeal = deals.reduce((best, current) =>
+      current.cost < best.cost ? current : best
+    );
+
+    // --- 4. Apply Tax to the final best deal ---
+    bestDeal.cost *= 1 + taxRate;
+
+    return bestDeal;
   },
 
   getRatesForAlley(alleyName, day, hour) {
@@ -691,10 +827,6 @@ const PricingModule = {
         }
         break;
     }
-
-    const taxRate = bowlingAlleys[alleyName].taxRate || 0;
-    if (gameRate) gameRate *= 1 + taxRate;
-    if (hourlyRate) hourlyRate *= 1 + taxRate;
 
     return { game: gameRate, hour: hourlyRate };
   },
@@ -906,9 +1038,10 @@ function generateWeekComparison() {
 
         if (isLeagueTime) return;
 
-        const rates = PricingModule.getRatesForAlley(alleyName, day, hour);
         const { cost } = PricingModule.calculateTotalCost(
-          rates,
+          alleyName,
+          day,
+          hour,
           numPlayers,
           numGames,
           minutesPerGame
@@ -1167,7 +1300,10 @@ async function getDriveTimes(retryCount = 0) {
     RecentAddresses.save(startAddress);
     generateFullDayTable();
     hideDriveTimePrompt();
-    Toast.show('Drive times calculated successfully!', 'success');
+    Toast.show(
+      'Drive times calculated successfully!<br>Sorted by drive time.',
+      'success'
+    );
     announceToScreenReader('Drive times calculated');
   } catch (error) {
     console.error('Error fetching drive times:', error);
@@ -1393,9 +1529,10 @@ function generateFullDayTable() {
 
         if (isLeagueTime) return;
 
-        const rates = PricingModule.getRatesForAlley(alleyName, day, hour);
         const { cost } = PricingModule.calculateTotalCost(
-          rates,
+          alleyName,
+          day,
+          hour,
           numPlayers,
           numGames,
           minutesPerGame
@@ -1477,18 +1614,17 @@ function generateFullDayTable() {
       };
 
       if (isOpen) {
-        cellData.rates = PricingModule.getRatesForAlley(
+        const costResult = PricingModule.calculateTotalCost(
           alleyName,
           selectedDay,
-          hour
-        );
-        const costResult = PricingModule.calculateTotalCost(
-          cellData.rates,
+          hour,
           numPlayers,
           numGames,
           minutesPerGame
         );
         cellData.cost = costResult.cost;
+        cellData.rateType = costResult.rateType;
+        cellData.details = costResult.details;
 
         if (
           !isPastTime &&
@@ -1504,6 +1640,7 @@ function generateFullDayTable() {
               ...costResult,
               alley: alleyName,
               hour,
+              rateType: cellData.rateType,
             };
           }
         }
@@ -1520,23 +1657,19 @@ function generateFullDayTable() {
 
   // Display best deal message
   if (bestDealToday.cost !== Infinity) {
-    const timePhrase =
-      earliestTime === 'any'
-        ? `is <b>${bestDealToday.alley}</b> at <b>${formatHour(
-            bestDealToday.hour
-          )}</b>,`
-        : `at <b>${formatHour(parseInt(earliestTime))}</b> is <b>${
-            bestDealToday.alley
-          }</b>,`;
+    const timePhrase = `is <b>${bestDealToday.alley}</b> at <b>${formatHour(
+      bestDealToday.hour // Always use the hour from the actual best deal
+    )}</b>,`;
 
-    let rateType = 'unknown';
-    if (bestDealToday.details.includes('/gm')) {
-      rateType = 'per-game';
-    } else if (bestDealToday.details.includes('/hr')) {
-      rateType = 'hourly';
+    const rateType = bestDealToday.rateType || 'unknown';
+
+    let costPerPerson = 'N/A';
+    const perPerson = bestDealToday.cost / numPlayers;
+    if (perPerson % 1 === 0) {
+      costPerPerson = perPerson.toFixed(0); // e.g., "6"
+    } else {
+      costPerPerson = perPerson.toFixed(2); // e.g., "19.58"
     }
-
-    const costPerPerson = (bestDealToday.cost / numPlayers).toFixed(2);
 
     dom.calculatorResult.innerHTML = `Best deal for ${numPlayers} players, ${numGames} games each ${timePhrase} costing $<b>${bestDealToday.cost.toFixed(
       0
@@ -1647,17 +1780,98 @@ function generateFullDayTable() {
               maxPrice
             );
           }
+          const displayRates = PricingModule.getRatesForAlley(
+            alleyName,
+            selectedDay,
+            cellData.hour
+          );
 
-          const priceHTML = `
-            <div class="hour-price">${PricingModule.formatPrice(
-              cellData.rates?.hour,
-              'hr'
-            )}</div>
-            <div class="game-price">${PricingModule.formatPrice(
-              cellData.rates?.game,
-              'gm'
-            )}</div>
-          `;
+          let priceHTML = '';
+          if (cellData.cost !== Infinity) {
+            // --- Get Tax Rate ---
+            const alley = bowlingAlleys[alleyName];
+            const taxRate = alley.taxRate || 0;
+
+            // --- Format Total Cost ---
+            let totalCostFormatted;
+            if (cellData.cost % 1 === 0) {
+              totalCostFormatted = cellData.cost.toFixed(0);
+            } else {
+              totalCostFormatted = cellData.cost.toFixed(2);
+            }
+
+            // --- Format Per-Person Cost ---
+            let perPersonCostFormatted = 'N/A';
+            const perPerson = cellData.cost / numPlayers;
+            if (perPerson % 1 === 0) {
+              perPersonCostFormatted = perPerson.toFixed(0);
+            } else {
+              perPersonCostFormatted = perPerson.toFixed(2);
+            }
+
+            // --- Get Pre-Tax Base Rates ---
+            const displayRates = PricingModule.getRatesForAlley(
+              alleyName,
+              selectedDay,
+              cellData.hour
+            );
+
+            // --- Calculate Taxed Base Rates for Display ---
+            const taxedHourRate = displayRates.hour
+              ? displayRates.hour * (1 + taxRate)
+              : null;
+            const taxedGameRate = displayRates.game
+              ? displayRates.game * (1 + taxRate)
+              : null;
+
+            // --- Determine Context and Format Rate Line ---
+            let rateLine = '';
+            if (cellData.rateType === 'hourly') {
+              const totalMinutes = numPlayers * numGames * minutesPerGame;
+              const hoursNeeded = Math.ceil(totalMinutes / 30) * 0.5;
+              rateLine = `${PricingModule.formatPrice(
+                taxedHourRate,
+                'hr'
+              )} x ${hoursNeeded}h`;
+            } else if (cellData.rateType === 'per-game') {
+              const gameLabel = numGames === 1 ? 'game' : 'games';
+              // Show total games if only 1 player, otherwise show games per player
+              const gameCountDisplay =
+                numPlayers === 1 ? numPlayers * numGames : numGames;
+              const gameUnitDisplay =
+                numPlayers === 1 ? gameLabel : `${gameLabel} each`;
+              rateLine = `${PricingModule.formatPrice(
+                taxedGameRate,
+                'gm'
+              )} x ${gameCountDisplay} ${gameUnitDisplay}`;
+            } else if (cellData.rateType === 'special') {
+              // For specials, just show the special text as the primary line
+              rateLine = cellData.details || 'Special Rate';
+            } else {
+              // Fallback if rate type is unknown but cost is valid
+              rateLine =
+                PricingModule.formatPrice(taxedHourRate, 'hr') ||
+                PricingModule.formatPrice(taxedGameRate, 'gm');
+            }
+
+            // --- Build the HTML ---
+            priceHTML = `
+    <div class="rate-display primary">
+      ${rateLine}
+    </div>
+    <div class="calculated-cost"> 
+     = $${totalCostFormatted}
+    </div>
+    <div class="per-person-cost">
+      ${perPersonCostFormatted}/person
+    </div>
+  `;
+          } else {
+            // Fallback for cells with no valid cost
+            priceHTML = `
+    <div class="rate-display primary">-</div>
+  `;
+          }
 
           const halfHourNote =
             alley.hours[selectedDay].minutes &&
@@ -1738,15 +1952,14 @@ function generateFullDayTable() {
   });
 
   // Generate specials section
-  const specialDescriptions = Object.values(bowlingAlleys)
-    .filter(
-      (alley) =>
-        !state.avoided.has(
-          Object.keys(bowlingAlleys).find((key) => bowlingAlleys[key] === alley)
-        )
-    )
-    .map((alley) => alley.specials?.[selectedDay]?.description)
-    .filter(Boolean);
+
+  const specialDescriptions = alleyNames // Use the sorted list from the table generation
+    .filter((alleyName) => !state.avoided.has(alleyName)) // Directly filter avoided using the name
+    .map((alleyName) => {
+      const alley = bowlingAlleys[alleyName]; // Get the alley data using the sorted name
+      return alley.specials?.[selectedDay]?.description; // Get the description
+    })
+    .filter(Boolean); // Remove any alleys without a special description for the day
 
   let specialsHTML = '<h2>Specials for Today</h2>';
   if (specialDescriptions.length > 0) {
