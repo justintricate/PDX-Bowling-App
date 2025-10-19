@@ -1,7 +1,3 @@
-/* ============================================================================
-   CSS VARIABLES & THEME
-   ============================================================================ */
-
 :root {
   --background-color: #f3f4f6;
   --surface-color: #ffffff;
@@ -24,10 +20,6 @@
   --primary-color: #3b82f6;
 }
 
-/* ============================================================================
-   ACCESSIBILITY - SCREEN READER ONLY
-   ============================================================================ */
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -39,10 +31,6 @@
   white-space: nowrap;
   border-width: 0;
 }
-
-/* ============================================================================
-   BASE STYLES
-   ============================================================================ */
 
 html {
   margin: 0;
@@ -87,10 +75,6 @@ h2 {
   color: #93c5fd;
 }
 
-/* ============================================================================
-   TOAST NOTIFICATIONS
-   ============================================================================ */
-
 .toast {
   position: fixed;
   bottom: 20px;
@@ -125,38 +109,27 @@ h2 {
 .toast-success {
   border-left-color: var(--success-color);
 }
-
 .toast-success .toast-icon {
   color: var(--success-color);
 }
-
 .toast-error {
   border-left-color: var(--error-color);
 }
-
 .toast-error .toast-icon {
   color: var(--error-color);
 }
-
 .toast-warning {
   border-left-color: var(--warning-color);
 }
-
 .toast-warning .toast-icon {
   color: var(--warning-color);
 }
-
 .toast-info {
   border-left-color: var(--info-color);
 }
-
 .toast-info .toast-icon {
   color: var(--info-color);
 }
-
-/* ============================================================================
-   CONTROLS CONTAINER
-   ============================================================================ */
 
 .controls-container {
   display: flex;
@@ -190,24 +163,20 @@ h2 {
   position: relative;
 }
 
+.time-range-separator {
+  color: var(--text-muted);
+  font-size: 0.9em;
+  padding: 0 4px;
+}
+
 label {
   font-size: 1em;
-  color: #374151;
+  color: var(--text-color);
   font-weight: 700;
 }
 
 [data-theme='dark'] label {
   color: var(--text-color);
-}
-
-.view-toggle label[for] {
-  font-weight: 400;
-  cursor: pointer;
-  color: #6b7280;
-}
-
-[data-theme='dark'] .view-toggle label[for] {
-  color: var(--text-muted);
 }
 
 input[type='number'],
@@ -235,7 +204,6 @@ select {
   border-color: var(--border-color);
 }
 
-/* Focus styles for accessibility */
 input:focus,
 select:focus,
 button:focus {
@@ -280,32 +248,40 @@ button:focus {
 }
 
 #share-button,
-#week-comparison-button,
-#compact-view-toggle {
+#week-comparison-button {
   background-color: var(--primary-color);
   color: #fff;
 }
 
 #share-button:hover,
-#week-comparison-button:hover,
-#compact-view-toggle:hover {
+#week-comparison-button:hover {
   background-color: #2563eb;
 }
 
-/* ============================================================================
-   CALCULATOR RESULT
-   ============================================================================ */
-
 #calculator-result {
-  margin: 20px 0 25px;
+  margin: 20px 0 15px;
   font-size: 1.2em;
   font-weight: 500;
   text-align: center;
 }
 
-/* ============================================================================
-   TABLE STYLES
-   ============================================================================ */
+#sort-status-indicator {
+  text-align: center;
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+  display: none;
+  height: 1.2em;
+}
+
+[data-theme='dark'] #sort-status-indicator {
+  color: #93c5fd;
+}
+
+#sort-status-indicator.visible {
+  display: block;
+}
 
 .table-container {
   overflow-x: auto;
@@ -316,7 +292,7 @@ button:focus {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 10px;
   animation: 0.4s ease-in-out fadeIn;
   table-layout: fixed;
 }
@@ -385,13 +361,16 @@ th:first-child {
   padding: 8px 10px;
   font-size: 0.9em;
   box-sizing: border-box;
-  width: 140px;
+  width: 160px;
 }
 
 thead th:first-child {
   background-color: var(--background-color);
   border: none;
   z-index: 11;
+  vertical-align: bottom;
+  text-align: center;
+  padding-bottom: 4px;
 }
 
 [data-theme='dark'] thead th:first-child {
@@ -425,19 +404,15 @@ tbody tr:hover > td {
   background-color: #5a6778 !important;
 }
 
-/* ============================================================================
-   ALLEY INFO & ACTIONS
-   ============================================================================ */
-
 .alley-header {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 4px;
 }
 
 .alley-name {
   flex: 1;
+  min-width: 0;
 }
 
 .alley-name a {
@@ -461,18 +436,6 @@ tbody tr:hover > td {
   gap: 4px;
 }
 
-.alley-sub-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.alley-info.drive-time {
-  margin: 0;
-  padding: 0;
-}
-
 .alley-action-btn {
   background: transparent;
   border: 1px solid var(--border-color);
@@ -487,50 +450,6 @@ tbody tr:hover > td {
   justify-content: center;
   font-size: 0.8em;
   line-height: 0;
-}
-
-/* Style for the "Avoid" button when active */
-.alley-action-btn.active-avoid {
-  background-color: #fee2e2; /* Light red */
-  border-color: var(--error-color);
-  color: #b91c1c; /* Dark red */
-}
-
-[data-theme='dark'] .alley-action-btn.active-avoid {
-  background-color: #450a0a; /* Dark red bg */
-  border-color: #991b1b;
-  color: #fca5a5; /* Light red text */
-}
-
-/* Style for the entire table row when avoided */
-.avoided-row {
-  opacity: 0.5;
-  background-color: #e5e7eb !important; /* Use a muted gray */
-  text-decoration: line-through;
-  transition: opacity 0.3s, background-color 0.3s;
-}
-
-/* Allow a bit more visibility on hover */
-.avoided-row:hover {
-  opacity: 0.7;
-}
-
-[data-theme='dark'] .avoided-row {
-  background-color: #1f2937 !important; /* Darker bg for dark mode */
-  opacity: 0.4;
-}
-
-[data-theme='dark'] .avoided-row:hover {
-  opacity: 0.6;
-}
-
-/* Ensure the sticky first cell also gets the avoided style */
-.avoided-row > td:first-child {
-  background-color: #e5e7eb !important;
-}
-
-[data-theme='dark'] .avoided-row > td:first-child {
-  background-color: #1f2937 !important;
 }
 
 .alley-action-btn:hover {
@@ -550,6 +469,18 @@ tbody tr:hover > td {
   color: #fbbf24;
 }
 
+.alley-action-btn.active-avoid {
+  background-color: #fee2e2;
+  border-color: var(--error-color);
+  color: #b91c1c;
+}
+
+[data-theme='dark'] .alley-action-btn.active-avoid {
+  background-color: #450a0a;
+  border-color: #991b1b;
+  color: #fca5a5;
+}
+
 .alley-info {
   font-size: 0.85em;
   font-weight: 400;
@@ -567,70 +498,22 @@ tbody tr:hover > td {
   text-decoration: underline;
 }
 
-/* ============================================================================
-   PRICE CELLS
-   ============================================================================ */
+.alley-sub-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.alley-info.drive-time {
+  margin: 0;
+  padding: 0;
+}
 
 .price-cell {
   position: relative;
   overflow: visible !important;
   z-index: 1;
-}
-
-.cost-details {
-  font-size: 0.8em;
-  color: var(--text-muted);
-  line-height: 1.2;
-}
-
-/* Style for base rates */
-.rate-display {
-  font-size: 0.75em; /* Smaller, italic by default */
-  color: var(--text-muted);
-  line-height: 1.1;
-  font-style: italic;
-}
-
-.rate-text {
-  flex-grow: 1; /* Allows text to take available space */
-}
-
-/* Make the primary rate(s) larger and bold */
-.rate-display.primary {
-  font-size: 0.9em;
-  font-weight: 700;
-  color: var(--text-color);
-  font-style: normal;
-  margin-bottom: 6px; /* Increased bottom margin for spacing */
-  line-height: 1.2;
-  display: flex;
-  justify-content: center; /* Center the whole block (icons + text) */
-  align-items: center; /* Vertically align icons and text */
-  gap: 3px;
-  min-height: 1.2em; /* Ensure it takes up space even if empty */
-}
-
-/* Ensure only non-empty rate divs take up space */
-.rate-display:empty {
-  display: none;
-}
-
-/* Style for the calculated total cost */
-.calculated-cost {
-  font-size: 0.9em; /* Match rate display */
-  color: var(--text-muted);
-  line-height: 1.1;
-  margin-top: 0; /* Remove top margin */
-  margin-bottom: 2px; /* Add small space below */
-  font-weight: 700; /* Make it bold */
-  text-align: center;
-}
-
-/* Style for the calculated per-person cost */
-.per-person-cost {
-  font-size: 0.8em;
-  color: var(--text-muted);
-  line-height: 1.1; /* Adjust line height */
   text-align: center;
 }
 
@@ -640,6 +523,11 @@ tbody tr:hover > td {
   color: #6b7280;
   display: block;
   margin-top: 2px;
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  text-align: center;
 }
 
 .closed-cell,
@@ -650,25 +538,12 @@ tbody tr:hover > td {
   color: #9ca3af;
 }
 
-.closed-cell .rate-text,
-.filtered-cell .rate-text,
-.past-time-cell .rate-text,
-.cannot-make-it-cell .rate-text,
-.closed-cell .calculated-cost,
-.filtered-cell .calculated-cost,
-.past-time-cell .calculated-cost,
-.cannot-make-it-cell .calculated-cost,
-.closed-cell .per-person-cost,
-.filtered-cell .per-person-cost,
-.past-time-cell .per-person-cost,
-.cannot-make-it-cell .per-person-cost {
-  font-style: italic;
-}
-
-/* Explicitly prevent icons from becoming italic */
-.deal-indicator,
-.special-icon {
-  font-style: normal !important; /* Use !important to override inheritance */
+[data-theme='dark'] .closed-cell,
+[data-theme='dark'] .filtered-cell,
+[data-theme='dark'] .past-time-cell,
+[data-theme='dark'] .cannot-make-it-cell {
+  background-color: #1f2937 !important;
+  color: var(--text-muted);
 }
 
 .cannot-make-it-cell {
@@ -680,13 +555,6 @@ tbody tr:hover > td {
     #f3f4f6 20px
   ) !important;
   font-size: 0.75em;
-}
-
-[data-theme='dark'] .closed-cell,
-[data-theme='dark'] .past-time-cell,
-[data-theme='dark'] .cannot-make-it-cell {
-  background-color: #1f2937 !important;
-  color: var(--text-muted);
 }
 
 [data-theme='dark'] .cannot-make-it-cell {
@@ -707,26 +575,30 @@ tbody tr:hover > td {
   opacity: 0.2;
 }
 
-/* ============================================================================
-   DEAL INDICATORS & SPECIALS
-   ============================================================================ */
+.closed-cell .rate-text,
+.filtered-cell .rate-text,
+.past-time-cell .rate-text,
+.cannot-make-it-cell .rate-text,
+.closed-cell .calculated-cost,
+.filtered-cell .calculated-cost,
+.past-time-cell .calculated-cost,
+.cannot-make-it-cell .calculated-cost,
+.closed-cell .per-person-cost,
+.filtered-cell .per-person-cost,
+.past-time-cell .per-person-cost,
+.cannot-make-it-cell .per-person-cost {
+  font-style: italic;
+}
 
 .deal-indicator,
 .special-icon {
   cursor: pointer;
-  font-size: 1em; /* Adjust if needed */
+  font-size: 1em;
   line-height: 1;
-  display: inline-flex; /* Ensure they behave like inline elements */
-  align-items: center; /* Center content within the icon element if needed */
+
   margin-bottom: 4px;
-}
-
-.special-icon {
-  right: 4px;
-}
-
-.deal-indicator {
-  left: 4px;
+  font-style: normal !important;
+  margin-right: 3px;
 }
 
 .deal-indicator .tooltip-text,
@@ -747,7 +619,6 @@ tbody tr:hover > td {
   transition: opacity 0.3s;
   white-space: normal;
   font-size: 0.85em;
-  font-style: normal;
 }
 
 .show-tooltip {
@@ -758,26 +629,56 @@ tbody tr:hover > td {
 .deal-indicator.week {
   animation: 2s ease-in-out infinite pulse-week;
 }
-
 .deal-indicator.day {
   animation: 2s ease-in-out infinite pulse-day;
 }
-
 @keyframes pulse-week {
   50% {
     transform: scale(1.1);
   }
 }
-
 @keyframes pulse-day {
   50% {
     transform: scale(1.05);
   }
 }
 
-/* ============================================================================
-   SPECIALS & LEGEND
-   ============================================================================ */
+.rate-display {
+  font-size: 0.75em;
+  color: var(--text-muted);
+  line-height: 1.1;
+  font-style: italic;
+}
+
+.rate-display.primary {
+  font-size: 0.9em;
+  font-weight: 700;
+  color: var(--text-color);
+  font-style: normal;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.rate-display:empty {
+  display: none;
+}
+
+.calculated-cost {
+  font-size: 0.9em;
+  color: var(--text-muted);
+  line-height: 1.1;
+  margin-top: 0;
+  margin-bottom: 2px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.per-person-cost {
+  font-size: 0.8em;
+  color: var(--text-muted);
+  line-height: 1.1;
+  text-align: center;
+}
 
 .specials-key-wrapper {
   display: flex;
@@ -801,6 +702,7 @@ tbody tr:hover > td {
 
 #specials-container {
   max-width: 600px;
+  flex-grow: 1;
 }
 
 #specials-container h2 {
@@ -810,7 +712,6 @@ tbody tr:hover > td {
 
 #specials-container ul {
   text-align: left;
-  display: inline-block;
   list-style-type: '🎳';
   padding-left: 25px;
   margin: 0;
@@ -855,10 +756,6 @@ tbody tr:hover > td {
   color: var(--text-muted);
   text-align: center;
 }
-
-/* ============================================================================
-   WEEK COMPARISON MODAL
-   ============================================================================ */
 
 .modal {
   position: fixed;
@@ -939,10 +836,7 @@ tbody tr:hover > td {
 
 .week-comparison-grid {
   display: grid;
-  grid-template-columns: repeat(
-    7,
-    minmax(0, 1fr)
-  ); /* Force 7 flexible columns */
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 15px;
 }
 
@@ -993,13 +887,11 @@ tbody tr:hover > td {
   color: var(--primary-color);
   margin-bottom: 2px;
 }
-
 .week-card-date {
   font-size: 0.8em;
   color: var(--text-muted);
   margin-bottom: 8px;
 }
-
 .week-card-alley {
   font-size: 0.9em;
   font-weight: 600;
@@ -1007,28 +899,21 @@ tbody tr:hover > td {
   min-height: 2.5em;
   word-break: break-word;
 }
-
 .week-card-time {
   font-size: 0.85em;
   color: var(--text-muted);
   margin-bottom: 8px;
 }
-
 .week-card-cost {
   font-size: 1.5em;
   font-weight: 700;
   color: var(--primary-color);
   margin-bottom: 4px;
 }
-
 .week-card-per-person {
   font-size: 0.75em;
   color: var(--text-muted);
 }
-
-/* ============================================================================
-   DRIVE TIME PROMPT
-   ============================================================================ */
 
 .drive-prompt {
   position: fixed;
@@ -1056,12 +941,10 @@ tbody tr:hover > td {
   transform: translateX(0);
   pointer-events: auto;
 }
-
 .drive-prompt p {
   margin: 0;
   line-height: 1.4;
 }
-
 #close-prompt-btn {
   background: transparent;
   border: none;
@@ -1071,21 +954,15 @@ tbody tr:hover > td {
   cursor: pointer;
   padding: 0;
 }
-
 #close-prompt-btn:hover {
   color: var(--text-color);
 }
-
-/* ============================================================================
-   THEME TOGGLE
-   ============================================================================ */
 
 .theme-switch-wrapper {
   position: absolute;
   right: 10px;
   bottom: 5px;
 }
-
 .theme-switch {
   position: relative;
   display: inline-block;
@@ -1093,13 +970,11 @@ tbody tr:hover > td {
   height: 28px;
   cursor: pointer;
 }
-
 .theme-switch input {
   opacity: 0;
   width: 0;
   height: 0;
 }
-
 .slider {
   position: absolute;
   top: 0;
@@ -1112,11 +987,9 @@ tbody tr:hover > td {
   display: flex;
   align-items: center;
 }
-
 [data-theme='dark'] .slider {
   background-color: #4b5563;
 }
-
 .slider:before {
   position: absolute;
   content: '';
@@ -1129,44 +1002,33 @@ tbody tr:hover > td {
   transition: 0.4s;
   z-index: 1;
 }
-
 .slider svg {
   position: absolute;
   transition: opacity 0.4s;
   z-index: 2;
 }
-
 .sun-icon {
   left: 5px;
   opacity: 1;
   color: #374151;
 }
-
 .moon-icon {
   right: 5px;
   opacity: 0;
   color: #374151;
 }
-
 input:checked + .slider {
   background-color: var(--primary-color);
 }
-
 input:checked + .slider:before {
   transform: translateX(24px);
 }
-
 input:checked + .slider .sun-icon {
   opacity: 0;
 }
-
 input:checked + .slider .moon-icon {
   opacity: 1;
 }
-
-/* ============================================================================
-   AUTOCOMPLETE
-   ============================================================================ */
 
 .pac-container {
   background-color: var(--surface-color);
@@ -1183,7 +1045,6 @@ input:checked + .slider .moon-icon {
   right: 0;
   margin-top: 4px;
 }
-
 .pac-item {
   padding: 10px;
   font-size: 0.9em;
@@ -1192,69 +1053,76 @@ input:checked + .slider .moon-icon {
   border: none;
   border-top: 1px solid var(--border-color);
 }
-
 .pac-item:first-child {
   border-top: none;
 }
-
 .pac-item:hover {
   background-color: var(--background-color);
 }
-
 [data-theme='dark'] .pac-item:hover {
   background-color: #4b5563;
 }
-
 .pac-item-query {
   font-weight: 700;
   color: var(--text-color);
 }
-
 .pac-item-recent {
   background-color: #f0f9ff;
 }
-
 [data-theme='dark'] .pac-item-recent {
   background-color: #1e3a5f;
 }
 
-/* ============================================================================
-   RESPONSIVE DESIGN
-   ============================================================================ */
+.avoided-row {
+  opacity: 0.5;
+  background-color: #e5e7eb !important;
+  text-decoration: line-through;
+  transition: opacity 0.3s, background-color 0.3s;
+}
+.avoided-row:hover {
+  opacity: 0.7;
+}
+[data-theme='dark'] .avoided-row {
+  background-color: #1f2937 !important;
+  opacity: 0.4;
+}
+[data-theme='dark'] .avoided-row:hover {
+  opacity: 0.6;
+}
+.avoided-row > td:first-child {
+  background-color: #e5e7eb !important;
+}
+[data-theme='dark'] .avoided-row > td:first-child {
+  background-color: #1f2937 !important;
+}
 
 @media (max-width: 1024px) {
   .controls-container {
     flex-direction: column;
     align-items: stretch;
   }
-
   .theme-switch-wrapper {
     position: static;
     transform: none;
     align-self: center;
     margin-top: 10px;
   }
-
   .specials-key-wrapper {
     flex-direction: column;
     align-items: center;
   }
-
   #legend-container {
     width: 100%;
     max-width: 450px;
   }
-
   table {
     table-layout: auto;
     width: auto;
   }
-
   td:not(:first-child),
   th:not(:first-child) {
     min-width: 75px;
   }
-
   .week-comparison-grid {
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   }
@@ -1265,18 +1133,15 @@ input:checked + .slider .moon-icon {
     padding: 10px;
     -webkit-text-size-adjust: 100%;
   }
-
   h1 {
     font-size: 1.5em;
   }
-
   .control-group {
     flex-direction: column;
     align-items: stretch;
     gap: 8px;
     width: 100%;
   }
-
   .action-button,
   input[type='number'],
   input[type='text'],
@@ -1284,49 +1149,59 @@ input:checked + .slider .moon-icon {
     width: 100%;
     box-sizing: border-box;
   }
-
-  .time-filter-toggle {
-    flex-direction: row;
-    align-items: center;
-    align-self: flex-start;
-    margin-top: 5px;
-  }
-
   td:first-child,
   th:first-child {
     width: 100px;
   }
-
   .alley-header {
     flex-direction: column;
     align-items: flex-start;
   }
-
   .alley-actions {
     width: 100%;
     justify-content: flex-start;
   }
-
   .toast {
     bottom: 10px;
     right: 10px;
     left: 10px;
     max-width: none;
   }
-
   .drive-prompt {
     top: 10px;
     right: 10px;
     left: 10px;
     max-width: none;
   }
-
   .modal-content {
     width: 95%;
     padding: 20px;
   }
-
   .week-comparison-grid {
     grid-template-columns: 1fr;
   }
+}
+
+#sort-indicator-cell {
+  vertical-align: bottom;
+  text-align: center;
+  padding-bottom: 4px;
+  background-color: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] #sort-indicator-cell {
+  background-color: #374151;
+}
+
+.sort-indicator-content {
+  font-size: 0.75em;
+  color: #fff;
+  font-weight: 500;
+  display: inline-block;
+}
+
+[data-theme='dark'] .sort-indicator-content {
+  color: var(--text-color);
 }

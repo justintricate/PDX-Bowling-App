@@ -14,7 +14,7 @@
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎳</text></svg>"
     />
-    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="src/style.css" />
   </head>
   <body>
     <!-- Screen reader only announcements -->
@@ -43,12 +43,13 @@
             </select>
           </div>
           <div class="control-group">
-            <label for="timeFilter">Earliest Time:</label>
-            <select id="timeFilter" aria-label="Select earliest time"></select>
-            <div class="control-group view-toggle time-filter-toggle">
-              <input type="checkbox" id="timeFilterExact" />
-              <label for="timeFilterExact">Exact time only</label>
-            </div>
+            <label for="timeFilterStart">Time Window:</label>
+            <select
+              id="timeFilterStart"
+              aria-label="Select start time"
+            ></select>
+            <span class="time-range-separator">to</span>
+            <select id="timeFilterEnd" aria-label="Select end time"></select>
           </div>
           <div class="control-group">
             <label for="numPlayers">Players:</label>
@@ -212,6 +213,7 @@
       </div>
 
       <div id="calculator-result" role="status" aria-live="polite"></div>
+      <div id="sort-status-indicator" aria-live="polite"></div>
       <div
         id="results"
         class="table-container"
