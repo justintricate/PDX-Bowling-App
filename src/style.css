@@ -348,7 +348,13 @@ th.current-hour {
 }
 
 td {
-  height: 68px;
+  border-bottom: 1px solid var(--border-color);
+  padding: 8px 2px;
+  font-size: 0.8em;
+  vertical-align: middle;
+  word-wrap: break-word;
+  text-align: center;
+  color: var(--text-color);
 }
 
 td:first-child,
@@ -523,11 +529,8 @@ tbody tr:hover > td {
   color: #6b7280;
   display: block;
   margin-top: 2px;
-  position: absolute;
-  bottom: 2px;
-  left: 0;
-  right: 0;
   text-align: center;
+  width: 100%;
 }
 
 .closed-cell,
@@ -595,10 +598,12 @@ tbody tr:hover > td {
   cursor: pointer;
   font-size: 1em;
   line-height: 1;
-
-  margin-bottom: 4px;
+  display: inline-flex;
+  align-items: center;
   font-style: normal !important;
   margin-right: 3px;
+  flex-shrink: 0;
+  margin-bottom: 6px;
 }
 
 .deal-indicator .tooltip-text,
@@ -657,6 +662,13 @@ tbody tr:hover > td {
   font-style: normal;
   margin-bottom: 4px;
   line-height: 1.2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
+  min-height: 1.2em;
+  width: 100%;
+  flex-wrap: nowrap;
 }
 
 .rate-display:empty {
