@@ -333,7 +333,7 @@ th {
   top: 0;
   z-index: 2;
   font-weight: 500;
-  height: 18px;
+  height: 25px;
 }
 
 th.current-hour {
@@ -348,13 +348,8 @@ th.current-hour {
 }
 
 td {
-  border-bottom: 1px solid var(--border-color);
   padding: 8px 2px;
-  font-size: 0.8em;
-  vertical-align: middle;
-  word-wrap: break-word;
-  text-align: center;
-  color: var(--text-color);
+  min-height: 70px;
 }
 
 td:first-child,
@@ -368,6 +363,7 @@ th:first-child {
   font-size: 0.9em;
   box-sizing: border-box;
   width: 160px;
+  min-height: 70px;
 }
 
 thead th:first-child {
@@ -521,6 +517,22 @@ tbody tr:hover > td {
   overflow: visible !important;
   z-index: 1;
   text-align: center;
+  padding-top: 1.5em;
+}
+
+.price-cell:hover {
+  z-index: 20;
+}
+
+.cell-icons {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  bottom: 10px;
+  text-align: center;
+  height: 1.2em; /* Approx height of one icon line */
+  line-height: 1; /* Ensure icons align well */
 }
 
 .half-hour-note {
@@ -595,15 +607,15 @@ tbody tr:hover > td {
 
 .deal-indicator,
 .special-icon {
+  position: relative;
   cursor: pointer;
   font-size: 1em;
   line-height: 1;
   display: inline-flex;
   align-items: center;
   font-style: normal !important;
-  margin-right: 3px;
-  flex-shrink: 0;
-  margin-bottom: 6px;
+  margin-left: 2px;
+  margin-right: 2px;
 }
 
 .deal-indicator .tooltip-text,
@@ -616,10 +628,10 @@ tbody tr:hover > td {
   border-radius: 6px;
   padding: 8px;
   position: absolute;
-  z-index: 1000;
+  z-index: 9999;
   bottom: 125%;
   left: 50%;
-  margin-left: -100px;
+  transform: translateX(-50%);
   opacity: 0;
   transition: opacity 0.3s;
   white-space: normal;
@@ -689,6 +701,11 @@ tbody tr:hover > td {
   font-size: 0.8em;
   color: var(--text-muted);
   line-height: 1.1;
+  text-align: center;
+}
+
+.rate-text {
+  flex-grow: 1;
   text-align: center;
 }
 

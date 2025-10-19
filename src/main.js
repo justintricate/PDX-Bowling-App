@@ -77,62 +77,62 @@ const bowlingAlleys = {
     specials: {
       Sun: {
         from: 20,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes',
+        text: 'Quarter Mania! $11 cover + $0.25 games',
         description:
-          '<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games/shoes).',
+          '<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
         coverCharge: 11,
         gameRate: 0.25,
       },
       Mon: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes',
+        text: 'Quarter Mania! $11 cover + $0.25 games',
         description:
-          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
         coverCharge: 11,
         gameRate: 0.25,
       },
       Tue: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes',
+        text: 'Quarter Mania! $11 cover + $0.25 games',
         description:
-          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
         coverCharge: 11,
         gameRate: 0.25,
       },
       Wed: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes',
+        text: 'Quarter Mania! $11 cover + $0.25 games',
         description:
-          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
         coverCharge: 11,
         gameRate: 0.25,
       },
       Thu: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes',
+        text: 'Quarter Mania! $11 cover + $0.25 games',
         description:
-          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
         coverCharge: 11,
         gameRate: 0.25,
       },
       Fri: {
         from: 22,
-        text: 'All You Can Bowl for $15',
+        text: 'All-You-Can-Bowl for $15',
         description:
-          '<b>Kingpins Portland:</b> Cosmic All You Can Bowl from 10 PM - Midnight for $15 (shoes included).',
+          '<b>Kingpins Portland:</b> Cosmic All-You-Can-Bowl from 10 PM - Midnight for $15 (shoes included).',
         type: 'ayce',
         aycePrice: 15,
       },
       Sat: {
         from: 22,
-        text: 'All You Can Bowl for $15',
+        text: 'All-You-Can-Bowl for $15',
         description:
-          '<b>Kingpins Portland:</b> Cosmic All You Can Bowl from 10 PM - Midnight for $15 (shoes included).',
+          '<b>Kingpins Portland:</b> Cosmic All-You-Can-Bowl from 10 PM - Midnight for $15 (shoes included).',
         type: 'ayce',
         aycePrice: 15,
       },
@@ -229,62 +229,62 @@ const bowlingAlleys = {
     specials: {
       Sun: {
         from: 20,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes',
+        text: 'Quarter Mania! $11 cover + $0.25 games',
         description:
-          '<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games/shoes).',
+          '<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
         coverCharge: 11,
         gameRate: 0.25,
       },
       Mon: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes',
+        text: 'Quarter Mania! $11 cover + $0.25 games',
         description:
-          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
         coverCharge: 11,
         gameRate: 0.25,
       },
       Tue: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes',
+        text: 'Quarter Mania! $11 cover + $0.25 games',
         description:
-          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
         coverCharge: 11,
         gameRate: 0.25,
       },
       Wed: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes',
+        text: 'Quarter Mania! $11 cover + $0.25 games',
         description:
-          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
         coverCharge: 11,
         gameRate: 0.25,
       },
       Thu: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games/shoes',
+        text: 'Quarter Mania! $11 cover + $0.25 games',
         description:
-          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games/shoes).',
+          '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
         coverCharge: 11,
         gameRate: 0.25,
       },
       Fri: {
         from: 23,
-        text: 'All You Can Bowl for $15',
+        text: 'All-You-Can-Bowl for $15',
         description:
-          '<b>Kingpins Beaverton:</b> Cosmic All You Can Bowl from 11 PM - 1 AM for $15 (shoes included).',
+          '<b>Kingpins Beaverton:</b> Cosmic All-You-Can-Bowl from 11 PM - 1 AM for $15 (shoes included).',
         type: 'ayce',
         aycePrice: 15,
       },
       Sat: {
         from: 23,
-        text: 'All You Can Bowl for $15',
+        text: 'All-You-Can-Bowl for $15',
         description:
-          '<b>Kingpins Beaverton:</b> Cosmic All You Can Bowl from 11 PM - 1 AM for $15 (shoes included).',
+          '<b>Kingpins Beaverton:</b> Cosmic All-You-Can-Bowl from 11 PM - 1 AM for $15 (shoes included).',
         type: 'ayce',
         aycePrice: 15,
       },
@@ -485,6 +485,33 @@ function validateInputs() {
       `Games must be between ${CONFIG.MIN_GAMES} and ${CONFIG.MAX_GAMES}`,
       'warning'
     );
+  }
+}
+
+function equalizeRowHeights() {
+  const table = dom.results.querySelector('table');
+  if (!table) return;
+
+  const rows = table.querySelectorAll('tbody tr');
+  if (rows.length === 0) return;
+
+  let maxHeight = 0;
+
+  rows.forEach((row) => {
+    row.style.height = '';
+    const rowHeight = row.offsetHeight;
+    if (rowHeight > maxHeight) {
+      maxHeight = rowHeight;
+    }
+  });
+
+  if (maxHeight > 0) {
+    rows.forEach((row) => {
+      row.style.height = `${maxHeight}px`;
+    });
+    table.querySelectorAll('tbody td:first-child').forEach((cell) => {
+      cell.style.height = `${maxHeight}px`;
+    });
   }
 }
 
@@ -1124,14 +1151,56 @@ function populateTimeWindowFilters() {
 }
 
 function setupTooltipEvents() {
-  document.querySelectorAll('.deal-indicator, .special-icon').forEach((el) => {
-    const tt = el.querySelector('.tooltip-text');
-    if (!tt) return;
-    el.addEventListener('mouseenter', () => tt.classList.add('show-tooltip'));
-    el.addEventListener('mouseleave', () =>
-      tt.classList.remove('show-tooltip')
-    );
-  });
+  document
+    .querySelectorAll('.deal-indicator, .special-icon')
+    .forEach((element) => {
+      const tooltipText = element.querySelector('.tooltip-text');
+      if (!tooltipText) return;
+
+      // --- Function to position the tooltip ---
+      const positionTooltip = () => {
+        // Make visible first to allow measurement
+        tooltipText.classList.add('show-tooltip');
+        // Reset transform before measuring to get natural position
+        tooltipText.style.transform = 'translateX(-50%)';
+
+        const rect = tooltipText.getBoundingClientRect();
+        const viewportWidth = window.innerWidth;
+        const buffer = 30; // Pixels from edge
+
+        let currentTransform = -50; // Default translateX percentage
+
+        if (rect.left < buffer) {
+          // Overflowing left edge
+          const overflowAmount = buffer - rect.left;
+          // Calculate the percentage adjustment needed based on tooltip width
+          const percentAdjustment = (overflowAmount / rect.width) * 100;
+          currentTransform += percentAdjustment;
+        } else if (rect.right > viewportWidth - buffer) {
+          // Overflowing right edge
+          const overflowAmount = rect.right - (viewportWidth - buffer);
+          // Calculate the percentage adjustment needed based on tooltip width
+          const percentAdjustment = (overflowAmount / rect.width) * 100;
+          currentTransform -= percentAdjustment;
+        }
+
+        // Apply the final transform
+        tooltipText.style.transform = `translateX(${currentTransform}%)`;
+      };
+
+      // --- Function to hide the tooltip ---
+      const hideTooltip = () => {
+        tooltipText.classList.remove('show-tooltip');
+        // Reset transform when hiding
+        tooltipText.style.transform = 'translateX(-50%)';
+      };
+
+      // --- Add Event Listeners ---
+      element.addEventListener('mouseenter', positionTooltip);
+      element.addEventListener('focus', positionTooltip); // For keyboard navigation
+      element.addEventListener('mouseleave', hideTooltip);
+      element.addEventListener('blur', hideTooltip); // For keyboard navigation
+    });
 }
 async function getDriveTimes(retryCount = 0) {
   const startAddress = dom.startAddress.value;
@@ -1797,7 +1866,10 @@ function generateFullDayTable() {
 
           return `<td data-label="${formatHour(
             cellData.hour
-          )}" class="${cellClass}" style="background-color: ${backgroundColor};">${dealIndicator}${specialIndicator}${priceHTML}${halfHourNote}</td>`;
+          )}" class="${cellClass}" style="background-color: ${backgroundColor};">
+            <div class="cell-icons">${dealIndicator}${specialIndicator}</div> 
+            ${priceHTML}${halfHourNote}
+          </td>`;
         })
         .join('');
       return `<tr ${
@@ -1864,6 +1936,7 @@ function generateFullDayTable() {
       });
     });
     setupTooltipEvents();
+    equalizeRowHeights();
   }
 
   announceToScreenReader(`Table updated for ${selectedDay}`);
