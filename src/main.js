@@ -1142,29 +1142,51 @@ async function getDriveTimes(retryCount = 0) {
   dom.driveTimeButton.disabled = true;
   dom.driveTimeButton.textContent = 'Calculating...';
   try {
-    const dests = Object.values(bowlingAlleys).map((a) => a.address);
-    const resp = await fetch(CONFIG.NETLIFY_FUNCTION_URL, {
+    const destinations = Object.values(bowlingAlleys).map(
+      (alley) => alley.address
+    );
+
+    const response = await fetch(CONFIG.NETLIFY_FUNCTION_URL, {
       method: 'POST',
       body: JSON.stringify({
         origin: startAddress,
-        destinations: dests.join('|'),
+        destinations: destinations.join('|'),
       }),
     });
-    if (!resp.ok) throw new Error(`HTTP error! status: ${resp.status}`);
-    const data = await resp.json();
-    if (data.status !== 'OK')
-      throw new Error(`API Error: ${data.error_message || data.status}`);
-    const names = Object.keys(bowlingAlleys);
-    data.rows[0].elements.forEach((el, i) => {
-      const name = names[i];
-      if (state.contactInfo[name]) {
-        state.contactInfo[name].drive =
-          el.status === 'OK' ? el.duration.text : 'Not found';
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.status !== 'OK') {
+      throw new Error(
+        `Google Maps API Error: ${data.error_message || data.status}`
+      );
+    }
+
+    const alleyNames = Object.keys(bowlingAlleys);
+    data.rows[0].elements.forEach((element, index) => {
+      const alleyName = alleyNames[index];
+      if (state.contactInfo[alleyName]) {
+        state.contactInfo[alleyName].drive =
+          element.status === 'OK' ? element.duration.text : 'Not found';
       } else {
-        console.warn(`Contact info for ${name} not found`);
+        console.warn(
+          `Contact info for ${alleyName} not found during drive time update`
+        );
       }
     });
+
     state.driveTimesActive = true;
+
+    try {
+      localStorage.setItem('lastStartAddress', startAddress);
+    } catch (e) {
+      console.error('Failed to save address to localStorage:', e);
+    }
+
     RecentAddresses.save(startAddress);
     generateFullDayTable();
     hideDriveTimePrompt();
@@ -1844,14 +1866,6 @@ function generateFullDayTable() {
     setupTooltipEvents();
   }
 
-  if (state.driveTimesActive) {
-    dom.sortStatusIndicator.textContent = '🚗 Sorted by Drive Time';
-    dom.sortStatusIndicator.classList.add('visible');
-  } else {
-    dom.sortStatusIndicator.textContent = '';
-    dom.sortStatusIndicator.classList.remove('visible');
-  }
-
   announceToScreenReader(`Table updated for ${selectedDay}`);
 }
 
@@ -1883,9 +1897,19 @@ function init() {
     weekComparisonModal: document.getElementById('week-comparison-modal'),
     closeModalBtn: document.getElementById('close-modal-btn'),
   };
+
   initializeContactInfo();
   AlleyPreferences.load();
   populateTimeWindowFilters();
+
+  try {
+    const lastAddress = localStorage.getItem('lastStartAddress');
+    if (lastAddress) {
+      dom.startAddress.value = lastAddress;
+    }
+  } catch (e) {
+    console.error('Failed to load address from localStorage:', e);
+  }
 
   const urlParams = new URLSearchParams(window.location.search);
   const dayParam = urlParams.get('day');

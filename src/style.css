@@ -333,7 +333,7 @@ th {
   top: 0;
   z-index: 2;
   font-weight: 500;
-  height: 25px;
+  height: 18px;
 }
 
 th.current-hour {
@@ -348,7 +348,7 @@ th.current-hour {
 }
 
 td {
-  height: 75px;
+  height: 68px;
 }
 
 td:first-child,
