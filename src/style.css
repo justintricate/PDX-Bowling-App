@@ -878,6 +878,8 @@ tbody tr:hover > td {
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .week-comparison-card:hover,
@@ -922,11 +924,26 @@ tbody tr:hover > td {
   margin-bottom: 8px;
 }
 .week-card-alley {
-  font-size: 0.9em;
+  font-size: 0.85em;
   font-weight: 600;
   margin-bottom: 4px;
-  min-height: 2.5em;
   word-break: break-word;
+  line-height: 1.4;
+  width: 100%;
+}
+.alley-name-item {
+  display: block;
+  padding: 2px 0;
+}
+
+.alley-name-item + .alley-name-item {
+  border-top: 1px solid var(--border-color);
+  margin-top: 4px;
+  padding-top: 4px;
+}
+
+[data-theme='dark'] .alley-name-item + .alley-name-item {
+  border-top-color: var(--border-color);
 }
 .week-card-time {
   font-size: 0.85em;
@@ -938,6 +955,7 @@ tbody tr:hover > td {
   font-weight: 700;
   color: var(--primary-color);
   margin-bottom: 4px;
+  margin-top: auto;
 }
 .week-card-per-person {
   font-size: 0.75em;

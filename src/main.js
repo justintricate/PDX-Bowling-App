@@ -1045,7 +1045,9 @@ function generateWeekComparison() {
           const tiedAlleys = deals.map((deal) => deal.alley);
           const uniqueAlleyNames = [...new Set(tiedAlleys)];
           const earliestHour = Math.min(...deals.map((deal) => deal.hour));
-          const alleyText = uniqueAlleyNames.join(' / ');
+          const alleyText = uniqueAlleyNames
+            .map((name) => `<span class="alley-name-item">${name}</span>`)
+            .join('');
 
           const minWeeklyCost = Math.min(
             ...weekSummary
@@ -1076,12 +1078,12 @@ function generateWeekComparison() {
                   ? '<div class="week-card-badge">Best of Week!</div>'
                   : ''
               }
-              <div class="week-card-alley">${alleyText}</div>
-              <div class="week-card-time">${
-                earliestHour !== null && isFinite(earliestHour)
-                  ? formatHour(earliestHour)
-                  : '-'
-              }</div>
+<div class="week-card-alley">${alleyText}</div>
+<div class="week-card-time">${
+            earliestHour !== null && isFinite(earliestHour)
+              ? formatHour(earliestHour)
+              : '-'
+          }</div>
               <div class="week-card-cost">${
                 cost !== Infinity ? `$${cost.toFixed(0)}` : 'N/A'
               }</div>
@@ -1835,9 +1837,16 @@ function generateFullDayTable() {
     const gameLabel = numGames === 1 ? 'game' : 'games';
     const eachSuffix = numPlayers > 1 || numGames > 1 ? ' each' : '';
 
-    dom.calculatorResult.innerHTML = `Best deal ${timeContextPhrase} for ${numPlayers} ${playerLabel}, ${numGames} ${gameLabel}${eachSuffix} ${dealLocationPhrase} costing $<b>${bestCost.toFixed(
+    const summaryPart1 = `Best deal ${timeContextPhrase} for ${numPlayers} ${playerLabel}, ${numGames} ${gameLabel}${eachSuffix} ${dealLocationPhrase.slice(
+      0,
+      -1
+    )}.`;
+    const summaryPart2 = `It will cost $<b>${bestCost.toFixed(
       0
     )}</b> total. (${costPerPerson}/person at the <b>${rateType}</b> rate.)`;
+
+    dom.calculatorResult.innerHTML =
+      dom.calculatorResult.innerHTML = `${summaryPart1}<br>${summaryPart2}`;
   } else {
     dom.calculatorResult.innerHTML =
       'No available deals found for the selected time window.';
