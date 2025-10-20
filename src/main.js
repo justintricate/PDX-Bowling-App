@@ -620,51 +620,41 @@ const PricingModule = {
       let specialCost = Infinity;
       switch (special.type) {
         case 'cover_plus_per_game':
-          if (
-            typeof special.coverCharge === 'number' &&
-            typeof special.gameRate === 'number'
-          ) {
-            specialCost =
-              numPlayers * special.coverCharge + totalGames * special.gameRate;
-            deals.push({
-              cost: specialCost,
-              details: special.text,
-              rateType: 'special',
-            });
-          }
+          specialCost =
+            numPlayers * special.coverCharge + totalGames * special.gameRate;
+          deals.push({
+            cost: specialCost,
+            details: special.text,
+            rateType: 'per-game',
+          });
           break;
         case 'ayce':
-          if (typeof special.aycePrice === 'number') {
-            specialCost = numPlayers * special.aycePrice;
-            deals.push({
-              cost: specialCost,
-              details: special.text,
-              rateType: 'special',
-            });
-          }
+          specialCost = numPlayers * special.aycePrice;
+          deals.push({
+            cost: specialCost,
+            details: special.text,
+            rateType: 'per-person',
+          });
           break;
         case 'flat_rate_hourly':
-          if (typeof special.hourlyRate === 'number') {
-            specialCost = special.hourlyRate * hoursNeeded * lanesNeeded;
-            deals.push({
-              cost: specialCost,
-              details: special.text,
-              rateType: 'special',
-            });
-          }
+          specialCost = special.hourlyRate * hoursNeeded * lanesNeeded;
+          deals.push({
+            cost: specialCost,
+            details: special.text,
+            rateType: 'hourly',
+          });
           break;
         case 'per_game':
-          if (typeof special.gameRate === 'number') {
-            specialCost =
-              alleyName === "Big Al's Vancouver" && day === 'Tue'
-                ? (special.gameRate / (1 + taxRate)) * totalGames
-                : special.gameRate * totalGames;
-            deals.push({
-              cost: specialCost,
-              details: special.text,
-              rateType: 'special',
-            });
+          if (alleyName === "Big Al's Vancouver" && day === 'Tue') {
+            specialCost = (special.gameRate / (1 + taxRate)) * totalGames;
+          } else {
+            specialCost = special.gameRate * totalGames;
           }
+          deals.push({
+            cost: specialCost,
+            details: special.text,
+            rateType: 'per-game',
+          });
           break;
       }
     }
@@ -970,7 +960,7 @@ function generateWeekComparison() {
       month: 'short',
       day: 'numeric',
     });
-    let bestDeal = { cost: Infinity, alley: null, hour: null };
+    let bestDealsForDay = [];
     Object.keys(bowlingAlleys).forEach((alleyName) => {
       if (state.avoided.has(alleyName)) return;
       CONFIG.HOURS.forEach((hour) => {
@@ -995,8 +985,10 @@ function generateWeekComparison() {
             numGames,
             minutesPerGame
           );
-          if (cost !== Infinity && isFinite(cost) && cost < bestDeal.cost) {
-            bestDeal = { cost, alley: alleyName, hour };
+          if (cost < (bestDealsForDay[0]?.cost ?? Infinity)) {
+            bestDealsForDay = [{ cost, alley: alleyName, hour }];
+          } else if (cost === bestDealsForDay[0]?.cost) {
+            bestDealsForDay.push({ cost, alley: alleyName, hour });
           }
         } catch (e) {
           console.error(
@@ -1006,7 +998,7 @@ function generateWeekComparison() {
         }
       });
     });
-    return { day, dateString, ...bestDeal };
+    return { day, dateString, deals: bestDealsForDay };
   });
   let timePhrase = '';
   if (startTime !== 'any' && endTime !== 'any') {
@@ -1025,42 +1017,84 @@ function generateWeekComparison() {
   const modalContent = dom.weekComparisonModal.querySelector(
     '.modal-content-inner'
   );
-  const html = `<h2>Best Deals by Day</h2><p class="week-comparison-subtitle">For ${numPlayers} ${
+  const html = `
+    <h2>Best Deals by Day</h2>
+    <p class="week-comparison-subtitle">For ${numPlayers} ${
     numPlayers === 1 ? 'player' : 'players'
-  }, ${numGames} ${
-    numGames === 1 ? 'game' : 'games'
-  } each${timePhrase}</p><div class="week-comparison-grid">${weekSummary
-    .map(({ day, dateString, cost, alley, hour }) => {
-      const isBestOfWeek =
-        cost !== Infinity &&
-        cost ===
-          Math.min(
-            ...weekSummary.filter((d) => d.cost !== Infinity).map((d) => d.cost)
+  }, ${numGames} ${numGames === 1 ? 'game' : 'games'} each${timePhrase}</p>
+    <div class="week-comparison-grid">
+      ${weekSummary
+        .map(({ day, dateString, deals }) => {
+          if (deals.length === 0) {
+            return `
+              <div class="week-comparison-card no-deal"
+                   data-day="${day}" role="button" tabindex="0"
+                   aria-label="Select ${day}, no deals found">
+                <div class="week-card-day">${day}</div>
+                <div class="week-card-date">${dateString}</div>
+                <div class="week-card-alley">No deals found</div>
+                <div class="week-card-time">-</div>
+                <div class="week-card-cost">N/A</div>
+                <div class="week-card-per-person"></div>
+              </div>`;
+          }
+
+          const firstDeal = deals[0];
+          const cost = firstDeal.cost;
+
+          const tiedAlleys = deals.map((deal) => deal.alley);
+          const uniqueAlleyNames = [...new Set(tiedAlleys)];
+          const earliestHour = Math.min(...deals.map((deal) => deal.hour));
+          const alleyText = uniqueAlleyNames.join(' / ');
+
+          const minWeeklyCost = Math.min(
+            ...weekSummary
+              .flatMap((d) => d.deals.map((deal) => deal.cost))
+              .filter(isFinite)
           );
-      let costPerPerson = 'N/A';
-      if (cost !== Infinity) {
-        const pp = cost / numPlayers;
-        costPerPerson = pp % 1 === 0 ? pp.toFixed(0) : pp.toFixed(2);
-      }
-      return `<div class="week-comparison-card ${
-        isBestOfWeek ? 'best-of-week' : ''
-      }" data-day="${day}" role="button" tabindex="0" aria-label="Select ${day}, best deal at ${
-        alley || 'N/A'
-      } for ${
-        cost !== Infinity ? '$' + cost.toFixed(0) : 'N/A'
-      }"><div class="week-card-day">${day}</div><div class="week-card-date">${dateString}</div>${
-        isBestOfWeek ? '<div class="week-card-badge">Best of Week!</div>' : ''
-      }<div class="week-card-alley">${
-        alley || 'No deals'
-      }</div><div class="week-card-time">${
-        hour !== null ? formatHour(hour) : '-'
-      }</div><div class="week-card-cost">${
-        cost !== Infinity ? '$' + cost.toFixed(0) : 'N/A'
-      }</div><div class="week-card-per-person">${
-        cost !== Infinity ? `${costPerPerson}/person` : ''
-      }</div></div>`;
-    })
-    .join('')}</div>`;
+          const isBestOfWeek = cost === minWeeklyCost && isFinite(cost);
+
+          let costPerPerson = 'N/A';
+          if (cost !== Infinity && numPlayers > 0) {
+            const perPerson = cost / numPlayers;
+            costPerPerson =
+              perPerson % 1 === 0 ? perPerson.toFixed(0) : perPerson.toFixed(2);
+          }
+
+          return `
+            <div class="week-comparison-card ${
+              isBestOfWeek ? 'best-of-week' : ''
+            }"
+                 data-day="${day}" role="button" tabindex="0"
+                 aria-label="Select ${day}, best deal at ${uniqueAlleyNames.join(
+            ', '
+          )} for $${cost.toFixed(0)}">
+              <div class="week-card-day">${day}</div>
+              <div class="week-card-date">${dateString}</div>
+              ${
+                isBestOfWeek
+                  ? '<div class="week-card-badge">Best of Week!</div>'
+                  : ''
+              }
+              <div class="week-card-alley">${alleyText}</div>
+              <div class="week-card-time">${
+                earliestHour !== null && isFinite(earliestHour)
+                  ? formatHour(earliestHour)
+                  : '-'
+              }</div>
+              <div class="week-card-cost">${
+                cost !== Infinity ? `$${cost.toFixed(0)}` : 'N/A'
+              }</div>
+              <div class="week-card-per-person">${
+                cost !== Infinity && costPerPerson !== 'N/A'
+                  ? `${costPerPerson}/person`
+                  : ''
+              }</div>
+            </div>`;
+        })
+        .join('')}
+    </div>
+  `;
   modalContent.innerHTML = html;
   modalContent.querySelectorAll('.week-comparison-card').forEach((card) => {
     const selectDay = () => {
@@ -1499,7 +1533,7 @@ function generateFullDayTable() {
 
   let minPrice = Infinity,
     maxPrice = -Infinity;
-  let bestDealToday = { cost: Infinity };
+  let bestDealToday = [];
 
   const tableData = alleyNames.map((alleyName) => {
     const hourlyData = CONFIG.HOURS.map((hour) => {
@@ -1625,11 +1659,31 @@ function generateFullDayTable() {
             cellData.rateType = costResult.rateType;
             cellData.details = costResult.details;
             if (!isPastTime && !isFilteredByTime && !cannotMakeItInTime) {
-              if (cellData.cost < minPrice) minPrice = cellData.cost;
               if (cellData.cost > maxPrice && cellData.cost !== Infinity)
                 maxPrice = cellData.cost;
-              if (cellData.cost < bestDealToday.cost) {
-                bestDealToday = { ...costResult, alley: alleyName, hour: hour };
+              if (cellData.cost < (bestDealToday[0]?.cost ?? Infinity)) {
+                // New outright best deal found
+                bestDealToday = [
+                  {
+                    ...costResult,
+                    alley: alleyName,
+                    hour: hour,
+                    // rateType is included via spread
+                  },
+                ];
+                minPrice = cellData.cost; // Update minPrice here as well
+              } else if (cellData.cost === bestDealToday[0]?.cost) {
+                // Tie found, add to the array
+                bestDealToday.push({
+                  ...costResult,
+                  alley: alleyName,
+                  hour: hour,
+                  // rateType is included via spread
+                });
+              }
+              // Update maxPrice separately
+              if (cellData.cost > maxPrice && cellData.cost !== Infinity) {
+                maxPrice = cellData.cost;
               }
             }
           } else {
@@ -1654,11 +1708,66 @@ function generateFullDayTable() {
     return { alleyName, hours: hourlyData };
   });
 
-  if (
-    bestDealToday.cost !== Infinity &&
-    bestDealToday.alley &&
-    bestDealToday.hour !== undefined
-  ) {
+  // Display best deal message
+  if (bestDealToday.length > 0) {
+    if (bestDealToday.length > 1 && state.driveTimesActive) {
+      const parseMinutes = (driveStr = '') => {
+        if (!driveStr || typeof driveStr !== 'string') return Infinity;
+        try {
+          const timeParts = driveStr.split(' ');
+          let days = 0,
+            hours = 0,
+            mins = 0;
+          const dayIndex = timeParts.findIndex((p) => p.includes('day'));
+          if (dayIndex > 0) {
+            days = parseInt(timeParts[dayIndex - 1]) || 0;
+          }
+          const hourIndex = timeParts.findIndex((p) => p.includes('hour'));
+          if (hourIndex > 0) {
+            hours = parseInt(timeParts[hourIndex - 1]) || 0;
+          }
+          const minIndex = timeParts.findIndex((p) => p.includes('min'));
+          if (minIndex > 0) {
+            mins = parseInt(timeParts[minIndex - 1]) || 0;
+          }
+          if (
+            days === 0 &&
+            hours === 0 &&
+            mins === 0 &&
+            timeParts.length >= 2 &&
+            timeParts[1].includes('min')
+          ) {
+            mins = parseInt(timeParts[0]) || 0;
+          }
+          if (
+            days === 0 &&
+            hours === 0 &&
+            mins === 0 &&
+            timeParts.length >= 2 &&
+            timeParts[1].includes('hour')
+          ) {
+            hours = parseInt(timeParts[0]) || 0;
+          }
+          const totalMins = days * 24 * 60 + hours * 60 + mins;
+          return isNaN(totalMins) || totalMins < 0 ? Infinity : totalMins;
+        } catch {
+          return Infinity;
+        }
+      };
+      bestDealToday.sort((a, b) => {
+        const minsA = parseMinutes(state.contactInfo[a.alley]?.drive);
+        const minsB = parseMinutes(state.contactInfo[b.alley]?.drive);
+        return minsA - minsB;
+      });
+    }
+
+    const firstBestDeal = bestDealToday[0];
+    const bestCost = firstBestDeal.cost;
+    let rateType = firstBestDeal.rateType || 'unknown';
+    if (rateType === 'flat-rate') {
+      rateType = 'flat rate';
+    }
+
     let timeContextPhrase = '';
     if (startTime !== 'any' && endTime !== 'any') {
       if (startHour === endHour - 1) {
@@ -1675,20 +1784,58 @@ function generateFullDayTable() {
     } else {
       timeContextPhrase = `for any time`;
     }
-    const dealTimePhrase = `is <b>${bestDealToday.alley}</b> at <b>${formatHour(
-      bestDealToday.hour
-    )}</b>,`;
-    const rateType = bestDealToday.rateType || 'unknown';
+
+    const dealsByAlley = new Map();
+    bestDealToday.forEach((deal) => {
+      if (!dealsByAlley.has(deal.alley)) {
+        dealsByAlley.set(deal.alley, []);
+      }
+      dealsByAlley.get(deal.alley).push(deal.hour);
+    });
+
+    const sortedAlleyNames = [
+      ...new Set(bestDealToday.map((deal) => deal.alley)),
+    ];
+
+    const locationStrings = sortedAlleyNames.map((alleyName) => {
+      const hours = dealsByAlley.get(alleyName);
+      const minHour = Math.min(...hours);
+      const maxHour = Math.max(...hours);
+
+      let timeRangeStr;
+      if (minHour === maxHour) {
+        timeRangeStr = `at <b>${formatHour(minHour)}</b>`;
+      } else {
+        timeRangeStr = `from <b>${formatHour(minHour)}</b> to <b>${formatHour(
+          maxHour
+        )}</b>`;
+      }
+      return `<b>${alleyName}</b> ${timeRangeStr}`;
+    });
+
+    let dealLocationPhrase;
+    if (locationStrings.length === 1) {
+      dealLocationPhrase = `is ${locationStrings[0]},`;
+    } else if (locationStrings.length === 2) {
+      dealLocationPhrase = `options include ${locationStrings[0]} and ${locationStrings[1]},`;
+    } else {
+      const lastLocation = locationStrings[locationStrings.length - 1];
+      const otherLocations = locationStrings.slice(0, -1).join(', ');
+      dealLocationPhrase = `options include ${otherLocations}, and ${lastLocation},`;
+    }
+
     let costPerPerson = 'N/A';
-    const perPerson = bestDealToday.cost / numPlayers;
+    const perPerson = bestCost / numPlayers;
     if (isFinite(perPerson)) {
       costPerPerson =
         perPerson % 1 === 0 ? perPerson.toFixed(0) : perPerson.toFixed(2);
     }
+
     const playerLabel = numPlayers === 1 ? 'player' : 'players';
     const gameLabel = numGames === 1 ? 'game' : 'games';
     const eachSuffix = numPlayers > 1 || numGames > 1 ? ' each' : '';
-    dom.calculatorResult.innerHTML = `Best deal ${timeContextPhrase} for ${numPlayers} ${playerLabel}, ${numGames} ${gameLabel}${eachSuffix} ${dealTimePhrase} costing $<b>${bestDealToday.cost.toFixed(
+
+    dom.calculatorResult.innerHTML = `Best deal ${timeContextPhrase} for ${numPlayers} ${playerLabel}, ${numGames} ${gameLabel}${eachSuffix} ${dealLocationPhrase} costing $<b>${bestCost.toFixed(
       0
     )}</b> total. (${costPerPerson}/person at the <b>${rateType}</b> rate.)`;
   } else {
