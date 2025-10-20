@@ -77,7 +77,7 @@ const bowlingAlleys = {
     specials: {
       Sun: {
         from: 20,
-        text: 'Quarter Mania! $11 cover + $0.25 games',
+        text: '$11 cover + $0.25 games',
         description:
           '<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
@@ -86,7 +86,7 @@ const bowlingAlleys = {
       },
       Mon: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games',
+        text: '$11 cover + $0.25 games',
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
@@ -95,7 +95,7 @@ const bowlingAlleys = {
       },
       Tue: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games',
+        text: '$11 cover + $0.25 games',
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
@@ -104,7 +104,7 @@ const bowlingAlleys = {
       },
       Wed: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games',
+        text: '$11 cover + $0.25 games',
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
@@ -113,7 +113,7 @@ const bowlingAlleys = {
       },
       Thu: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games',
+        text: '$11 cover + $0.25 games',
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
@@ -162,7 +162,7 @@ const bowlingAlleys = {
       },
       Wed: {
         allDay: true,
-        text: '$2/game & $2/shoes special',
+        text: '$2/game special',
         description:
           '<b>SuperPlay:</b> $2 Wednesdays ($2 games, $2 shoes & drink specials).',
         type: 'per_game',
@@ -177,12 +177,12 @@ const bowlingAlleys = {
       },
       Fri: {
         from: 21,
-        text: 'Cosmic Bowling is on!',
+        text: 'Cosmic Bowling',
         description: '<b>SuperPlay:</b> Cosmic Bowling after 9 PM.',
       },
       Sat: {
         from: 21,
-        text: 'Cosmic Bowling is on!',
+        text: 'Cosmic Bowling',
         description: '<b>SuperPlay:</b> Cosmic Bowling after 9 PM.',
       },
     },
@@ -229,7 +229,7 @@ const bowlingAlleys = {
     specials: {
       Sun: {
         from: 20,
-        text: 'Quarter Mania! $11 cover + $0.25 games',
+        text: '$11 cover + $0.25 games',
         description:
           '<b>Kingpins (Both):</b> Cosmic Quarter Mania from 8:30 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
@@ -238,7 +238,7 @@ const bowlingAlleys = {
       },
       Mon: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games',
+        text: '$11 cover + $0.25 games',
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
@@ -247,7 +247,7 @@ const bowlingAlleys = {
       },
       Tue: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games',
+        text: '$11 cover + $0.25 games',
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
@@ -256,7 +256,7 @@ const bowlingAlleys = {
       },
       Wed: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games',
+        text: '$11 cover + $0.25 games',
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
@@ -265,7 +265,7 @@ const bowlingAlleys = {
       },
       Thu: {
         from: 21,
-        text: 'Quarter Mania! $11 cover + $0.25 games',
+        text: '$11 cover + $0.25 games',
         description:
           '<b>Kingpins (Both):</b> Quarter Mania from 9 PM - Close ($11 cover, $0.25 games).',
         type: 'cover_plus_per_game',
