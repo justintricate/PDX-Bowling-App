@@ -307,7 +307,7 @@ const bowlingAlleys = {
     specials: {
       Tue: {
         allDay: true,
-        text: '$2 games all day!',
+        text: '$2 game/special',
         description:
           "<b>Big Al's Beaverton:</b> Two Buck Tuesdays ($2 games, shoes, sodas, beers & snacks).",
         type: 'per_game',
@@ -333,14 +333,14 @@ const bowlingAlleys = {
       Mon: {
         from: 15,
         to: 18,
-        text: 'Happy Hour! $15/hr',
+        text: '$15/hr Happy Hour',
         description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
         type: 'flat_rate_hourly',
         hourlyRate: 15,
       },
       Tue: {
         allDay: true,
-        text: '$2 games all day!',
+        text: '$2 game/special',
         description: "<b>Langer's:</b> Twosday! $2 per person per game.",
         type: 'per_game',
         gameRate: 2,
@@ -348,7 +348,7 @@ const bowlingAlleys = {
       Wed: {
         from: 15,
         to: 18,
-        text: 'Happy Hour! $15/hr',
+        text: '$15/hr Happy Hour',
         description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
         type: 'flat_rate_hourly',
         hourlyRate: 15,
@@ -356,7 +356,7 @@ const bowlingAlleys = {
       Thu: {
         from: 15,
         to: 18,
-        text: 'Happy Hour! $15/hr',
+        text: '$15/hr Happy Hour',
         description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
         type: 'flat_rate_hourly',
         hourlyRate: 15,
@@ -364,7 +364,7 @@ const bowlingAlleys = {
       Fri: {
         from: 15,
         to: 18,
-        text: 'Happy Hour! $15/hr',
+        text: '$15/hr Happy Hour',
         description: "<b>Langer's:</b> Happy Hour bowling for $15/hr (3-6 PM).",
         type: 'flat_rate_hourly',
         hourlyRate: 15,
@@ -388,7 +388,7 @@ const bowlingAlleys = {
     specials: {
       Tue: {
         allDay: true,
-        text: '$2 games, shoes, drinks & snacks!',
+        text: '$2 game/special',
         description:
           "<b>Big Al's Vancouver:</b> Two Buck Tuesdays ($2 games, shoes, sodas, beers & snacks).",
         type: 'per_game',
@@ -1984,20 +1984,28 @@ function generateFullDayTable() {
               : null;
           let rateLine = '';
           if (cellData.rateType === 'hourly') {
-            const totalMinutes = numPlayers * numGames * minutesPerGame;
-            const hoursNeeded = Math.ceil(totalMinutes / 30) * 0.5;
-            rateLine = `${PricingModule.formatPrice(
-              taxedHourRate,
-              'hr'
-            )} x ${hoursNeeded}h`;
+            if (cellData.details && !cellData.details.startsWith('(')) {
+              rateLine = cellData.details;
+            } else {
+              const totalMinutes = numPlayers * numGames * minutesPerGame;
+              const hoursNeeded = Math.ceil(totalMinutes / 30) * 0.5;
+              rateLine = `${PricingModule.formatPrice(
+                taxedHourRate,
+                'hr'
+              )} x ${hoursNeeded}h`;
+            }
           } else if (cellData.rateType === 'per-game') {
-            const totalGames = numPlayers * numGames;
-            const gameUnitDisplay = totalGames === 1 ? 'gm' : 'gms';
-            rateLine = `${PricingModule.formatPrice(
-              taxedGameRate,
-              'gm'
-            )} x ${totalGames} ${gameUnitDisplay}`;
-          } else if (cellData.rateType === 'special') {
+            if (cellData.details && !cellData.details.startsWith('(')) {
+              rateLine = cellData.details;
+            } else {
+              const totalGames = numPlayers * numGames;
+              const gameUnitDisplay = totalGames === 1 ? 'gm' : 'gms';
+              rateLine = `${PricingModule.formatPrice(
+                taxedGameRate,
+                'gm'
+              )} x ${totalGames} ${gameUnitDisplay}`;
+            }
+          } else if (cellData.rateType === 'per-person') {
             rateLine = cellData.details || 'Special Rate';
           } else {
             rateLine =
