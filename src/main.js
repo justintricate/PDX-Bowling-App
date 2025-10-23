@@ -495,15 +495,12 @@ function equalizeRowHeights() {
   const rows = table.querySelectorAll('tbody tr');
   if (rows.length === 0) return;
 
-  let maxHeight = 0;
-
-  rows.forEach((row) => {
-    row.style.height = '';
-    const rowHeight = row.offsetHeight;
-    if (rowHeight > maxHeight) {
-      maxHeight = rowHeight;
-    }
-  });
+  const maxHeight = Math.max(
+    ...Array.from(rows, (row) => {
+      row.style.height = '';
+      return row.offsetHeight;
+    })
+  );
 
   if (maxHeight > 0) {
     rows.forEach((row) => {
@@ -569,6 +566,40 @@ const AlleyPreferences = {
     generateFullDayTable();
   },
 };
+
+// Extracted parse drive time function for reuse
+function parseDriveTimeMinutes(driveStr = '') {
+  if (!driveStr || typeof driveStr !== 'string') return Infinity;
+  try {
+    const timeParts = driveStr.split(' ');
+    let days = 0,
+      hours = 0,
+      mins = 0;
+
+    const dayIndex = timeParts.findIndex((p) => p.includes('day'));
+    if (dayIndex > 0) days = parseInt(timeParts[dayIndex - 1]) || 0;
+
+    const hourIndex = timeParts.findIndex((p) => p.includes('hour'));
+    if (hourIndex > 0) hours = parseInt(timeParts[hourIndex - 1]) || 0;
+
+    const minIndex = timeParts.findIndex((p) => p.includes('min'));
+    if (minIndex > 0) mins = parseInt(timeParts[minIndex - 1]) || 0;
+
+    // Handle single value cases
+    if (days === 0 && hours === 0 && mins === 0 && timeParts.length >= 2) {
+      if (timeParts[1].includes('min')) {
+        mins = parseInt(timeParts[0]) || 0;
+      } else if (timeParts[1].includes('hour')) {
+        hours = parseInt(timeParts[0]) || 0;
+      }
+    }
+
+    const totalMins = days * 24 * 60 + hours * 60 + mins;
+    return isNaN(totalMins) || totalMins < 0 ? Infinity : totalMins;
+  } catch {
+    return Infinity;
+  }
+}
 
 const PricingModule = {
   calculateTotalCost(
@@ -795,7 +826,7 @@ const PricingModule = {
     if (price === null || price === undefined || isNaN(price)) return '';
     const formattedPrice =
       price % 1 === 0 ? price.toFixed(0) : price.toFixed(2);
-    return `$${formattedPrice} /${unit}`;
+    return `${formattedPrice} /${unit}`;
   },
   getColorForPrice(price, minPrice, maxPrice) {
     if (
@@ -836,10 +867,12 @@ function formatHour(hour) {
   if (n < 12 && n > 0) return `${n} AM`;
   return '';
 }
+
 function formatPhoneNumberForLink(phoneNumber) {
   if (!phoneNumber || typeof phoneNumber !== 'string') return '';
   return phoneNumber.replace(/\D/g, '');
 }
+
 function getCurrentPacificTime() {
   try {
     const d = new Date(
@@ -860,17 +893,15 @@ function getCurrentPacificTime() {
     return { day: d, hour: h, date: f };
   }
 }
+
 function debounce(func, wait) {
   let t;
   return function (...a) {
-    const l = () => {
-      clearTimeout(t);
-      func.apply(this, a);
-    };
     clearTimeout(t);
-    t = setTimeout(l, wait);
+    t = setTimeout(() => func.apply(this, a), wait);
   };
 }
+
 function delay(ms) {
   return new Promise((r) => setTimeout(r, ms));
 }
@@ -915,6 +946,7 @@ const RecentAddresses = {
       );
   },
 };
+
 function applyTheme(theme) {
   dom.html.setAttribute('data-theme', theme);
   dom.themeToggle.checked = theme === 'dark';
@@ -925,6 +957,7 @@ function applyTheme(theme) {
   }
   generateFullDayTable();
 }
+
 function initializeTheme() {
   let savedTheme;
   try {
@@ -934,6 +967,7 @@ function initializeTheme() {
   }
   applyTheme(savedTheme === 'light' ? 'light' : 'dark');
 }
+
 function generateWeekComparison() {
   const { date: currentDate } = getCurrentPacificTime();
   const numPlayers = parseInt(dom.numPlayers.value) || 1;
@@ -951,9 +985,8 @@ function generateWeekComparison() {
     const dayIndex = CONFIG.DAYS_OF_WEEK.indexOf(day);
     const currentDayIndex = currentDate.getDay();
     let dayDiff = dayIndex - currentDayIndex;
-    if (dayDiff < 0) {
-      dayDiff += 7;
-    }
+    if (dayDiff < 0) dayDiff += 7;
+
     const targetDate = new Date(currentDate);
     targetDate.setDate(currentDate.getDate() + dayDiff);
     const dateString = targetDate.toLocaleDateString('en-US', {
@@ -1000,6 +1033,7 @@ function generateWeekComparison() {
     });
     return { day, dateString, deals: bestDealsForDay };
   });
+
   let timePhrase = '';
   if (startTime !== 'any' && endTime !== 'any') {
     if (startHour === endHour - 1) {
@@ -1014,6 +1048,7 @@ function generateWeekComparison() {
   } else if (endTime !== 'any') {
     timePhrase = `, ending before ${formatHour(endTime)}`;
   }
+
   const modalContent = dom.weekComparisonModal.querySelector(
     '.modal-content-inner'
   );
@@ -1070,7 +1105,7 @@ function generateWeekComparison() {
                  data-day="${day}" role="button" tabindex="0"
                  aria-label="Select ${day}, best deal at ${uniqueAlleyNames.join(
             ', '
-          )} for $${cost.toFixed(0)}">
+          )} for ${cost.toFixed(0)}">
               <div class="week-card-day">${day}</div>
               <div class="week-card-date">${dateString}</div>
               ${
@@ -1078,14 +1113,14 @@ function generateWeekComparison() {
                   ? '<div class="week-card-badge">Best of Week!</div>'
                   : ''
               }
-<div class="week-card-alley">${alleyText}</div>
-<div class="week-card-time">${
-            earliestHour !== null && isFinite(earliestHour)
-              ? formatHour(earliestHour)
-              : '-'
-          }</div>
+              <div class="week-card-alley">${alleyText}</div>
+              <div class="week-card-time">${
+                earliestHour !== null && isFinite(earliestHour)
+                  ? formatHour(earliestHour)
+                  : '-'
+              }</div>
               <div class="week-card-cost">${
-                cost !== Infinity ? `$${cost.toFixed(0)}` : 'N/A'
+                cost !== Infinity ? `${cost.toFixed(0)}` : 'N/A'
               }</div>
               <div class="week-card-per-person">${
                 cost !== Infinity && costPerPerson !== 'N/A'
@@ -1117,11 +1152,13 @@ function generateWeekComparison() {
   dom.weekComparisonModal.setAttribute('aria-hidden', 'false');
   announceToScreenReader('Week comparison opened');
 }
+
 function closeWeekComparisonModal() {
   dom.weekComparisonModal.classList.remove('show');
   dom.weekComparisonModal.setAttribute('aria-hidden', 'true');
   announceToScreenReader('Week comparison closed');
 }
+
 function showDriveTimePrompt() {
   try {
     if (sessionStorage.getItem('promptDismissed') === 'true') return;
@@ -1130,9 +1167,11 @@ function showDriveTimePrompt() {
   }
   dom.drivePrompt.classList.add('show');
 }
+
 function hideDriveTimePrompt() {
   dom.drivePrompt.classList.remove('show');
 }
+
 function shareSettings() {
   const params = new URLSearchParams({
     day: dom.daySelect.value,
@@ -1193,51 +1232,41 @@ function setupTooltipEvents() {
       const tooltipText = element.querySelector('.tooltip-text');
       if (!tooltipText) return;
 
-      // --- Function to position the tooltip ---
       const positionTooltip = () => {
-        // Make visible first to allow measurement
         tooltipText.classList.add('show-tooltip');
-        // Reset transform before measuring to get natural position
         tooltipText.style.transform = 'translateX(-50%)';
 
         const rect = tooltipText.getBoundingClientRect();
         const viewportWidth = window.innerWidth;
-        const buffer = 30; // Pixels from edge
+        const buffer = 30;
 
-        let currentTransform = -50; // Default translateX percentage
+        let currentTransform = -50;
 
         if (rect.left < buffer) {
-          // Overflowing left edge
           const overflowAmount = buffer - rect.left;
-          // Calculate the percentage adjustment needed based on tooltip width
           const percentAdjustment = (overflowAmount / rect.width) * 100;
           currentTransform += percentAdjustment;
         } else if (rect.right > viewportWidth - buffer) {
-          // Overflowing right edge
           const overflowAmount = rect.right - (viewportWidth - buffer);
-          // Calculate the percentage adjustment needed based on tooltip width
           const percentAdjustment = (overflowAmount / rect.width) * 100;
           currentTransform -= percentAdjustment;
         }
 
-        // Apply the final transform
         tooltipText.style.transform = `translateX(${currentTransform}%)`;
       };
 
-      // --- Function to hide the tooltip ---
       const hideTooltip = () => {
         tooltipText.classList.remove('show-tooltip');
-        // Reset transform when hiding
         tooltipText.style.transform = 'translateX(-50%)';
       };
 
-      // --- Add Event Listeners ---
       element.addEventListener('mouseenter', positionTooltip);
-      element.addEventListener('focus', positionTooltip); // For keyboard navigation
+      element.addEventListener('focus', positionTooltip);
       element.addEventListener('mouseleave', hideTooltip);
-      element.addEventListener('blur', hideTooltip); // For keyboard navigation
+      element.addEventListener('blur', hideTooltip);
     });
 }
+
 async function getDriveTimes(retryCount = 0) {
   const startAddress = dom.startAddress.value;
   if (!startAddress) {
@@ -1311,6 +1340,7 @@ async function getDriveTimes(retryCount = 0) {
     dom.driveTimeButton.textContent = 'Get Drive Times';
   }
 }
+
 async function handleAutocomplete(event, container) {
   const input = event.target.value;
   if (input.length < 3) {
@@ -1357,6 +1387,7 @@ async function handleAutocomplete(event, container) {
     container.style.display = 'none';
   }
 }
+
 function initializeContactInfo() {
   for (const alleyName in bowlingAlleys) {
     state.contactInfo[alleyName] = {
@@ -1405,51 +1436,8 @@ function generateFullDayTable() {
     if (aIsFavorite && !bIsFavorite) return -1;
     if (!aIsFavorite && bIsFavorite) return 1;
     if (state.driveTimesActive) {
-      const parseMinutes = (driveStr = '') => {
-        if (!driveStr || typeof driveStr !== 'string') return Infinity;
-        try {
-          const timeParts = driveStr.split(' ');
-          let days = 0,
-            hours = 0,
-            mins = 0;
-          const dayIndex = timeParts.findIndex((p) => p.includes('day'));
-          if (dayIndex > 0) {
-            days = parseInt(timeParts[dayIndex - 1]) || 0;
-          }
-          const hourIndex = timeParts.findIndex((p) => p.includes('hour'));
-          if (hourIndex > 0) {
-            hours = parseInt(timeParts[hourIndex - 1]) || 0;
-          }
-          const minIndex = timeParts.findIndex((p) => p.includes('min'));
-          if (minIndex > 0) {
-            mins = parseInt(timeParts[minIndex - 1]) || 0;
-          }
-          if (
-            days === 0 &&
-            hours === 0 &&
-            mins === 0 &&
-            timeParts.length >= 2 &&
-            timeParts[1].includes('min')
-          ) {
-            mins = parseInt(timeParts[0]) || 0;
-          }
-          if (
-            days === 0 &&
-            hours === 0 &&
-            mins === 0 &&
-            timeParts.length >= 2 &&
-            timeParts[1].includes('hour')
-          ) {
-            hours = parseInt(timeParts[0]) || 0;
-          }
-          const totalMins = days * 24 * 60 + hours * 60 + mins;
-          return isNaN(totalMins) || totalMins < 0 ? Infinity : totalMins;
-        } catch {
-          return Infinity;
-        }
-      };
-      const minsA = parseMinutes(state.contactInfo[alleyA]?.drive);
-      const minsB = parseMinutes(state.contactInfo[alleyB]?.drive);
+      const minsA = parseDriveTimeMinutes(state.contactInfo[alleyA]?.drive);
+      const minsB = parseDriveTimeMinutes(state.contactInfo[alleyB]?.drive);
       if (minsA !== Infinity && minsB !== Infinity) return minsA - minsB;
       if (minsA === Infinity && minsB !== Infinity) return 1;
       if (minsA !== Infinity && minsB === Infinity) return -1;
@@ -1538,51 +1526,7 @@ function generateFullDayTable() {
           driveTimeStr !== '- mins' &&
           driveTimeStr !== 'Not found'
         ) {
-          try {
-            const timeParts = driveTimeStr.split(' ');
-            let days = 0,
-              hours = 0,
-              mins = 0;
-            const dayIndex = timeParts.findIndex((p) => p.includes('day'));
-            if (dayIndex > 0) {
-              days = parseInt(timeParts[dayIndex - 1]) || 0;
-            }
-            const hourIndex = timeParts.findIndex((p) => p.includes('hour'));
-            if (hourIndex > 0) {
-              hours = parseInt(timeParts[hourIndex - 1]) || 0;
-            }
-            const minIndex = timeParts.findIndex((p) => p.includes('min'));
-            if (minIndex > 0) {
-              mins = parseInt(timeParts[minIndex - 1]) || 0;
-            }
-            if (
-              days === 0 &&
-              hours === 0 &&
-              mins === 0 &&
-              timeParts.length >= 2 &&
-              timeParts[1].includes('min')
-            ) {
-              mins = parseInt(timeParts[0]) || 0;
-            }
-            if (
-              days === 0 &&
-              hours === 0 &&
-              mins === 0 &&
-              timeParts.length >= 2 &&
-              timeParts[1].includes('hour')
-            ) {
-              hours = parseInt(timeParts[0]) || 0;
-            }
-            driveMinutes = days * 24 * 60 + hours * 60 + mins;
-            if (isNaN(driveMinutes) || driveMinutes < 0) {
-              throw new Error('Parsed NaN or negative minutes');
-            }
-          } catch (e) {
-            console.error('Error parsing drive time:', driveTimeStr, e);
-            driveMinutes = Infinity;
-          }
-        } else {
-          driveMinutes = 0;
+          driveMinutes = parseDriveTimeMinutes(driveTimeStr);
         }
         if (driveMinutes > 0 && driveMinutes !== Infinity) {
           const currentMinutes = currentDate.getMinutes();
@@ -1639,26 +1583,21 @@ function generateFullDayTable() {
               if (cellData.cost > maxPrice && cellData.cost !== Infinity)
                 maxPrice = cellData.cost;
               if (cellData.cost < (bestDealToday[0]?.cost ?? Infinity)) {
-                // New outright best deal found
                 bestDealToday = [
                   {
                     ...costResult,
                     alley: alleyName,
                     hour: hour,
-                    // rateType is included via spread
                   },
                 ];
-                minPrice = cellData.cost; // Update minPrice here as well
+                minPrice = cellData.cost;
               } else if (cellData.cost === bestDealToday[0]?.cost) {
-                // Tie found, add to the array
                 bestDealToday.push({
                   ...costResult,
                   alley: alleyName,
                   hour: hour,
-                  // rateType is included via spread
                 });
               }
-              // Update maxPrice separately
               if (cellData.cost > maxPrice && cellData.cost !== Infinity) {
                 maxPrice = cellData.cost;
               }
@@ -1688,52 +1627,9 @@ function generateFullDayTable() {
   // Display best deal message
   if (bestDealToday.length > 0) {
     if (bestDealToday.length > 1 && state.driveTimesActive) {
-      const parseMinutes = (driveStr = '') => {
-        if (!driveStr || typeof driveStr !== 'string') return Infinity;
-        try {
-          const timeParts = driveStr.split(' ');
-          let days = 0,
-            hours = 0,
-            mins = 0;
-          const dayIndex = timeParts.findIndex((p) => p.includes('day'));
-          if (dayIndex > 0) {
-            days = parseInt(timeParts[dayIndex - 1]) || 0;
-          }
-          const hourIndex = timeParts.findIndex((p) => p.includes('hour'));
-          if (hourIndex > 0) {
-            hours = parseInt(timeParts[hourIndex - 1]) || 0;
-          }
-          const minIndex = timeParts.findIndex((p) => p.includes('min'));
-          if (minIndex > 0) {
-            mins = parseInt(timeParts[minIndex - 1]) || 0;
-          }
-          if (
-            days === 0 &&
-            hours === 0 &&
-            mins === 0 &&
-            timeParts.length >= 2 &&
-            timeParts[1].includes('min')
-          ) {
-            mins = parseInt(timeParts[0]) || 0;
-          }
-          if (
-            days === 0 &&
-            hours === 0 &&
-            mins === 0 &&
-            timeParts.length >= 2 &&
-            timeParts[1].includes('hour')
-          ) {
-            hours = parseInt(timeParts[0]) || 0;
-          }
-          const totalMins = days * 24 * 60 + hours * 60 + mins;
-          return isNaN(totalMins) || totalMins < 0 ? Infinity : totalMins;
-        } catch {
-          return Infinity;
-        }
-      };
       bestDealToday.sort((a, b) => {
-        const minsA = parseMinutes(state.contactInfo[a.alley]?.drive);
-        const minsB = parseMinutes(state.contactInfo[b.alley]?.drive);
+        const minsA = parseDriveTimeMinutes(state.contactInfo[a.alley]?.drive);
+        const minsB = parseDriveTimeMinutes(state.contactInfo[b.alley]?.drive);
         return minsA - minsB;
       });
     }
@@ -1820,8 +1716,7 @@ function generateFullDayTable() {
       0
     )}</b> total. (${costPerPerson}/person at the <b>${rateType}</b> rate.)`;
 
-    dom.calculatorResult.innerHTML =
-      dom.calculatorResult.innerHTML = `${summaryPart1}<br>${summaryPart2}`;
+    dom.calculatorResult.innerHTML = `${summaryPart1}<br>${summaryPart2}`;
   } else {
     dom.calculatorResult.innerHTML =
       'No available deals found for the selected time window.';
@@ -1907,9 +1802,11 @@ function generateFullDayTable() {
             !cellData.isFilteredByTime &&
             !cellData.isPastTime &&
             !cellData.cannotMakeItInTime &&
-            cellData.cost === bestDealToday.cost &&
-            bestDealToday.alley === alleyName &&
-            bestDealToday.hour === cellData.hour;
+            cellData.cost === bestDealToday[0]?.cost &&
+            bestDealToday.some(
+              (deal) => deal.alley === alleyName && deal.hour === cellData.hour
+            );
+
           if (isBestOfWeek) {
             dealIndicator = `<div class="deal-indicator week">‼️<span class="tooltip-text">Best deal of the week!</span></div>`;
           } else if (isWorstOfWeek) {
@@ -1988,7 +1885,7 @@ function generateFullDayTable() {
               PricingModule.formatPrice(taxedGameRate, 'gm') ||
               'Rate N/A';
           }
-          const priceHTML = `<div class="rate-display primary"><span class="rate-text">${rateLine}</span></div><div class="calculated-cost">= $${totalCostFormatted}</div><div class="per-person-cost">${perPersonCostFormatted}/person</div>`;
+          const priceHTML = `<div class="rate-display primary"><span class="rate-text">${rateLine}</span></div><div class="calculated-cost">= ${totalCostFormatted}</div><div class="per-person-cost">${perPersonCostFormatted}/person</div>`;
           const alleyHours = alley?.hours?.[selectedDay];
           const halfHourNote =
             alleyHours?.minutes && cellData.hour === alleyHours.open
