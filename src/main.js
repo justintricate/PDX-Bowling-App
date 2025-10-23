@@ -1365,32 +1365,7 @@ function initializeContactInfo() {
     };
   }
 }
-function setupSwipeGestures() {
-  let sx = 0,
-    sy = 0;
-  dom.results.addEventListener(
-    'touchstart',
-    (e) => {
-      sx = e.touches[0].clientX;
-      sy = e.touches[0].clientY;
-    },
-    { passive: true }
-  );
-  dom.results.addEventListener(
-    'touchend',
-    (e) => {
-      const ex = e.changedTouches[0].clientX,
-        ey = e.changedTouches[0].clientY,
-        dx = sx - ex,
-        dy = sy - ey;
-      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
-        if (dx > 0) changeDay(1);
-        else changeDay(-1);
-      }
-    },
-    { passive: true }
-  );
-}
+
 function changeDay(dir) {
   const i = CONFIG.DAYS_OF_WEEK.indexOf(dom.daySelect.value),
     ni = (i + dir + 7) % 7;
@@ -2244,7 +2219,6 @@ function init() {
     }
   });
 
-  setupSwipeGestures();
   initializeTheme();
   showDriveTimePrompt();
   generateFullDayTable();
